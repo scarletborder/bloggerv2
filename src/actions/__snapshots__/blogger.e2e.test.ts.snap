@@ -1,0 +1,1401 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Blogger API Service - E2E Tests > getAllTags > should efficiently fetch the complete list of blog tags 1`] = `
+[
+  {
+    "term": "学习笔记-python",
+  },
+  {
+    "term": "学习笔记-计算机组成原理",
+  },
+  {
+    "term": "学习笔记-misc",
+  },
+  {
+    "term": "学习笔记-概率论",
+  },
+  {
+    "term": "博客园迁移-学习c语言",
+  },
+  {
+    "term": "学习笔记-py异步",
+  },
+  {
+    "term": "Q邮迁移-我的随笔",
+  },
+  {
+    "term": "学习笔记-离散数学",
+  },
+  {
+    "term": "武汉大学网安计蒜客大一实训",
+  },
+  {
+    "term": "学习笔记-rust",
+  },
+  {
+    "term": "引流",
+  },
+  {
+    "term": "杂谈",
+  },
+  {
+    "term": "项目介绍-project",
+  },
+]
+`;
+
+exports[`Blogger API Service - E2E Tests > getPageList > should fetch a real list of pages 1`] = `
+{
+  "feed": {
+    "entry": [
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.page-3893379078461036963",
+        },
+        "link": [
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/pages/default/3893379078461036963",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/pages/default/3893379078461036963",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/p/tools-list.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2025-05-24T03:53:00.000Z,
+        "summary": {
+          "$t": "&nbsp;这里记录了一些可能有用的工具链接蜂鸣器谱生成器为嵌入式实验产物做的一个工具,用于生成单通道乐谱WebRTC p2p file transfer纯前端文件传输工具, 借助webRTC和STUN,操作较为繁琐",
+        },
+        "title": {
+          "$t": "Tools List",
+        },
+        "updated": 2025-05-24T03:55:11.551Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.page-3477670537415441864",
+        },
+        "link": [
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/pages/default/3477670537415441864",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/pages/default/3477670537415441864",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/p/liveshare-webrtc-p2p-text-file-transfer.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2025-05-20T07:32:00.000Z,
+        "summary": {
+          "$t": "<!DOCTYPE html>
+
+
+
+    
+    
+    WebRTC P2P Transfer
+  
+  	
+      textarea{
+      	color: black
+      }  
+  	
+    
+
+
+
+    
+        WebRTC P2P Text & File Transfer
+        Author: scarletborder
+
+        <!-- Settings Module -->
+        
+            
+                Settings
+                ▼
+            
+            
+                
+                    Currently Using STUN: 
+                
+",
+        },
+        "title": {
+          "$t": "liveshare-WebRTC P2P Text & File Transfer",
+        },
+        "updated": 2025-05-20T07:39:25.617Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.page-8837590237577911109",
+        },
+        "link": [
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/pages/default/8837590237577911109",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/pages/default/8837590237577911109",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/p/python-midi-processor-in-browser-body.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2025-05-19T16:27:00.002Z,
+        "summary": {
+          "$t": "
+
+
+
+    
+    
+    
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #444;
+            white-space: pre-wrap;
+            background-color: #1e1e1e;
+            min-height: 50px;
+",
+        },
+        "title": {
+          "$t": "蜂鸣器谱生成器",
+        },
+        "updated": 2025-05-25T03:12:05.468Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.page-8886986855028046962",
+        },
+        "link": [
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/pages/default/8886986855028046962",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/pages/default/8886986855028046962",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/p/howl.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2025-05-18T09:51:00.000Z,
+        "summary": {
+          "$t": "
+描述howler.js 是一个适用于现代网络的音频库。它默认使用 Web Audio API，并在必要时回退到 HTML5 Audio。这使得在 JavaScript 中处理音频在所有平台上都变得简单且可靠。更多信息、实时演示和用户展示可在 howlerjs.com
+
+
+
+ 查看。在 Twitter 上关注 howler.js 及相关开发讨论：@GoldFireStudios。功能统一的 API 满足所有音频需求默认使用 Web Audio API，必要时回退到 HTML5 Audio处理各种环境下的边缘情况和错误支持所有编解码器，实现全面的跨浏览器支持自动缓存以提升性能可单独、成组或全局控制声音支持同时播放多个声音轻松定义和播放声音精灵完全控制淡入淡出、播放速率、定位、音量等轻松添加 3D 空间音效或立体声平移模块化 - 使用你需要的部分，易于扩展无外部依赖，仅纯 ",
+        },
+        "title": {
+          "$t": "howl文档翻译",
+        },
+        "updated": 2025-05-18T09:51:08.380Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.page-9097673407327436680",
+        },
+        "link": [
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/pages/default/9097673407327436680",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/pages/default/9097673407327436680",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/p/aboutme.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2025-05-16T12:24:00.000Z,
+        "summary": {
+          "$t": "个人描述WHU在读本科生，鹅厂实习生喜欢折腾，爱好Touhou，lolitaLink Github交流博主由于学业等原因可能更新博客网站频率较少,请见谅欢迎和博主交换友链,你可以在你的网站任何地方插入以下banner并链接到 blog.scarletborder.cn外部图床:&nbsp;https://s2.loli.net/2025/05/16/ke3yL5RDTOsU4vg.pnghttps://i.postimg.cc/XNt87Qtr/banner.png在此之后如果有意愿可以将你的网址和一些事项发送到博主的邮箱 baishuibeef@gmail.com",
+        },
+        "title": {
+          "$t": "AboutMe",
+        },
+        "updated": 2025-05-16T12:24:48.585Z,
+      },
+    ],
+    "openSearch$totalResults": 5,
+  },
+}
+`;
+
+exports[`Blogger API Service - E2E Tests > getPostContent > should fetch the real content for a specific, known post 1`] = `
+{
+  "feed": {
+    "entry": [
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "content": {
+          "$t": "  <div class="stackedit__html"><p>经过一番的修改,前两年中使用stackedit 编写的博文可以正常显示了, 先前由于css选择器规则冲突导致无法正常换行和注释文字乱飞</p>
+<hr>
+<p>过去的文章预览如下<br>
+<img src="https://i.postimg.cc/qBmsBCD0/image.png" alt="enter image description here"></p>
+<p>可惜的是 StackEdit 的html导出程式无法为变量赋予特殊的token,即变量将无法获得特殊颜色, 因此之后涉及到代码分享的博文将依然继续使用魔改typora脚本生成文章.<br>
+另外作为web应用,StackEdit没有附带的图床,意味着上传图片将较为复杂(需要手工打开图床软件)<br>
+不过StackEdit较为方便的是有着全平台(web应用)的特性,同时 <code>Export as HTML</code> 功能比Typora更方便一些, Typora需要编译一个go工具,一些不方便的平台会遇到麻烦.</p>
+<p>以下是StackEdit的一些示例</p>
+<pre class=" language-go"><code class="prism  language-go">fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"Hello world"</span><span class="token punctuation">)</span>
+</code></pre>
+<p>其中StackEdit的导出模板如下, 只需要导出html即可</p>
+<pre class=" language-html"><code class="prism  language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>stackedit__html<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>{{{files.0.content.html}}}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+</code></pre>
+</div>
+",
+        },
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-2424380243462267441",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/2424380243462267441/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2025/06/stackedit.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/2424380243462267441",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/2424380243462267441",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2025/06/stackedit.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2025-06-09T08:47:00.001Z,
+        "title": {
+          "$t": "由StackEdit编写的博文即日起恢复正常显示",
+        },
+        "updated": 2025-06-09T08:47:01.871Z,
+      },
+    ],
+  },
+}
+`;
+
+exports[`Blogger API Service - E2E Tests > getPostList > should fetch a real list of posts and match the expected structure 1`] = `
+{
+  "feed": {
+    "category": [
+      {
+        "term": "学习笔记-python",
+      },
+      {
+        "term": "学习笔记-计算机组成原理",
+      },
+      {
+        "term": "学习笔记-misc",
+      },
+      {
+        "term": "学习笔记-概率论",
+      },
+      {
+        "term": "博客园迁移-学习c语言",
+      },
+      {
+        "term": "学习笔记-py异步",
+      },
+      {
+        "term": "Q邮迁移-我的随笔",
+      },
+      {
+        "term": "学习笔记-离散数学",
+      },
+      {
+        "term": "武汉大学网安计蒜客大一实训",
+      },
+      {
+        "term": "学习笔记-rust",
+      },
+      {
+        "term": "引流",
+      },
+      {
+        "term": "杂谈",
+      },
+      {
+        "term": "项目介绍-project",
+      },
+    ],
+    "entry": [
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-2424380243462267441",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/2424380243462267441/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2025/06/stackedit.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/2424380243462267441",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/2424380243462267441",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2025/06/stackedit.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2025-06-09T08:47:00.001Z,
+        "summary": {
+          "$t": "  经过一番的修改,前两年中使用stackedit 编写的博文可以正常显示了, 先前由于css选择器规则冲突导致无法正常换行和注释文字乱飞
+
+过去的文章预览如下
+
+可惜的是 StackEdit 的html导出程式无法为变量赋予特殊的token,即变量将无法获得特殊颜色, 因此之后涉及到代码分享的博文将依然继续使用魔改typora脚本生成文章.
+另外作为web应用,StackEdit没有附带的图床,意味着上传图片将较为复杂(需要手工打开图床软件)
+不过StackEdit较为方便的是有着全平台(web应用)的特性,同时 Export as HTML 功能比Typora更方便一些, Typora需要编译一个go工具,一些不方便的平台会遇到麻烦.
+以下是StackEdit的一些示例
+fmt.Println("Hello world")
+
+其中StackEdit的导出模板如下, 只需要导出html",
+        },
+        "title": {
+          "$t": "由StackEdit编写的博文即日起恢复正常显示",
+        },
+        "updated": 2025-06-09T08:47:01.871Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "category": [
+          {
+            "term": "学习笔记-计算机组成原理",
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-1191827666343398613",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/1191827666343398613/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2025/06/02.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/1191827666343398613",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/1191827666343398613",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2025/06/02.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2025-06-09T05:43:00.001Z,
+        "summary": {
+          "$t": "<!DOCTYPE html>
+
+
+
+  
+  
+  祭祖02
+ 
+
+
+
+  课时2
+<!-- @import &#34;[TOC]&#34; {cmd=&#34;toc&#34; depthFrom=1 depthTo=6 orderedList=false} -->
+上文传送门
+计组01 ~ 绯境之外~Outside of Scarlet (scarletborder.blogspot.com)
+对上节课的补充
+周期时长速换频率
+
+
+
+
+cycle time
+cycle rate
+
+
+
+
+250ps
+4GHz
+
+
+500ps
+2GHz
+
+
+1000ps
+1GHz
+
+
+题目常见条件
+
+题目出现same ISA（instructions sets architecture） 意味着 高级语言成为汇编语言后是相同的，指令数是相同的
+问快多少倍，用倍数衡量性能而不是快50%这种百分比叙述。
+",
+        },
+        "title": {
+          "$t": "祭祖02",
+        },
+        "updated": 2025-06-09T05:43:06.859Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-5573715436572685981",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/5573715436572685981/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2025/05/comprehensive-experiment-2-experiment.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/5573715436572685981",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/5573715436572685981",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2025/05/comprehensive-experiment-2-experiment.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2025-05-19T11:03:00.001Z,
+        "summary": {
+          "$t": "
+ 【Experiment description】The operating system of the operating machine is kali. After entering the system, the default is the command line interface. Enter the startx command to open the graphical interface.
+
+
+
+All the information and tools needed are placed in the /home/Hack directory.The task of this experiment is to penetrate into the two hosts of the intranet through the proxy through the ",
+        },
+        "title": {
+          "$t": "Comprehensive Experiment 2 - Experiment of Cyber Security Lesson in Wuhan University",
+        },
+        "updated": 2025-05-19T11:03:05.411Z,
+      },
+    ],
+    "openSearch$totalResults": 76,
+  },
+}
+`;
+
+exports[`Blogger API Service - E2E Tests > getPostList > should fetch posts within a specific date range 1`] = `
+{
+  "feed": {
+    "category": [
+      {
+        "term": "学习笔记-python",
+      },
+      {
+        "term": "学习笔记-计算机组成原理",
+      },
+      {
+        "term": "学习笔记-misc",
+      },
+      {
+        "term": "学习笔记-概率论",
+      },
+      {
+        "term": "博客园迁移-学习c语言",
+      },
+      {
+        "term": "学习笔记-py异步",
+      },
+      {
+        "term": "Q邮迁移-我的随笔",
+      },
+      {
+        "term": "学习笔记-离散数学",
+      },
+      {
+        "term": "武汉大学网安计蒜客大一实训",
+      },
+      {
+        "term": "学习笔记-rust",
+      },
+      {
+        "term": "引流",
+      },
+      {
+        "term": "杂谈",
+      },
+      {
+        "term": "项目介绍-project",
+      },
+    ],
+    "entry": [
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-9091972927662125777",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/9091972927662125777/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/08/tilemapscale2dposiotion.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/9091972927662125777",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/9091972927662125777",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/08/tilemapscale2dposiotion.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2024-08-07T14:34:00.000Z,
+        "summary": {
+          "$t": "&nbsp;今天跟着教程调试某2D界面,发现人物绘图总和给定的position存在偏差,并且移动不按照现有的格子一格一格的移动.最后通过断点确定了不是TileMap.Tileset.TileSize的问题.而是TileMap.Scale的问题,不知道是误操作还是默认的设置,总之这里的Scale不是(1,1).找到TileMap中Transform-&gt;Scale设置改回1,1就行了",
+        },
+        "title": {
+          "$t": "[牢骚]幽默TileMap.Scale对2D游戏Posiotion的影响",
+        },
+        "updated": 2024-08-07T14:34:02.800Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-7311051639433805059",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/7311051639433805059/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/08/getnodegodot-42-c.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/7311051639433805059",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/7311051639433805059",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/08/getnodegodot-42-c.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2024-08-03T08:59:00.001Z,
+        "summary": {
+          "$t": "<!doctype html>
+
+
+
+
+
+note1
+
+
+记录一次关于GetNode方法的GoDot 4.2 (采用c#脚本)的踩坑前言:笔者是第一次使用godot,c#的一些高级特性也不是很精通.今天在跟着b站上视频教程时遇到了奇怪的问题,具体报错如下xxxxxxxxxxE 0:00:00:0426 &nbsp; object System.Runtime.CompilerServices.CastHelpers.ChkCastAny(System.Void*, object): System.InvalidCastException: Unable to cast object of type 'Godot.Node' to type 'Fsm'.  &lt;C++ 错误&gt; &nbsp; &nbsp; &nbsp; System.InvalidCastException  &",
+        },
+        "title": {
+          "$t": "记录一次关于GetNode方法的GoDot 4.2 (采用c#脚本)的踩坑",
+        },
+        "updated": 2024-08-03T08:59:09.115Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-7525539975990432721",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/7525539975990432721/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/05/gin-next.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/7525539975990432721",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/7525539975990432721",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/05/gin-next.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2024-05-15T13:45:00.004Z,
+        "summary": {
+          "$t": "原文链接：https://blog.dianduidian.com/post/gin-%E4%B8%AD%E9%97%B4%E4%BB%B6next%E6%96%B9%E6%B3%95%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/中间件代码最后即使没有调用Next()方法，后续中间件及handlers也会执行；如果在中间件函数的非结尾调用Next()方法当前中间件剩余代码会被暂停执行，会先去执行后续中间件及handlers，等这些handlers全部执行完以后程序控制权会回到当前中间件继续执行剩余代码；如果想提前中止当前中间件的执行应该使用return退出而不是Next()方法；如果想中断剩余中间件及handlers应该使用Abort方法，但需要注意当前中间件的剩余代码会继续执行。",
+        },
+        "title": {
+          "$t": "[引路]gin-中间件next方法原理解析",
+        },
+        "updated": 2024-05-15T13:45:30.105Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-9016465108060782905",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/9016465108060782905/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/04/compile-principle-chapter-3-notes.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/9016465108060782905",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/9016465108060782905",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/04/compile-principle-chapter-3-notes.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2024-04-15T14:24:00.005Z,
+        "summary": {
+          "$t": "<!doctype html>
+
+
+
+doc3
+
+Compile Principle Chapter 3 Notes
+Key: DFA、NDFA, NDFA到DFA的转换, 正规文法与FA, 正规表达式与FA
+编译原理 3rd 章笔记
+有穷自动机的形式定义
+确定的有穷自动机DFA （5元组）
+DFA=(Q，\\sum，t，q_0 ，F)
+Q—有穷非空的状态集。
+\\Sigma— 有穷的输入字母表 。
+q_0 一 \\in{Q}, 是开始状态 。
+F——\\subseteq\\mathbb{Q}, 非空终止状态集合 。
+ t — 单值映射\\mathbb{Q}\\times\\Sigma{\\to}\\mathbb{Q}​。t(q,x)=q&#39;
+“确定”: 当前状态和下一个输入字符惟一地确定了后继状态。
+表示
+FA的表示：
+
+状态转换表
+列key为字母(路径),行Key为状态
+
+
+状态转换图
+类似数电里",
+        },
+        "title": {
+          "$t": "Compile Principle Chapter 3 Notes",
+        },
+        "updated": 2024-04-16T03:35:20.329Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-5484967200913984192",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/5484967200913984192/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/04/compile-principle-chapter2-homework.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/5484967200913984192",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/5484967200913984192",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/04/compile-principle-chapter2-homework.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2024-04-15T08:59:00.002Z,
+        "summary": {
+          "$t": "<!doctype html>
+
+
+
+
+
+Compile Principle-chapter2-homework
+
+  
+  
+  
+ 
+答案不唯一
+
+
+",
+        },
+        "title": {
+          "$t": "Compile Principle-chapter2-homework",
+        },
+        "updated": 2024-04-15T08:59:17.024Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-484647250619518174",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/484647250619518174/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/04/mysql.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/484647250619518174",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/484647250619518174",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/04/mysql.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2024-04-14T03:12:00.002Z,
+        "summary": {
+          "$t": "<!doctype html>
+
+
+
+Blog1
+
+关于Mysql部分聚合函数和分组的使用杂谈
+关键字：Mysql, 子查询, exists, any, group by, count, having
+
+Long time no C
+接上文python两种方法实现异步的mysql ~ 绯境之外~Outside of Scarlet (scarletborders.top)，这里再次整理一些常用的关键字以及解决一些谬论。
+Note
+使用了人工智能生成了部分内容。
+
+&nbsp;
+exists关键字
+Reference:
+MySQL中EXISTS的用法 - QiaoZhi - 博客园 (cnblogs.com)
+
+EXISTS用于检查子查询是否至少会返回一行数据，该子查询实际上并不返回任何数据，而是返回值True或False
+EXISTS 指定一个子查询，检测 行 的存在。
+虽然子查询的",
+        },
+        "title": {
+          "$t": "关于Mysql部分聚合函数和分组的使用杂谈",
+        },
+        "updated": 2024-04-14T03:13:08.721Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "category": [
+          {
+            "term": "学习笔记-misc",
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-3273474793308083906",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/3273474793308083906/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/03/blog-post.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/3273474793308083906",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/3273474793308083906",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/03/blog-post.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2024-03-30T06:07:00.001Z,
+        "summary": {
+          "$t": "&nbsp;周转时间◼ 作业的周转时间是指从作业提交到作业完成之间的时间间隔。周转时间是所有时间段之和，包括等待进入内存、在就绪队列中等待、在CPU上执行和I/O执行的时间。这段时间间隔包括了，作业等待、挂起等。◼ Ti= Tei – Tsi◼ 平均周转时间◼ 是指多个作业的周转时间的平均值。ｎ个作业的平均周转时间：◼ T =（T1＋T2＋ ... ＋Tn）／n（Ti为作业ｉ的周转时间）带权周转时间◼ 带权周转时间是指作业周转时间与作业实际运行时间的比值，Wi 。◼ 注意：这里作业实际运行时间是指在CPU中的时间，不包括阻塞、挂起等时间◼ 平均带权周转时间◼ 是指多个作业的带权周转时间的平均值。ｎ个作业的平均带权周转时间：◼ W ＝（W1＋W2＋ ... ＋Wn）/n（Wi为作业ｉ的带权周转时间）FCFS first come first start, sjf short first, ",
+        },
+        "title": {
+          "$t": "处理机调度的一些名词",
+        },
+        "updated": 2024-03-30T06:07:03.975Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-626301157906846485",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/626301157906846485/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/03/p2fromnginxtopingora.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/626301157906846485",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/626301157906846485",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/03/p2fromnginxtopingora.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2024-03-26T04:47:00.002Z,
+        "summary": {
+          "$t": "<!DOCTYPE html>
+
+
+
+  
+  
+  [p2]from_nginx_to_pingora
+ 
+
+
+
+  part2 Pingora Tutorial
+https://github.com/cloudflare/pingora
+负载均衡
+复刻part1的负载均衡配置
+这里使用http，其中xxxxxxxxx是我的公网ipv4地址
+main.rs
+use async_trait::async_trait;
+use pingora::prelude::*;
+use std::sync::Arc;
+
+pub struct LB(Arc&lt;LoadBalancer&lt;RoundRobin&gt;&gt;);
+
+#[async_trait]
+impl ProxyHttp for LB {
+    /// For this small example, we don't ",
+        },
+        "title": {
+          "$t": "[p2]from_nginx_to_pingora",
+        },
+        "updated": 2024-03-26T04:47:34.134Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-9117823049745603148",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/9117823049745603148/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/03/p1fromnginxtopingora.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/9117823049745603148",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/9117823049745603148",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/03/p1fromnginxtopingora.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2024-03-25T17:06:00.002Z,
+        "summary": {
+          "$t": "<!DOCTYPE html>
+
+
+
+  
+  
+  [p1]from_nginx_to_pingora
+ 
+
+
+
+  part1 Nginx Tutorial
+Download and Install Nginx
+This part refer document
+wget https://nginx.org/download/nginx-1.24.0.tar.gz
+tar -xzvf nginx-1.24.0.tar.gz
+./configure --without-http_rewrite_module
+make
+make install
+
+After there procedures, nginx is installed in my ubuntu device successfully.
+I can use vi /usr/local/nginx/conf/nginx.conf ",
+        },
+        "title": {
+          "$t": "[p1]from_nginx_to_pingora",
+        },
+        "updated": 2024-03-25T17:06:46.211Z,
+      },
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "category": [
+          {
+            "term": "引流",
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-2960563236685004850",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/2960563236685004850/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/03/simpletex-webapi.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/2960563236685004850",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/2960563236685004850",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2024/03/simpletex-webapi.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2024-03-17T13:01:00.002Z,
+        "summary": {
+          "$t": "这是一个学习性质的项目&nbsp;SimpleTex-WebAPI是一个GitHub项目，此项目采用GPL-3.0许可证。旨在将https://simpletex.cn/ai/latex_ocr 提供的web服务转成适合用户调用的http api服务。他可以将含有数学公式的图片转换为LaTeX代码。它适用于教育领域，帮助学生和研究人员快速将手写或印刷的数学公式转化为可编辑的文本。此API支持不同的识别模式，适合处理各种图片，并提供识别结果和置信度分数。更多详情请访问GitHub页面。",
+        },
+        "title": {
+          "$t": "[引流]SimpleTex-WebAPI",
+        },
+        "updated": 2024-03-17T13:01:18.902Z,
+      },
+    ],
+    "openSearch$totalResults": 10,
+  },
+}
+`;
+
+exports[`Blogger API Service - E2E Tests > getPostListByCategories > should fetch posts that contain a specific category 1`] = `
+{
+  "feed": {
+    "category": [
+      {
+        "term": "学习笔记-python",
+      },
+      {
+        "term": "学习笔记-计算机组成原理",
+      },
+      {
+        "term": "学习笔记-misc",
+      },
+      {
+        "term": "学习笔记-概率论",
+      },
+      {
+        "term": "博客园迁移-学习c语言",
+      },
+      {
+        "term": "学习笔记-py异步",
+      },
+      {
+        "term": "Q邮迁移-我的随笔",
+      },
+      {
+        "term": "学习笔记-离散数学",
+      },
+      {
+        "term": "武汉大学网安计蒜客大一实训",
+      },
+      {
+        "term": "学习笔记-rust",
+      },
+      {
+        "term": "引流",
+      },
+      {
+        "term": "杂谈",
+      },
+      {
+        "term": "项目介绍-project",
+      },
+    ],
+    "entry": [
+      {
+        "author": [
+          {
+            "name": {
+              "$t": "scarletborder",
+            },
+          },
+        ],
+        "category": [
+          {
+            "term": "学习笔记-rust",
+          },
+        ],
+        "id": {
+          "$t": "tag:blogger.com,1999:blog-3467414143469298730.post-6462403487855221741",
+        },
+        "link": [
+          {
+            "href": "https://blog.scarletborder.cn/feeds/6462403487855221741/comments/default",
+            "rel": "replies",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2023/09/rust_12.html#comment-form",
+            "rel": "replies",
+            "type": "text/html",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/6462403487855221741",
+            "rel": "edit",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://www.blogger.com/feeds/3467414143469298730/posts/default/6462403487855221741",
+            "rel": "self",
+            "type": "application/atom+xml",
+          },
+          {
+            "href": "https://blog.scarletborder.cn/2023/09/rust_12.html",
+            "rel": "alternate",
+            "type": "text/html",
+          },
+        ],
+        "published": 2023-09-03T13:35:00.002Z,
+        "summary": {
+          "$t": "<!DOCTYPE html>
+
+
+
+  
+  
+  rust小结
+ 
+
+
+
+  rust语言小记录
+全篇极大多数代码和示例抄runoob的
+变量
+变量分为不可变变量和可变变量，声明一个变量使用 let关键词
+let var1 = 10;	// 不可变变量
+var1 = 5;	// error, var1是immutable的variable
+let mut var2 = 4;
+var2 = 5;
+
+同时强类型，以下情形不被允许
+let mut var = 123;
+var = "abc";		// 当声明 a 是 123 以后，a 就被确定为整型数字，不能把字符串类型的值赋给它。
+var = 10.5;		// 自动转换数字精度有损失，Rust 语言不允许精度有损失的自动数据类型转换。
+
+shadowing
+重影就是指变量的名称可以被重新使用的机制：
+fn main() {
+    ",
+        },
+        "title": {
+          "$t": "rust小结",
+        },
+        "updated": 2023-09-08T16:11:55.537Z,
+      },
+    ],
+    "openSearch$totalResults": 1,
+  },
+}
+`;
