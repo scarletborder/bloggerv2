@@ -59,7 +59,7 @@ const PostListPageToggle: React.FC<PostListPageToggleProps> = ({
 
   const buttonDisabledStyles: React.CSSProperties = {
     backgroundColor: colors.border,
-    color: colors.textSecondary,
+    color: "#627077",
     cursor: 'not-allowed',
     transform: 'none',
   };

@@ -1,12 +1,21 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
+import viteCompression from 'vite-plugin-compression'
 
 // https://vite.dev/config/
-export default defineConfig({
-  // 配置静态资源的 CDN 地址，指向 GitHub static 分支
-  // 请将 'yourname/bloggerv2' 替换为您的实际 GitHub 仓库
-  base: 'https://cdn.jsdelivr.net/gh/yourname/bloggerv2@static/',
-  plugins: [react()],
+export default defineConfig(({ mode }) => ({
+  // 仅生产环境使用 CDN base，开发环境保持默认
+  base: mode === 'production' ? 'https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/' : '/',
+  plugins: [
+    react(),
+    viteCompression({
+      verbose: true,
+      disable: false,
+      threshold: 10240, // 只压缩大于 10kb 的文件
+      algorithm: 'gzip',
+      ext: '.gz',
+    })
+  ],
   server: {
     proxy: {
       '/proxy-api': {
@@ -42,7 +51,7 @@ export default defineConfig({
             return 'vendor';
           }
           if (id.includes('/src/pages/')) {
-              const match = id.match(/src\/pages\/([^/]+)\.tsx/);
+            const match = id.match(/src\/pages\/([^/]+)\.tsx/);
             if (match && match[1]) {
               return `page-${match[1].toLowerCase()}`;
             }
@@ -52,4 +61,4 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 600,
   },
-})
+}));

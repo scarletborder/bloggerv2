@@ -3,31 +3,34 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link href='https://s2.loli.net/2025/04/14/LnsCqG8ZVcrJN4l.png' rel='shortcut icon' type='image/vnd.microsoft.icon' />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vite + React + TS</title>
+  <title>绯境之外~Outside of Scarlet</title>
   <style id="theme-blocking-styles">
     /* 阻塞样式，确保页面在加载时立即有正确的背景色 */
-    html, body, #root {
+    html,
+    body,
+    #root {
       background-color: #f5f5f9 !important;
       color: #212529 !important;
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      transition: none !important; /* 禁用过渡动画，避免闪烁 */
+      transition: none !important;
+      /* 禁用过渡动画，避免闪烁 */
     }
-    
+
     /* 暗色模式样式 */
-    html[data-theme="dark"], 
-    html[data-theme="dark"] body, 
+    html[data-theme="dark"],
+    html[data-theme="dark"] body,
     html[data-theme="dark"] #root {
       background-color: #101013 !important;
       color: #ffffff !important;
     }
-    
+
     /* 浅色模式样式 */
-    html[data-theme="light"], 
-    html[data-theme="light"] body, 
+    html[data-theme="light"],
+    html[data-theme="light"] body,
     html[data-theme="light"] #root {
       background-color: #f5f5f9 !important;
       color: #212529 !important;
@@ -38,7 +41,7 @@
       try {
         // 从 localStorage 获取主题
         let theme = localStorage.getItem('theme');
-        
+
         // 如果没有手动设置主题，才使用系统偏好
         if (theme === null || theme === undefined) {
           const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -47,7 +50,7 @@
 
         // 立即设置主题属性，让CSS立即生效
         document.documentElement.setAttribute('data-theme', theme);
-        
+
         // 在页面加载完成后移除阻塞样式，让正常的CSS接管
         function enableTransitions() {
           const blockingStyles = document.getElementById('theme-blocking-styles');
@@ -55,7 +58,7 @@
             blockingStyles.remove();
           }
         }
-        
+
         // 在DOMContentLoaded和load事件后都尝试移除，确保React应用启动后
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', enableTransitions);
@@ -63,7 +66,7 @@
         } else {
           enableTransitions();
         }
-        
+
       } catch (e) {
         // 出现错误时，设置默认浅色主题
         document.documentElement.setAttribute('data-theme', 'light');

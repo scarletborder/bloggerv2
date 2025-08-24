@@ -187,7 +187,7 @@ function MobilePageToggle({
   const disabledButtonStyles: React.CSSProperties = {
     ...buttonStyles,
     backgroundColor: colors.border,
-    color: colors.textSecondary,
+    color: "#627077",
     cursor: 'not-allowed',
     opacity: 0.6,
   };
