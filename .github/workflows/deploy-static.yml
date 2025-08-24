@@ -15,20 +15,16 @@ jobs:
         with:
           fetch-depth: 0  # 获取完整历史，确保能访问所有分支
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
-
-      - name: Enable corepack (for pnpm)
-        run: corepack enable
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
