@@ -64,7 +64,7 @@ const PostListItem: React.FC<PostListItemProps> = ({
   const tagStyles: React.CSSProperties = {
     padding: '2px 8px',
     backgroundColor: colors.primary,
-    color: '#ffffff',
+    color: colors.surface,
     borderRadius: '12px',
     fontSize: '12px',
     fontWeight: '500',

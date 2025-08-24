@@ -48,10 +48,10 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
       link.rel = 'stylesheet';
       link.href = href;
       link.id = id;
-      
+
       link.onload = () => resolve();
       link.onerror = () => reject(new Error(`Failed to load CSS: ${href}`));
-      
+
       document.head.appendChild(link);
     });
   };
@@ -61,7 +61,7 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
     const loadStyles = async () => {
       try {
         setCssLoaded(false);
-        
+
         // 加载基础 CSS（始终需要）
         await Promise.all([
           loadCSS('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css', 'katex-css'),
@@ -95,7 +95,7 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
             }
           });
         }, 50);
-        
+
       } catch (error) {
         console.warn('Failed to load some CSS files:', error);
         setCssLoaded(true); // 即使失败也标记为已完成，避免卡住
@@ -108,7 +108,7 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
   useEffect(() => {
     // 只有在 CSS 加载完成后才执行高亮
     if (!cssLoaded) return;
-    
+
     // 等待 DOM 渲染完成后执行高亮
     const highlightCode = () => {
       setTimeout(() => {
@@ -127,7 +127,7 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
   // 组件挂载后确保高亮，但要等待 CSS 加载完成
   useEffect(() => {
     if (!cssLoaded) return;
-    
+
     const timer = setTimeout(() => {
       try {
         Prism.highlightAll();
@@ -147,33 +147,33 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
 
     // 处理新的 HTML 结构：<pre class="md-fences ..."><pre class="cleaned-codemirror-block"><code class="language-js">
     const mdFencesBlocks = tempDiv.querySelectorAll('pre.md-fences');
-    
+
     mdFencesBlocks.forEach((outerPre) => {
       // 检查是否包含 cleaned-codemirror-block
       const innerPre = outerPre.querySelector('pre.cleaned-codemirror-block');
       const codeElement = innerPre?.querySelector('code');
-      
+
       if (innerPre && codeElement) {
         // 获取语言信息，优先从外层 pre 获取 lang 属性
         const langAttr = outerPre.getAttribute('lang') || '';
-        
+
         // 清理代码内容 - 替换 &nbsp; 为普通空格
         let codeContent = codeElement.textContent || '';
         codeContent = codeContent.replace(/\u00A0/g, ' '); // 替换 &nbsp; (非断行空格)
-        
+
         // 创建新的简化代码块
         const newPre = document.createElement('pre');
         const newCode = document.createElement('code');
-        
+
         // 设置语言类名用于 Prism 高亮
         if (langAttr) {
           newCode.className = `language-${langAttr}`;
         }
-        
+
         newCode.textContent = codeContent;
         newPre.appendChild(newCode);
         newPre.className = 'cleaned-codemirror-block';
-        
+
         // 替换整个外层 pre
         outerPre.parentNode?.replaceChild(newPre, outerPre);
       }
