@@ -5,8 +5,8 @@
   --light-background: #f5f5f9;
   --light-surface: #ececf3;
   --light-text: #212529;
-  --light-text-secondary: #626277;
-  --light-border: #bba4c6;
+  --light-text-secondary: #627077;
+  --light-border: #82969F;
   --light-primary: #a4bbc6;
   --light-primary-hover: #a4bbc6;
   --light-shadow: rgba(0, 0, 0, 0.1);
@@ -15,7 +15,7 @@
   --dark-background: #101013;
   --dark-surface: #202027;
   --dark-text: #ffffff;
-  --dark-text-secondary: #a4bbc6;
+  --dark-text-secondary: #E6E6FF;
   --dark-border: #a4a4c6;
   --dark-primary: #bba4c6;
   --dark-primary-hover: #a4a4c6;
