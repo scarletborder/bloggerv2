@@ -1,8 +1,9 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { usePagination, useUpdateEffect } from 'ahooks';
 import { Link } from 'react-router-dom';
 import GetPostList from '../../services/PostList';
 import { getCurrentTheme } from '../../constants/colors';
+import { usePaginationUrl } from '../../hooks';
 
 interface PostListMobileProps { }
 
@@ -241,12 +242,20 @@ function MobilePageToggle({
 export default function PostListMobile({ }: PostListMobileProps) {
   const colors = getCurrentTheme();
   const postListRef = useRef<HTMLDivElement>(null);
-  const [displayedItemsCount, setDisplayedItemsCount] = useState(0);
+
+  // 使用URL参数同步分页状态 - 必须在组件顶层调用
+  const { startIndex: urlStartIndex, pageSize: urlPageSize, updateUrl } = usePaginationUrl({
+    defaultStartIndex: 0,
+    defaultPageSize: 10,
+  });
+
+  // 计算初始页码
+  const initialCurrent = Math.floor(urlStartIndex / urlPageSize) + 1;
 
   const { data, loading, pagination } = usePagination(
     ({ current, pageSize }) => {
-      // 计算当前应该传递的 startIndex
-      const startIndex = current === 1 ? 0 : displayedItemsCount;
+      // 使用URL中的startIndex或根据当前页计算
+      const startIndex = current === initialCurrent ? urlStartIndex : (current - 1) * pageSize;
 
       return GetPostList({
         current,
@@ -256,23 +265,10 @@ export default function PostListMobile({ }: PostListMobileProps) {
     },
     {
       cacheKey: 'postList',
-      defaultPageSize: 10,
+      defaultCurrent: initialCurrent,
+      defaultPageSize: urlPageSize,
     },
   );
-
-  // 更新已显示的文章数量
-  const updateDisplayedCount = useCallback(() => {
-    if (data?.list) {
-      const currentPageItems = data.list.length;
-      const totalDisplayed = (pagination.current - 1) * pagination.pageSize + currentPageItems;
-      setDisplayedItemsCount(totalDisplayed);
-    }
-  }, [data, pagination.current, pagination.pageSize]);
-
-  // 当数据变化时更新计数
-  useUpdateEffect(() => {
-    updateDisplayedCount();
-  }, [data, updateDisplayedCount]);
 
   // 监听分页变化，滚动到组件顶部
   useUpdateEffect(() => {
@@ -307,6 +303,16 @@ export default function PostListMobile({ }: PostListMobileProps) {
       currentDate.getMonth() !== prevDate.getMonth()
     );
   };
+
+  // 处理分页变化的回调函数
+  const handlePageChange = useCallback((newCurrent: number, newPageSize: number) => {
+    // 计算新的startIndex
+    const newStartIndex = (newCurrent - 1) * newPageSize;
+    // 更新URL参数
+    updateUrl(newStartIndex, newPageSize);
+    // 更新分页状态
+    pagination.onChange(newCurrent, newPageSize);
+  }, [updateUrl, pagination]);
 
   const containerStyles: React.CSSProperties = {
     maxWidth: '100%',
@@ -395,8 +401,8 @@ export default function PostListMobile({ }: PostListMobileProps) {
         total={data.total}
         pageSize={pagination.pageSize}
         displayedItemsCount={data.list.length}
-        onPrevious={() => pagination.onChange(pagination.current - 1, pagination.pageSize)}
-        onNext={() => pagination.onChange(pagination.current + 1, pagination.pageSize)}
+        onPrevious={() => handlePageChange(pagination.current - 1, pagination.pageSize)}
+        onNext={() => handlePageChange(pagination.current + 1, pagination.pageSize)}
       />
     </div>
   );

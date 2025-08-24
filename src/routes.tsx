@@ -28,6 +28,8 @@ export default function AppRoutes() {
       <Route path="/tools" element={<PageView children={<Pages.ToolsPage />} />} />
       {/* 归档页面 */}
       <Route path="/archives" element={<WithNav children={<Pages.ArchivesPage />} />} />
+      {/* 文章页面 - 捕获所有路径作为文章路径 */}
+      <Route path="/*" element={<PageView children={<Pages.PostPage />} />} />
     </Routes>
   );
 }
