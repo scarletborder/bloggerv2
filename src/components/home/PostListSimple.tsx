@@ -6,9 +6,11 @@ import PostListPageToggle from './PostListPageToggle';
 import { getCurrentTheme } from '../../constants/colors';
 import { usePaginationUrl } from '../../hooks';
 
-interface PostListProps { }
+interface PostListSimpleProps {
+  isMobile?: boolean;
+}
 
-export default function PostList({ }: PostListProps) {
+export default function PostListSimple({ isMobile = false }: PostListSimpleProps) {
   const colors = getCurrentTheme();
   const postListRef = useRef<HTMLDivElement>(null);
 
@@ -60,35 +62,34 @@ export default function PostList({ }: PostListProps) {
   }, [pagination.current]);
 
   const containerStyles: React.CSSProperties = {
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: '20px',
+    width: '100%',
+    padding: isMobile ? '0' : '0',
   };
 
   const titleStyles: React.CSSProperties = {
-    fontSize: '24px',
+    fontSize: isMobile ? '20px' : '18px',
     fontWeight: '700',
-    marginBottom: '24px',
+    marginBottom: '15px', // 减少margin
     color: colors.text,
-    textAlign: 'center',
+    textAlign: 'left',
   };
 
   const loadingStyles: React.CSSProperties = {
     textAlign: 'center',
-    padding: '40px',
+    padding: '20px 10px', // 减少padding
     color: colors.textSecondary,
     fontSize: '16px',
   };
 
   const emptyStyles: React.CSSProperties = {
     textAlign: 'center',
-    padding: '40px',
+    padding: '20px 10px', // 减少padding
     color: colors.textSecondary,
     fontSize: '16px',
   };
 
   const listStyles: React.CSSProperties = {
-    marginBottom: '20px',
+    marginBottom: '15px', // 减少margin
   };
 
   if (loading && !data) {

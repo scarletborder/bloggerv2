@@ -310,7 +310,7 @@ export default function PostListMobile({ }: PostListMobileProps) {
   const containerStyles: React.CSSProperties = {
     maxWidth: '100%',
     margin: '0',
-    padding: '12px',
+    padding: '0px',
   };
 
   const titleStyles: React.CSSProperties = {
@@ -352,7 +352,7 @@ export default function PostListMobile({ }: PostListMobileProps) {
     return (
       <div ref={postListRef} style={containerStyles}>
         <h2 style={titleStyles}>最新文章</h2>
-        <div style={loadingStyles}>正在加载文章...</div>
+        <div style={loadingStyles}>正在加载文章...<br />blogger api可能抽风,偶发加载时间超过10秒</div>
       </div>
     );
   }

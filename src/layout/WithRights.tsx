@@ -7,15 +7,16 @@ const FOOTER_SECTIONS = [
   {
     title: '',
     items: [
-      'Your Company',
-      `© ${new Date().getFullYear()} 版权所有`,
+      '绯境之外',
+      `© 2022 - ${new Date().getFullYear()} Copyright 绯境之外`,
+      `Theme by scarletborder`,
     ],
   },
   {
     title: '联系方式',
     items: [
-      '邮箱: contact@example.com',
-      '电话: +86 123 4567 8901',
+      '邮箱: baishuibeef@gmail.com',
+      'scarletborder / 黯界绯',
     ],
   },
 ];
@@ -104,9 +105,29 @@ const WithRights: React.FC<WithRightsProps> = ({
                   {item}
                 </div>
               ))}
+              {/* PC端footer banner已移至HomePage.tsx */}
             </div>
           ))}
         </div>
+        {/* 手机视图下，footerContent下方独立显示banner */}
+        {isMobile && (
+          <div style={{ margin: '16px auto 0 auto', width: '100%', maxWidth: '320px', textAlign: 'left' }}>
+            <img
+              src="https://s2.loli.net/2025/05/16/ke3yL5RDTOsU4vg.png"
+              alt="footer banner"
+              style={{
+                maxWidth: '320px',
+                width: '100%',
+                height: 'auto',
+                maxHeight: '96px',
+                borderRadius: '8px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                objectFit: 'contain',
+                display: 'block',
+              }}
+            />
+          </div>
+        )}
       </footer>
     </div>
   );
