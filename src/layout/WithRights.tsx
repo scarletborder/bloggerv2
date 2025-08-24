@@ -1,25 +1,32 @@
 import React from 'react';
-import { useTheme } from 'ahooks';
 import { isMobile } from 'react-device-detect';
+
+
+// 全局footer信息对象数组
+const FOOTER_SECTIONS = [
+  {
+    title: '',
+    items: [
+      'Your Company',
+      `© ${new Date().getFullYear()} 版权所有`,
+    ],
+  },
+  {
+    title: '联系方式',
+    items: [
+      '邮箱: contact@example.com',
+      '电话: +86 123 4567 8901',
+    ],
+  },
+];
 
 interface WithRightsProps {
   children: React.ReactNode;
-  copyrightText?: string;
-  companyName?: string;
-  links?: { name: string; url: string }[];
 }
 
 const WithRights: React.FC<WithRightsProps> = ({
   children,
-  copyrightText = `© ${new Date().getFullYear()} 版权所有`,
-  companyName = "Your Company",
-  links = [
-    { name: "隐私政策", url: "/privacy" },
-    { name: "服务条款", url: "/terms" },
-    { name: "联系我们", url: "/contact" }
-  ]
 }) => {
-  const { theme } = useTheme();
 
   const containerStyles: React.CSSProperties = {
     display: 'flex',
@@ -35,27 +42,30 @@ const WithRights: React.FC<WithRightsProps> = ({
   };
 
   const footerStyles: React.CSSProperties = {
-    backgroundColor: theme === 'dark' ? '#0a0a0a' : '#f5f5f5',
+    backgroundColor: 'var(--surface-color)',
     borderTop: '1px solid var(--border-color)',
     padding: isMobile ? '20px 16px' : '24px 48px',
     marginTop: 'auto',
-    color: theme === 'dark' ? '#888888' : '#666666',
+    color: 'var(--text-secondary-color)',
   };
 
   const footerContentStyles: React.CSSProperties = {
     maxWidth: '1200px',
     margin: '0 auto',
-    display: 'grid',
-    gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr',
-    gap: isMobile ? '16px' : '32px',
+    display: 'flex',
+    justifyContent: 'space-between',
     alignItems: isMobile ? 'center' : 'flex-start',
-    textAlign: isMobile ? 'center' : 'left',
+    gap: isMobile ? '16px' : '32px',
+    flexDirection: 'row', // 手机端也横向排布
+    flexWrap: isMobile ? 'wrap' : 'nowrap',
   };
 
   const sectionStyles: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
     gap: '8px',
+    minWidth: 0,
+    flex: 1,
   };
 
   const titleStyles: React.CSSProperties = {
@@ -65,22 +75,9 @@ const WithRights: React.FC<WithRightsProps> = ({
     marginBottom: '8px',
   };
 
-  const linkStyles: React.CSSProperties = {
-    color: 'inherit',
-    textDecoration: 'none',
-    fontSize: '14px',
-    transition: 'color 0.2s ease',
-    cursor: 'pointer',
-  };
-
-  const linkHoverStyles: React.CSSProperties = {
-    ...linkStyles,
-    color: 'var(--primary-color)',
-  };
-
   const copyrightStyles: React.CSSProperties = {
     fontSize: '14px',
-    color: 'inherit',
+    color: 'var(--text-secondary-color)',
     lineHeight: '1.4',
   };
 
@@ -91,68 +88,24 @@ const WithRights: React.FC<WithRightsProps> = ({
     marginBottom: '4px',
   };
 
-  const [hoveredLink, setHoveredLink] = React.useState<string | null>(null);
-
   return (
     <div style={containerStyles}>
-      <main style={mainContentStyles}>
-        {children}
-      </main>
+      <main style={mainContentStyles}>{children}</main>
       <footer style={footerStyles}>
         <div style={footerContentStyles}>
-          {/* 第一列：公司信息 */}
-          <div style={sectionStyles}>
-            <div style={companyStyles}>{companyName}</div>
-            <div style={copyrightStyles}>{copyrightText}</div>
-          </div>
-
-          {/* 第二列：快速链接 (PC端显示) */}
-          {!isMobile && (
-            <div style={sectionStyles}>
-              <div style={titleStyles}>快速链接</div>
-              {links.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.url}
-                  style={hoveredLink === link.name ? linkHoverStyles : linkStyles}
-                  onMouseEnter={() => setHoveredLink(link.name)}
-                  onMouseLeave={() => setHoveredLink(null)}
+          {FOOTER_SECTIONS.map((section, idx) => (
+            <div style={sectionStyles} key={idx}>
+              {section.title && <div style={titleStyles}>{section.title}</div>}
+              {section.items.map((item, i) => (
+                <div
+                  style={idx === 0 ? (i === 0 ? companyStyles : copyrightStyles) : copyrightStyles}
+                  key={i}
                 >
-                  {link.name}
-                </a>
+                  {item}
+                </div>
               ))}
             </div>
-          )}
-
-          {/* 第三列：联系信息 (PC端显示) */}
-          {!isMobile && (
-            <div style={sectionStyles}>
-              <div style={titleStyles}>联系方式</div>
-              <div style={copyrightStyles}>
-                邮箱: contact@example.com
-              </div>
-              <div style={copyrightStyles}>
-                电话: +86 123 4567 8901
-              </div>
-            </div>
-          )}
-
-          {/* 移动端：简化的链接显示 */}
-          {isMobile && (
-            <div style={{ ...sectionStyles, flexDirection: 'row', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-              {links.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.url}
-                  style={hoveredLink === link.name ? linkHoverStyles : linkStyles}
-                  onMouseEnter={() => setHoveredLink(link.name)}
-                  onMouseLeave={() => setHoveredLink(null)}
-                >
-                  {link.name}
-                </a>
-              ))}
-            </div>
-          )}
+          ))}
         </div>
       </footer>
     </div>

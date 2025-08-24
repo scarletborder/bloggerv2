@@ -1,48 +1,21 @@
-import React, { useEffect } from 'react';
-import { useTheme } from 'ahooks';
+import React from 'react';
+import useTheme from '../hooks/useTheme';
 
 const ThemeToggle: React.FC = () => {
-  const { theme, themeMode, setThemeMode } = useTheme({
-    localStorageKey: 'bloggerv2-theme'
+  const { theme, themeMode, toggleTheme } = useTheme({
+    localStorageKey: 'theme'
   });
-
-  // 同步主题到 HTML data-theme 属性
-  useEffect(() => {
-    const htmlElement = document.documentElement;
-    if (themeMode === 'system') {
-      // 移除 data-theme 属性，让 CSS 媒体查询处理
-      htmlElement.removeAttribute('data-theme');
-    } else {
-      // 设置 data-theme 属性
-      htmlElement.setAttribute('data-theme', theme);
-    }
-  }, [theme, themeMode]);
-
-  // 切换主题模式：light -> dark -> system -> light
-  const toggleTheme = () => {
-    if (themeMode === 'light') {
-      setThemeMode('dark');
-    } else if (themeMode === 'dark') {
-      setThemeMode('system');
-    } else {
-      setThemeMode('light');
-    }
-  };
 
   // 获取滑块位置
   const getSliderPosition = () => {
-    if (themeMode === 'light') return '2px';
-    if (themeMode === 'dark') return '24px';
-    return '2px'; // system 模式从左开始，但宽度会覆盖整个容器
+    return themeMode === 'light' ? '2px' : '24px';
   };
 
   const containerStyles: React.CSSProperties = {
     position: 'relative',
     width: '50px',
     height: '28px',
-    backgroundColor: themeMode === 'system'
-      ? 'var(--surface-color)'
-      : (theme === 'dark' ? '#333' : '#ddd'),
+    backgroundColor: theme === 'dark' ? '#333' : '#ddd',
     borderRadius: '14px',
     cursor: 'pointer',
     transition: 'background-color 0.3s ease',
@@ -53,12 +26,10 @@ const ThemeToggle: React.FC = () => {
     position: 'absolute',
     top: '2px',
     left: getSliderPosition(),
-    width: themeMode === 'system' ? '46px' : '24px',
+    width: '24px',
     height: '24px',
-    backgroundColor: themeMode === 'system'
-      ? 'var(--primary-color)'
-      : (theme === 'dark' ? '#222' : '#fff'),
-    borderRadius: themeMode === 'system' ? '12px' : '50%',
+    backgroundColor: theme === 'dark' ? '#222' : '#fff',
+    borderRadius: '50%',
     transition: 'all 0.3s ease',
     display: 'flex',
     alignItems: 'center',
@@ -69,27 +40,13 @@ const ThemeToggle: React.FC = () => {
   const iconStyles: React.CSSProperties = {
     width: '14px',
     height: '14px',
-    fill: themeMode === 'system'
-      ? '#fff'
-      : (theme === 'dark' ? '#fff' : '#666'),
+    fill: theme === 'dark' ? '#fff' : '#666',
     transition: 'fill 0.3s ease',
   };
 
-  const textStyles: React.CSSProperties = {
-    fontSize: '9px',
-    fontWeight: '600',
-    color: '#fff',
-    letterSpacing: '0.3px',
-  };
-
-  // 根据当前主题显示不同的图标或文字
+  // 根据当前主题显示不同的图标
   const renderContent = () => {
-    if (themeMode === 'system') {
-      // 显示 AUTO 文字
-      return (
-        <span style={textStyles}>AUTO</span>
-      );
-    } else if (theme === 'dark') {
+    if (theme === 'dark') {
       // 月亮图标
       return (
         <svg
@@ -115,9 +72,6 @@ const ThemeToggle: React.FC = () => {
   };
 
   const getTooltipText = () => {
-    if (themeMode === 'system') {
-      return `Follow System (current: ${theme === 'dark' ? 'Dark' : 'Light'})`;
-    }
     return themeMode === 'dark' ? 'Dark Mode' : 'Light Mode';
   };
 
