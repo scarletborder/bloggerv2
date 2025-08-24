@@ -1,27 +1,92 @@
-import React from 'react';
+import React, { useEffect, useImperativeHandle, forwardRef } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useSetState, useMemoizedFn } from 'ahooks';
 import { getCurrentTheme } from '../../constants/colors';
+import PostCacheManager from '../../utils/postCache';
+import type { PostItem } from '../../models/PostItem';
 
 interface DateFilterProps {
   onDateSearch: (year: number, month: number) => void;
+  onRefreshRequest?: () => void;
+  showRefreshButton?: boolean;
 }
 
-export default function DateFilter({ onDateSearch }: DateFilterProps) {
+export interface DateFilterRef {
+  updateCacheDisplay: () => Promise<void>;
+}
+
+// 暴露给外部的缓存操作方法
+export const saveCacheForDate = async (year: number, month: number, posts: PostItem[]) => {
+  await PostCacheManager.saveCache(year, month, posts);
+};
+
+const DateFilter = forwardRef<DateFilterRef, DateFilterProps>(({ 
+  onDateSearch, 
+  onRefreshRequest, 
+  showRefreshButton = false 
+}, ref) => {
   const colors = getCurrentTheme();
   const [dateState, setDateState] = useSetState({
     selectedYear: new Date().getFullYear(),
     selectedMonth: new Date().getMonth() + 1
   });
+  const [cachedCounts, setCachedCounts] = useSetState<Record<string, Record<string, number>>>({});
+
+  // 初始化缓存管理器和加载缓存统计
+  useEffect(() => {
+    const initCache = async () => {
+      await PostCacheManager.init();
+      const counts = await PostCacheManager.getCachedDateCounts();
+      setCachedCounts(counts);
+    };
+    initCache();
+  }, []);
+
+  // 暴露方法给父组件
+  useImperativeHandle(ref, () => ({
+    updateCacheDisplay: async () => {
+      const counts = await PostCacheManager.getCachedDateCounts();
+      setCachedCounts(counts);
+    }
+  }), []);
 
   const handleSearch = useMemoizedFn(() => {
-    onDateSearch(dateState.selectedYear, dateState.selectedMonth);
+    const { selectedYear, selectedMonth } = dateState;
+    console.log('DateFilter: Searching for', selectedYear, selectedMonth);
+    // 直接触发搜索，缓存逻辑已经在useInfiniteScroll内部处理
+    onDateSearch(selectedYear, selectedMonth);
+  });
+
+  const handleRefresh = useMemoizedFn(async () => {
+    const { selectedYear, selectedMonth } = dateState;
+
+    // 清除缓存
+    await PostCacheManager.clearCache(selectedYear, selectedMonth);
+
+    // 更新缓存统计
+    const counts = await PostCacheManager.getCachedDateCounts();
+    setCachedCounts(counts);
+
+    // 触发刷新请求
+    if (onRefreshRequest) {
+      onRefreshRequest();
+    }
   });
 
   // 生成年份选项 (近10年)
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from({ length: 10 }, (_, i) => currentYear - i);
-  const monthOptions = Array.from({ length: 12 }, (_, i) => i + 1);
+  const monthOptions = Array.from({ length: 12 }, (_, i) => {
+    const month = i + 1;
+    const monthStr = month.toString().padStart(2, '0');
+    const yearStr = dateState.selectedYear.toString();
+    const cachedCount = cachedCounts[yearStr]?.[monthStr];
+
+    return {
+      value: month,
+      label: cachedCount !== undefined ? `${month}月 (${cachedCount})` : `${month}月`
+    };
+  });
 
   // PC版样式
   const pcContainerStyles: React.CSSProperties = {
@@ -124,12 +189,49 @@ export default function DateFilter({ onDateSearch }: DateFilterProps) {
     color: colors.text,
     marginBottom: isMobile ? '8px' : '12px',
     textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+  };
+
+  const refreshButtonStyles: React.CSSProperties = {
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    fontSize: '16px',
+    color: colors.primary,
+    padding: '4px',
+    borderRadius: '4px',
+    transition: 'all 0.2s ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   };
 
   return (
     <div style={isMobile ? mobileContainerStyles : pcContainerStyles}>
       <h3 style={titleStyles}>
         📅 按日期浏览
+        {showRefreshButton && (
+          <button
+            style={refreshButtonStyles}
+            onClick={handleRefresh}
+            title="刷新缓存"
+            onMouseEnter={(e) => {
+              if (!isMobile) {
+                e.currentTarget.style.backgroundColor = colors.primaryHover + '20';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isMobile) {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }
+            }}
+          >
+            🔄
+          </button>
+        )}
       </h3>
       <div style={isMobile ? mobileContentStyles : pcContentStyles}>
         <div style={isMobile ? mobileRowStyles : pcRowStyles}>
@@ -148,8 +250,8 @@ export default function DateFilter({ onDateSearch }: DateFilterProps) {
             value={dateState.selectedMonth}
             onChange={(e) => setDateState({ selectedMonth: Number(e.target.value) })}
           >
-            {monthOptions.map(month => (
-              <option key={month} value={month}>{month}月</option>
+            {monthOptions.map(option => (
+              <option key={option.value} value={option.value}>{option.label}</option>
             ))}
           </select>
         </div>
@@ -175,4 +277,8 @@ export default function DateFilter({ onDateSearch }: DateFilterProps) {
       </div>
     </div>
   );
-}
+});
+
+DateFilter.displayName = 'DateFilter';
+
+export default DateFilter;

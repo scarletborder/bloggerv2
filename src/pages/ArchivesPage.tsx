@@ -4,8 +4,11 @@ import { useInfiniteScroll, useLatest, useMemoizedFn } from 'ahooks';
 import { GetPostListByCategories, GetPostListByDate } from '../services/PostList';
 import { getCurrentTheme } from '../constants/colors';
 import TagsFilter from '../components/archives/TagsFilter';
-import DateFilter from '../components/archives/DateFilter';
+import DateFilter, { saveCacheForDate, type DateFilterRef } from '../components/archives/DateFilter';
+import PostCacheManager from '../utils/postCache';
 import ResultsDisplay from '../components/archives/ResultsDisplay';
+
+
 
 type SearchMode = 'none' | 'tag' | 'date';
 
@@ -15,9 +18,12 @@ export default function ArchivesPage() {
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [searchYear, setSearchYear] = useState<number>(0);
   const [searchMonth, setSearchMonth] = useState<number>(0);
-  
+
+
+
   // 用于自动滚动加载的 ref
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const dateFilterRef = useRef<DateFilterRef>(null);
 
   // 使用useLatest确保在异步回调中获取最新值
   const latestSearchMode = useLatest(searchMode);
@@ -71,14 +77,44 @@ export default function ArchivesPage() {
       if (latestSearchMode.current !== 'date' || !latestSearchYear.current || !latestSearchMonth.current) return { list: [] };
 
       const startIndex = d?.list ? d.list.length : 0;
+      const currentYear = latestSearchYear.current;
+      const currentMonth = latestSearchMonth.current;
+      
+      console.log('useInfiniteScroll: Loading data for', currentYear, currentMonth, 'startIndex:', startIndex);
+
+      // 如果是第一次加载，先检查缓存
+      if (startIndex === 0) {
+        const cachedPosts = await PostCacheManager.getCache(currentYear, currentMonth);
+        if (cachedPosts !== null) {
+          console.log('useInfiniteScroll: Using cached data:', cachedPosts.length, 'posts');
+          return {
+            list: cachedPosts,
+            noMore: true, // 缓存数据是完整的，不需要分页
+          };
+        }
+      }
+
+      // 没有缓存或不是第一次加载，发起网络请求
       const result = await GetPostListByDate({
-        year: latestSearchYear.current,
-        month: latestSearchMonth.current,
+        year: currentYear,
+        month: currentMonth,
         startIndex,
         pageSize: 10,
       });
 
-      // 只返回新获取的数据，useInfiniteScroll 会自动累积
+      // 如果是第一次加载，保存到缓存
+      if (startIndex === 0) {
+        try {
+          console.log('useInfiniteScroll: Saving cache for:', currentYear, currentMonth, 'Posts:', result.list.length);
+          await saveCacheForDate(currentYear, currentMonth, result.list);
+          // 更新缓存显示
+          dateFilterRef.current?.updateCacheDisplay();
+        } catch (error) {
+          console.error('Failed to save cache:', error);
+        }
+      }
+
+      // 返回网络请求的数据
       return {
         list: result.list,
         noMore: result.list.length < 10, // 当返回的数据少于 pageSize 时，表示没有更多数据
@@ -114,6 +150,15 @@ export default function ArchivesPage() {
     setSearchMonth(month);
     setSearchMode('date');
     // 使用setTimeout确保状态更新后再触发重新加载
+    setTimeout(() => {
+      dateReload();
+    }, 0);
+  });
+
+  // 处理刷新请求
+  const handleRefreshRequest = useMemoizedFn(() => {
+    console.log('Refresh requested for:', searchYear, searchMonth);
+    // 重新加载数据
     setTimeout(() => {
       dateReload();
     }, 0);
@@ -235,12 +280,17 @@ export default function ArchivesPage() {
         <h1 style={titleStyles}>📚 文章归档</h1>
 
         <div style={mobileContentStyles}>
-          <TagsFilter 
-            onTagSelect={handleTagSelect} 
+          <TagsFilter
+            onTagSelect={handleTagSelect}
             onTagSearch={handleTagSearch}
-            selectedTag={selectedTag} 
+            selectedTag={selectedTag}
           />
-          <DateFilter onDateSearch={handleDateSearch} />
+          <DateFilter 
+            ref={dateFilterRef}
+            onDateSearch={handleDateSearch} 
+            onRefreshRequest={handleRefreshRequest}
+            showRefreshButton={searchMode === 'date'}
+          />
           <ResultsDisplay
             data={getCurrentData()}
             loading={getCurrentLoading()}
@@ -262,14 +312,19 @@ export default function ArchivesPage() {
       <div style={pcContentStyles}>
         <div style={pcLeftPanelStyles}>
           <div style={pcTagsFilterStyles}>
-            <TagsFilter 
-              onTagSelect={handleTagSelect} 
+            <TagsFilter
+              onTagSelect={handleTagSelect}
               onTagSearch={handleTagSearch}
-              selectedTag={selectedTag} 
+              selectedTag={selectedTag}
             />
           </div>
           <div style={pcDateFilterStyles}>
-            <DateFilter onDateSearch={handleDateSearch} />
+            <DateFilter 
+            ref={dateFilterRef}
+            onDateSearch={handleDateSearch} 
+            onRefreshRequest={handleRefreshRequest}
+            showRefreshButton={searchMode === 'date'}
+          />
           </div>
         </div>
 

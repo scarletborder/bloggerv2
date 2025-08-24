@@ -4,16 +4,9 @@ import { Link } from 'react-router-dom';
 import GetPostList from '../../services/PostList';
 import { getCurrentTheme } from '../../constants/colors';
 import { usePaginationUrl } from '../../hooks';
+import { type PostItem as MobilePostItemProps } from '../../models/PostItem';
 
 interface PostListMobileProps { }
-
-interface MobilePostItemProps {
-  path: string;
-  title: string;
-  tags: string[];
-  summary: string;
-  published: number;
-}
 
 function MobilePostItem({ path, title, tags, summary, published }: MobilePostItemProps) {
   const colors = getCurrentTheme();

@@ -3,13 +3,7 @@ import { isMobile } from 'react-device-detect';
 import { useMemoizedFn } from 'ahooks';
 import { getCurrentTheme } from '../../constants/colors';
 
-interface PostItem {
-  path: string;
-  title: string;
-  tags: string[];
-  summary: string;
-  published: number;
-}
+import { type PostItem } from '../../models/PostItem';
 
 interface ResultsDisplayProps {
   data: {
