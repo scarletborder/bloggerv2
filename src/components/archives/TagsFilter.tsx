@@ -1,31 +1,29 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import { isMobile } from 'react-device-detect';
+import { useRequest, useMemoizedFn } from 'ahooks';
 import { getAllTags } from '../../actions/blogger.service';
 import { getCurrentTheme } from '../../constants/colors';
 
 interface TagsFilterProps {
   onTagSelect: (tag: string) => void;
+  onTagSearch: (tag: string) => void;
   selectedTag?: string;
 }
 
-export default function TagsFilter({ onTagSelect, selectedTag }: TagsFilterProps) {
+export default function TagsFilter({ onTagSelect, onTagSearch, selectedTag }: TagsFilterProps) {
   const colors = getCurrentTheme();
-  const [tags, setTags] = useState<Array<{ term: string }>>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    getAllTags().then(tagList => {
-      setTags(tagList);
-      setLoading(false);
-    }).catch(err => {
+  const { data: tags = [], loading } = useRequest(getAllTags, {
+    onError: (err) => {
       console.error('Failed to fetch tags:', err);
-      setLoading(false);
-    });
-  }, []);
+    }
+  });
 
-  const handleTagClick = useCallback((tag: string) => {
+  const handleTagClick = useMemoizedFn((tag: string) => {
+    console.log('Tag clicked:', tag); // 添加调试信息
     onTagSelect(tag);
-  }, [onTagSelect]);
+    onTagSearch(tag); // 直接触发搜索
+  });
 
   const getTagColor = (index: number): string => {
     const tagColors = [

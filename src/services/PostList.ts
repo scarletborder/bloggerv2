@@ -60,7 +60,7 @@ export default async function GetPostList(req: PostListRequest): Promise<PostLis
     'max-results': req.pageSize,
   };
   const resp = await getPostList(params);
-  const entrys = resp.feed.entry;
+  const entrys = resp.feed.entry || [];
 
   return {
     list: entrys.map((entry) => {
@@ -89,7 +89,7 @@ export async function GetPostListByCategories(req: PostListByCategoryRequest): P
   };
 
   const resp = await getPostListByCategories(req.categories, options);
-  const entrys = resp.feed.entry;
+  const entrys = resp.feed.entry || [];
 
   return {
     list: entrys.map((entry) => {
@@ -135,7 +135,7 @@ export async function GetPostListByDate(req: PostListByDateRequest): Promise<Pos
   }
 
   const resp = await getPostList(params);
-  const entrys = resp.feed.entry;
+  const entrys = resp.feed.entry || [];
 
   return {
     list: entrys.map((entry) => {

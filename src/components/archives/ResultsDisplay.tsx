@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { isMobile } from 'react-device-detect';
+import { useMemoizedFn } from 'ahooks';
 import { getCurrentTheme } from '../../constants/colors';
 
 interface PostItem {
@@ -16,22 +17,28 @@ interface ResultsDisplayProps {
     nextId?: string;
   } | undefined;
   loading: boolean;
-  loadMore: () => void;
   loadingMore: boolean;
   noMore: boolean;
   emptyMessage?: string;
+  scrollContainerRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 export default function ResultsDisplay({
   data,
   loading,
-  loadMore,
   loadingMore,
   noMore,
-  emptyMessage = "暂无文章"
+  emptyMessage = "暂无文章",
+  scrollContainerRef
 }: ResultsDisplayProps) {
   const colors = getCurrentTheme();
   const ref = useRef<HTMLDivElement>(null);
+
+  // 将点击处理函数移到组件顶层，符合Hooks规则
+  const handlePostClick = useMemoizedFn((postPath: string) => {
+    console.log('Navigate to:', postPath);
+    // 这里可以添加导航逻辑
+  });
 
   const formatDate = (timestamp: number): string => {
     const date = new Date(timestamp);
@@ -182,19 +189,12 @@ export default function ResultsDisplay({
     fontSize: '16px',
   };
 
-  const loadMoreButtonStyles: React.CSSProperties = {
-    display: 'block',
-    width: '100%',
-    padding: '12px 24px',
-    marginTop: '16px',
+  const loadingMoreStyles: React.CSSProperties = {
+    textAlign: 'center',
+    padding: '16px',
+    color: colors.textSecondary,
     fontSize: '14px',
-    fontWeight: '600',
-    backgroundColor: colors.primary,
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
+    marginTop: '8px',
   };
 
   const noMoreStyles: React.CSSProperties = {
@@ -218,7 +218,7 @@ export default function ResultsDisplay({
     <div style={containerStyles}>
       <h3 style={titleStyles}>📄 搜索结果</h3>
 
-      <div ref={ref} style={scrollContainerStyles}>
+      <div ref={scrollContainerRef || ref} style={scrollContainerStyles}>
         {!data || !data.list || data.list.length === 0 ? (
           <div style={emptyStyles}>{emptyMessage}</div>
         ) : (
@@ -239,10 +239,7 @@ export default function ResultsDisplay({
                     e.currentTarget.style.boxShadow = 'none';
                   }
                 }}
-                onClick={() => {
-                  console.log('Navigate to:', post.path);
-                  // 这里可以添加导航逻辑
-                }}
+                onClick={() => handlePostClick(post.path)}
               >
                 <h4 style={postTitleStyles}>{post.title}</h4>
                 <p style={postSummaryStyles}>{post.summary}</p>
@@ -255,26 +252,10 @@ export default function ResultsDisplay({
               </div>
             ))}
 
-            {!noMore && (
-              <button
-                style={loadMoreButtonStyles}
-                onClick={loadMore}
-                disabled={loadingMore}
-                onMouseEnter={(e) => {
-                  if (!isMobile) {
-                    e.currentTarget.style.backgroundColor = colors.primaryHover;
-                    e.currentTarget.style.transform = 'scale(1.02)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isMobile) {
-                    e.currentTarget.style.backgroundColor = colors.primary;
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }
-                }}
-              >
-                {loadingMore ? '正在加载...' : '加载更多文章'}
-              </button>
+            {loadingMore && (
+              <div style={loadingMoreStyles}>
+                正在加载更多文章...
+              </div>
             )}
 
             {noMore && data.list.length > 0 && (

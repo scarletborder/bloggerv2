@@ -10,6 +10,8 @@
   --light-primary: #a4bbc6;
   --light-primary-hover: #a4bbc6;
   --light-shadow: rgba(0, 0, 0, 0.1);
+  --light-scrollbar-thumb: #627077;
+  --light-scrollbar-track: #f1f1f1;
 
   /* 暗色模式颜色变量 */
   --dark-background: #101013;
@@ -20,6 +22,8 @@
   --dark-primary: #bba4c6;
   --dark-primary-hover: #a4a4c6;
   --dark-shadow: rgba(0, 0, 0, 0.3);
+  --dark-scrollbar-thumb: #E6E6FF;
+  --dark-scrollbar-track: #626277;
 
   /* 根据系统偏好设置初始主题 */
   color-scheme: light dark;
@@ -36,6 +40,8 @@
     --primary-color: var(--light-primary);
     --primary-hover-color: var(--light-primary-hover);
     --shadow-color: var(--light-shadow);
+    --scrollbar-thumb-color: var(--light-scrollbar-thumb);
+    --scrollbar-track-color: var(--light-scrollbar-track);
   }
 }
 
@@ -50,6 +56,8 @@
     --primary-color: var(--dark-primary);
     --primary-hover-color: var(--dark-primary-hover);
     --shadow-color: var(--dark-shadow);
+    --scrollbar-thumb-color: var(--dark-scrollbar-thumb);
+    --scrollbar-track-color: var(--dark-scrollbar-track);
   }
 }
 
@@ -63,6 +71,8 @@ html[data-theme="light"] {
   --primary-color: var(--light-primary);
   --primary-hover-color: var(--light-primary-hover);
   --shadow-color: var(--light-shadow);
+  --scrollbar-thumb-color: var(--light-scrollbar-thumb);
+  --scrollbar-track-color: var(--light-scrollbar-track);
 }
 
 html[data-theme="dark"] {
@@ -74,6 +84,8 @@ html[data-theme="dark"] {
   --primary-color: var(--dark-primary);
   --primary-hover-color: var(--dark-primary-hover);
   --shadow-color: var(--dark-shadow);
+  --scrollbar-thumb-color: var(--dark-scrollbar-thumb);
+  --scrollbar-track-color: var(--dark-scrollbar-track);
 }
 
 /* 防闪烁的基础样式 */

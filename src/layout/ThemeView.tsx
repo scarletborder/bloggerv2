@@ -301,6 +301,37 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
       border-top: 1px solid var(--border-color);
       margin: ${isMobile ? '20px 0' : '32px 0'};
     }
+
+    /* 滚动条样式 */
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--scrollbar-track-color);
+      border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb-color);
+      border-radius: 6px;
+      border: 2px solid var(--scrollbar-track-color);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-thumb-color);
+      opacity: 0.8;
+    }
+
+    ::-webkit-scrollbar-corner {
+      background: var(--scrollbar-track-color);
+    }
+
+    /* Firefox 滚动条样式 */
+    * {
+      scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+    }
   `;
 
   React.useEffect(() => {

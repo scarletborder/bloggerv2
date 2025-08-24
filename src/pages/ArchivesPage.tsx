@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import { isMobile } from 'react-device-detect';
-import { useInfiniteScroll } from 'ahooks';
+import { useInfiniteScroll, useLatest, useMemoizedFn } from 'ahooks';
 import { GetPostListByCategories, GetPostListByDate } from '../services/PostList';
 import { getCurrentTheme } from '../constants/colors';
 import TagsFilter from '../components/archives/TagsFilter';
@@ -15,34 +15,46 @@ export default function ArchivesPage() {
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [searchYear, setSearchYear] = useState<number>(0);
   const [searchMonth, setSearchMonth] = useState<number>(0);
+  
+  // 用于自动滚动加载的 ref
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // 使用useLatest确保在异步回调中获取最新值
+  const latestSearchMode = useLatest(searchMode);
+  const latestSelectedTag = useLatest(selectedTag);
+  const latestSearchYear = useLatest(searchYear);
+  const latestSearchMonth = useLatest(searchMonth);
 
   // 标签搜索的无限滚动
   const {
     data: tagData,
     loading: tagLoading,
-    loadMore: tagLoadMore,
+    loadMore: _tagLoadMore,
     loadingMore: tagLoadingMore,
     noMore: tagNoMore,
     reload: tagReload,
   } = useInfiniteScroll(
     async (d) => {
-      if (searchMode !== 'tag' || !selectedTag) return { list: [], nextId: undefined };
+      if (latestSearchMode.current !== 'tag' || !latestSelectedTag.current) return { list: [] };
 
       const startIndex = d?.list ? d.list.length : 0;
       const result = await GetPostListByCategories({
-        categories: [selectedTag],
+        categories: [latestSelectedTag.current],
         startIndex,
         pageSize: 10,
       });
 
+      // 只返回新获取的数据，useInfiniteScroll 会自动累积
       return {
-        list: [...(d?.list || []), ...result.list],
-        nextId: result.list.length > 0 ? 'more' : undefined,
+        list: result.list,
+        noMore: result.list.length < 10, // 当返回的数据少于 pageSize 时，表示没有更多数据
       };
     },
     {
-      isNoMore: (d) => d?.nextId === undefined,
+      target: scrollContainerRef,
+      isNoMore: (d) => d?.noMore === true,
       manual: true,
+      threshold: 100, // 距离底部100px时开始加载
     }
   );
 
@@ -50,45 +62,62 @@ export default function ArchivesPage() {
   const {
     data: dateData,
     loading: dateLoading,
-    loadMore: dateLoadMore,
+    loadMore: _dateLoadMore,
     loadingMore: dateLoadingMore,
     noMore: dateNoMore,
     reload: dateReload,
   } = useInfiniteScroll(
     async (d) => {
-      if (searchMode !== 'date' || !searchYear || !searchMonth) return { list: [], nextId: undefined };
+      if (latestSearchMode.current !== 'date' || !latestSearchYear.current || !latestSearchMonth.current) return { list: [] };
 
       const startIndex = d?.list ? d.list.length : 0;
       const result = await GetPostListByDate({
-        year: searchYear,
-        month: searchMonth,
+        year: latestSearchYear.current,
+        month: latestSearchMonth.current,
         startIndex,
         pageSize: 10,
       });
 
+      // 只返回新获取的数据，useInfiniteScroll 会自动累积
       return {
-        list: [...(d?.list || []), ...result.list],
-        nextId: result.list.length > 0 ? 'more' : undefined,
+        list: result.list,
+        noMore: result.list.length < 10, // 当返回的数据少于 pageSize 时，表示没有更多数据
       };
     },
     {
-      isNoMore: (d) => d?.nextId === undefined,
+      target: scrollContainerRef,
+      isNoMore: (d) => d?.noMore === true,
       manual: true,
+      threshold: 100, // 距离底部100px时开始加载
     }
   );
 
-  const handleTagSelect = useCallback((tag: string) => {
+  const handleTagSelect = useMemoizedFn((tag: string) => {
+    console.log('Selected tag:', tag); // 添加调试信息
     setSelectedTag(tag);
     setSearchMode('tag');
-    tagReload();
-  }, [tagReload]);
+  });
 
-  const handleDateSearch = useCallback((year: number, month: number) => {
+  const handleTagSearch = useMemoizedFn((tag: string) => {
+    console.log('Search tag:', tag); // 添加调试信息
+    setSelectedTag(tag);
+    setSearchMode('tag');
+    // 使用setTimeout确保状态更新后再触发重新加载
+    setTimeout(() => {
+      tagReload();
+    }, 0);
+  });
+
+  const handleDateSearch = useMemoizedFn((year: number, month: number) => {
+    console.log('Selected date:', year, month); // 添加调试信息
     setSearchYear(year);
     setSearchMonth(month);
     setSearchMode('date');
-    dateReload();
-  }, [dateReload]);
+    // 使用setTimeout确保状态更新后再触发重新加载
+    setTimeout(() => {
+      dateReload();
+    }, 0);
+  });
 
   // 获取当前显示的数据
   const getCurrentData = () => {
@@ -110,17 +139,6 @@ export default function ArchivesPage() {
         return dateLoading;
       default:
         return false;
-    }
-  };
-
-  const getCurrentLoadMore = () => {
-    switch (searchMode) {
-      case 'tag':
-        return tagLoadMore;
-      case 'date':
-        return dateLoadMore;
-      default:
-        return () => { };
     }
   };
 
@@ -217,15 +235,20 @@ export default function ArchivesPage() {
         <h1 style={titleStyles}>📚 文章归档</h1>
 
         <div style={mobileContentStyles}>
-          <TagsFilter onTagSelect={handleTagSelect} selectedTag={selectedTag} />
+          <TagsFilter 
+            onTagSelect={handleTagSelect} 
+            onTagSearch={handleTagSearch}
+            selectedTag={selectedTag} 
+          />
           <DateFilter onDateSearch={handleDateSearch} />
           <ResultsDisplay
             data={getCurrentData()}
             loading={getCurrentLoading()}
-            loadMore={getCurrentLoadMore()}
+
             loadingMore={getCurrentLoadingMore()}
             noMore={getCurrentNoMore()}
             emptyMessage={getEmptyMessage()}
+            scrollContainerRef={scrollContainerRef}
           />
         </div>
       </div>
@@ -239,7 +262,11 @@ export default function ArchivesPage() {
       <div style={pcContentStyles}>
         <div style={pcLeftPanelStyles}>
           <div style={pcTagsFilterStyles}>
-            <TagsFilter onTagSelect={handleTagSelect} selectedTag={selectedTag} />
+            <TagsFilter 
+              onTagSelect={handleTagSelect} 
+              onTagSearch={handleTagSearch}
+              selectedTag={selectedTag} 
+            />
           </div>
           <div style={pcDateFilterStyles}>
             <DateFilter onDateSearch={handleDateSearch} />
@@ -250,10 +277,11 @@ export default function ArchivesPage() {
           <ResultsDisplay
             data={getCurrentData()}
             loading={getCurrentLoading()}
-            loadMore={getCurrentLoadMore()}
+
             loadingMore={getCurrentLoadingMore()}
             noMore={getCurrentNoMore()}
             emptyMessage={getEmptyMessage()}
+            scrollContainerRef={scrollContainerRef}
           />
         </div>
       </div>

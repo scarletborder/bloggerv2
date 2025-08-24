@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { isMobile } from 'react-device-detect';
+import { useSetState, useMemoizedFn } from 'ahooks';
 import { getCurrentTheme } from '../../constants/colors';
 
 interface DateFilterProps {
@@ -8,12 +9,14 @@ interface DateFilterProps {
 
 export default function DateFilter({ onDateSearch }: DateFilterProps) {
   const colors = getCurrentTheme();
-  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
-  const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth() + 1);
+  const [dateState, setDateState] = useSetState({
+    selectedYear: new Date().getFullYear(),
+    selectedMonth: new Date().getMonth() + 1
+  });
 
-  const handleSearch = () => {
-    onDateSearch(selectedYear, selectedMonth);
-  };
+  const handleSearch = useMemoizedFn(() => {
+    onDateSearch(dateState.selectedYear, dateState.selectedMonth);
+  });
 
   // 生成年份选项 (近10年)
   const currentYear = new Date().getFullYear();
@@ -132,8 +135,8 @@ export default function DateFilter({ onDateSearch }: DateFilterProps) {
         <div style={isMobile ? mobileRowStyles : pcRowStyles}>
           <select
             style={isMobile ? mobileSelectStyles : pcSelectStyles}
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(Number(e.target.value))}
+            value={dateState.selectedYear}
+            onChange={(e) => setDateState({ selectedYear: Number(e.target.value) })}
           >
             {yearOptions.map(year => (
               <option key={year} value={year}>{year}年</option>
@@ -142,8 +145,8 @@ export default function DateFilter({ onDateSearch }: DateFilterProps) {
 
           <select
             style={isMobile ? mobileSelectStyles : pcSelectStyles}
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(Number(e.target.value))}
+            value={dateState.selectedMonth}
+            onChange={(e) => setDateState({ selectedMonth: Number(e.target.value) })}
           >
             {monthOptions.map(month => (
               <option key={month} value={month}>{month}月</option>

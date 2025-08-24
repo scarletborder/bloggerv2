@@ -2,6 +2,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 import * as Pages from './pages';
 import PageView from './layout/PageView';
+import WithNav from './layout/WithNav';
 
 
 function HtmlRedirect() {
@@ -26,7 +27,7 @@ export default function AppRoutes() {
       {/* 工具页面 */}
       <Route path="/tools" element={<PageView children={<Pages.ToolsPage />} />} />
       {/* 归档页面 */}
-      <Route path="/archives" element={<PageView children={<Pages.ArchivesPage />} />} />
+      <Route path="/archives" element={<WithNav children={<Pages.ArchivesPage />} />} />
     </Routes>
   );
 }
