@@ -230,7 +230,7 @@ const WithNav: React.FC<WithNavProps> = ({ children }) => {
 
   const navItems = [
     { title: 'HOME', to: '/' },
-    { title: 'ABOUT', to: '/about' },
+    { title: 'ARCHIVES', to: '/archives' },
     { title: 'TOOLS', to: '/tools' },
   ];
 

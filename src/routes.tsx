@@ -1,8 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import WithNav from './layout/WithNav';
 
 import * as Pages from './pages';
-import WithRights from './layout/WithRights';
 import PageView from './layout/PageView';
 
 
@@ -27,6 +25,8 @@ export default function AppRoutes() {
       <Route path="/" element={<PageView children={<Pages.HomePage />} />} />
       {/* 工具页面 */}
       <Route path="/tools" element={<PageView children={<Pages.ToolsPage />} />} />
+      {/* 归档页面 */}
+      <Route path="/archives" element={<PageView children={<Pages.ArchivesPage />} />} />
     </Routes>
   );
 }

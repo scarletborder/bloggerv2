@@ -7,7 +7,7 @@ export const BLOG_URL = import.meta.env.DEV ? "/proxy-api" : "https://blog.scarl
 /**
  * Default timeout for API requests in milliseconds.
  */
-export const API_TIMEOUT = 10000; // 10 seconds
+export const API_TIMEOUT = 30000; // 30 seconds
 
 /**
  * 每次请求的博文数量

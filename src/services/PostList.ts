@@ -1,9 +1,22 @@
-import { getPostList, type GetPostListParams } from "../actions/blogger.service";
+import { getPostList, getPostListByCategories, type GetPostListParams } from "../actions/blogger.service";
 
 type PostListRequest = {
   current: number;
   pageSize: number;
   startIndex?: number; // 已显示的文章数量，用于计算正确的 start-index
+}
+
+type PostListByCategoryRequest = {
+  categories: string[];
+  startIndex?: number; // 用于无限滚动
+  pageSize: number;
+}
+
+type PostListByDateRequest = {
+  year?: number;
+  month?: number;
+  startIndex?: number; // 用于无限滚动
+  pageSize: number;
 }
 
 type SinglePost = {
@@ -46,6 +59,81 @@ export default async function GetPostList(req: PostListRequest): Promise<PostLis
     'start-index': startIndex,
     'max-results': req.pageSize,
   };
+  const resp = await getPostList(params);
+  const entrys = resp.feed.entry;
+
+  return {
+    list: entrys.map((entry) => {
+      const tags = entry.category?.map(cat => cat.term) || [];
+      let linkPath = entry.link.find(link => link.rel === 'alternate')?.href || '';
+      linkPath = linkPath.split("//")[1].split("/").slice(1).join("/");
+      return {
+        path: linkPath,
+        title: entry.title.$t,
+        tags: tags,
+        summary: entry.summary.$t,
+        // thumbnail: entry.media$thumbnail.url,
+        published: new Date(entry.published).getTime(),
+      }
+    }),
+    total: resp.feed.openSearch$totalResults,
+  };
+}
+
+export async function GetPostListByCategories(req: PostListByCategoryRequest): Promise<PostListResponse> {
+  const startIndex = req.startIndex !== undefined ? req.startIndex + 1 : 1;
+
+  const options = {
+    'start-index': startIndex,
+    'max-results': req.pageSize,
+  };
+
+  const resp = await getPostListByCategories(req.categories, options);
+  const entrys = resp.feed.entry;
+
+  return {
+    list: entrys.map((entry) => {
+      const tags = entry.category?.map(cat => cat.term) || [];
+      let linkPath = entry.link.find(link => link.rel === 'alternate')?.href || '';
+      linkPath = linkPath.split("//")[1].split("/").slice(1).join("/");
+      return {
+        path: linkPath,
+        title: entry.title.$t,
+        tags: tags,
+        summary: entry.summary.$t,
+        // thumbnail: entry.media$thumbnail.url,
+        published: new Date(entry.published).getTime(),
+      }
+    }),
+    total: resp.feed.openSearch$totalResults,
+  };
+}
+
+export async function GetPostListByDate(req: PostListByDateRequest): Promise<PostListResponse> {
+  const startIndex = req.startIndex !== undefined ? req.startIndex + 1 : 1;
+
+  const params: GetPostListParams = {
+    'start-index': startIndex,
+    'max-results': req.pageSize,
+  };
+
+  // 添加日期过滤参数
+  if (req.year && req.month) {
+    // 构造日期范围
+    const startDate = new Date(req.year, req.month - 1, 1);
+    const endDate = new Date(req.year, req.month, 0, 23, 59, 59);
+
+    params['published-min'] = startDate.toISOString();
+    params['published-max'] = endDate.toISOString();
+  } else if (req.year) {
+    // 只有年份
+    const startDate = new Date(req.year, 0, 1);
+    const endDate = new Date(req.year, 11, 31, 23, 59, 59);
+
+    params['published-min'] = startDate.toISOString();
+    params['published-max'] = endDate.toISOString();
+  }
+
   const resp = await getPostList(params);
   const entrys = resp.feed.entry;
 
