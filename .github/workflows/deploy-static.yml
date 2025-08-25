@@ -11,12 +11,12 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout release branch
         uses: actions/checkout@v5
         with:
-          fetch-depth: 0  # 获取完整历史，确保能访问所有分支
+          fetch-depth: 0 # 获取完整历史，确保能访问所有分支
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -26,8 +26,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
+          node-version: "22"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -61,6 +61,21 @@ jobs:
           publish_dir: ./dist
           publish_branch: static
           force_orphan: true
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: 'Deploy static assets from release branch'
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: "Deploy static assets from release branch"
+
+      - name: Purge jsDelivr Cache
+        run: |
+          sudo apt-get update && sudo apt-get install -y curl
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.js || true
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor.js || true
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.js || true
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-react.js || true
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-archivespage.js || true
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-homepage.js || true
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-toolspage.js || true
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-prismjs.js || true
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-postpage.js || true
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.css || true
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.css || true
