@@ -1,69 +1,48 @@
-# React + TypeScript + Vite
+# Google Blogger + React + Typescript
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Blogger could be also elegant
 
-Currently, two official plugins are available:
+Blogger 也能如此美丽
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## How to use?
 
-## Expanding the ESLint configuration
+```bash
+# fork this repo
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# modify the `template.xml`
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+# modify base url in `vite.config.js` according to your fork repo url
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+# call push in the release branch to trigger github actions
+# which upload those compiled static files to jsDeliver CDN
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# upload the theme to blogger->theme->customize->restore
+# CAUTION: BACKUP your original theme first
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Features
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- [x] PostList
+- [x] Archives
+  - [x] Date Filter
+  - [x] Tag Filter
+- [x] Search
+- [ ] Discuss(Comments)
+- [ ] Pages
+- [ ] More Docs
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 说明
+
+本项目使用了大量的 google feeds api 而不是 blogger api V3。 这是因为后者需要 api key， 在本场景中由于全明码不好提供。
+
+后续如果 google 废弃了 google feeds api， 请参考本项目进行升级。
+
+https://github.com/uxxSam/react-google-blogger/tree/master/src/actions
+
+https://developers.google.com/blogger/docs/3.0/using
+
+## Effect 效果
+
+![pc example image.png](https://s2.loli.net/2025/08/26/Dcn8UOrLviC2ymQ.png)
+
+![mobile example image.png](https://s2.loli.net/2025/08/26/w6oaFVU8bK74WsH.png)
