@@ -11,6 +11,7 @@ import {
   highlightAfterCSSLoad, 
   highlightOnMount 
 } from './prismHighlighter';
+import { removeCodeBlockEnhancements, createCodeBlockObserver } from './codeBlockEnhancer';
 
 interface ContentViewProps {
   content: string;
@@ -55,6 +56,9 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
     // 只有在 CSS 加载完成后才执行高亮
     if (!cssLoaded) return;
 
+    // 清除之前的代码块增强
+    removeCodeBlockEnhancements();
+
     // 动态加载所需语言包并高亮代码
     const highlightCode = async () => {
       await performCompleteHighlight(content);
@@ -84,6 +88,24 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
       }
     };
   }, [cssLoaded, content]);
+
+  // 代码块观察器 Effect
+  useEffect(() => {
+    if (!cssLoaded) return;
+
+    // 创建观察器来监听动态添加的代码块
+    const observer = createCodeBlockObserver();
+    
+    // 开始观察 DOM 变化
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [cssLoaded]);
 
   // 清理和简化 CodeMirror 生成的复杂 HTML 结构
   const cleanedContent = cleanCodeMirrorContent(content);

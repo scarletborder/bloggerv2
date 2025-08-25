@@ -3,6 +3,8 @@
  * 根据主题生成博客内容的 CSS 样式
  */
 
+import { generateCodeBlockEnhancementStyles } from "./codeBlockStyles";
+
 /**
  * 生成内容样式的 CSS 字符串
  * @param theme 当前主题 ('dark' | 'light')
@@ -321,9 +323,12 @@ export const generateContentStyles = (theme: string): string => {
       .blog-content .katex-display {
         margin: 16px 0;
         margin: 1rem 0;
-      }
-    }
-  `;
+             }
+     }
+
+     /* 代码块增强功能样式 */
+     ${generateCodeBlockEnhancementStyles(theme)}
+   `;
 };
 
 /**

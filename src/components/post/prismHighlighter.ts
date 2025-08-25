@@ -9,6 +9,7 @@ import {
   extractLanguagesFromHTML,
   loadMultiplePrismLanguages,
 } from "./prismLanguageLoader";
+import { enhanceCodeBlocks } from "./codeBlockEnhancer";
 
 /**
  * 清除代码块的高亮标记
@@ -61,6 +62,8 @@ export const highlightWithRetry = (
           } else {
             // 标记所有代码块为已高亮，避免重复处理
             markBlocksAsHighlighted();
+            // 增强代码块（添加语言标签和复制按钮）
+            enhanceCodeBlocks();
             resolve();
           }
         } catch (error) {
@@ -140,6 +143,11 @@ export const highlightAfterCSSLoad = async (content: string): Promise<void> => {
       'pre code[class*="language-"]'
     );
     highlightSpecificBlocks(codeBlocks);
+
+    // 增强代码块
+    setTimeout(() => {
+      enhanceCodeBlocks();
+    }, 100);
   } catch (error) {
     console.warn("Failed to highlight after CSS load:", error);
   }
@@ -183,6 +191,8 @@ export const highlightOnMount = async (
           } else {
             // 标记所有代码块为已高亮
             markBlocksAsHighlighted();
+            // 增强代码块
+            enhanceCodeBlocks();
           }
         } catch (error) {
           console.warn("Failed to highlight code blocks on mount:", error);

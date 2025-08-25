@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@react-spring/web": "^10.0.1",
-    "@types/dompurify": "^3.2.0",
     "@use-gesture/react": "^10.3.1",
     "ahooks": "^3.9.4",
     "codemirror": "^6.0.2",
@@ -24,6 +23,7 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.8.2",
     "swiper": "^11.2.10",
+    "vite-plugin-remove-console": "^2.2.0",
     "zod": "^4.1.0"
   },
   "devDependencies": {
