@@ -222,20 +222,28 @@ export default function ArchivesPage() {
 
   // 样式定义
   const containerStyles: React.CSSProperties = {
-    maxHeight: isMobile ? "unset" : '90vh',
+    maxHeight: isMobile ? "unset" : '100vh',
     backgroundColor: colors.background,
     color: colors.text,
-    padding: isMobile ? 'unset 8px' : '18px 20px',
+    padding: isMobile ? 'unset 8px' : '18px 20px 0px',
+    overflow: isMobile ? 'unset' : 'hidden', // PC版本不允许滚动
   };
 
   const titleStyles: React.CSSProperties = {
     fontSize: isMobile ? '2em' : '28px',
     fontWeight: '800',
     textAlign: 'center',
-    marginBottom: isMobile ? '24px' : '32px',
+    marginBottom: isMobile ? '24px' : '16px',
     background: `linear-gradient(45deg, ${colors.primary}, ${colors.primaryHover})`,
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
+    // 为小屏幕PC设备限制标题高度占用
+    maxHeight: isMobile ? 'unset' : '5vh',
+    lineHeight: isMobile ? 'unset' : '1.2',
+    overflow: 'hidden',
+    // 减少PC设备上的上下空隙
+    padding: isMobile ? 'unset' : '8px 0',
+    margin: isMobile ? 'unset' : '0 0 16px 0',
   };
 
   // PC版布局样式
@@ -244,7 +252,8 @@ export default function ArchivesPage() {
     gap: '24px',
     maxWidth: '1400px',
     margin: '0 auto',
-    height: 'calc(100vh - 200px)',
+    height: 'calc(100vh - 150px)',
+    overflow: 'hidden', // 防止整体页面滚动
   };
 
   const pcLeftPanelStyles: React.CSSProperties = {
@@ -252,19 +261,26 @@ export default function ArchivesPage() {
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
+    height: '100%', // 占满父容器高度
   };
 
   const pcTagsFilterStyles: React.CSSProperties = {
-    flex: '0 0 60%',
+    flex: 1, // 占据剩余高度
+    minHeight: 0, // 允许收缩
+    overflow: 'auto', // 允许滚动
   };
 
   const pcDateFilterStyles: React.CSSProperties = {
-    flex: '0 0 auto',
+    flex: '0 0 auto', // 不参与flex布局的伸缩
+    // 与contentContainer底部平行，不使用固定高度
   };
 
   const pcRightPanelStyles: React.CSSProperties = {
     flex: 1,
     minWidth: 0,
+    height: '100%', // 占满父容器高度
+    display: 'flex',
+    flexDirection: 'column',
   };
 
   // 移动版布局样式
