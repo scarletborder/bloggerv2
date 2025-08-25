@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useRequest, useMemoizedFn } from 'ahooks';
 import { getAllTags } from '../../actions/blogger.service';
@@ -8,9 +8,10 @@ interface TagsFilterProps {
   onTagSelect: (tag: string) => void;
   onTagSearch: (tag: string) => void;
   selectedTag?: string;
+  initialTag?: string;
 }
 
-export default function TagsFilter({ onTagSelect, onTagSearch, selectedTag }: TagsFilterProps) {
+export default function TagsFilter({ onTagSelect, onTagSearch, selectedTag, initialTag }: TagsFilterProps) {
   const colors = getCurrentTheme();
 
   const { data: tags = [], loading } = useRequest(getAllTags, {
@@ -18,6 +19,17 @@ export default function TagsFilter({ onTagSelect, onTagSearch, selectedTag }: Ta
       console.error('Failed to fetch tags:', err);
     }
   });
+
+  // 处理初始标签自动选择
+  useEffect(() => {
+    if (initialTag && tags.length > 0 && !selectedTag) {
+      // 检查初始标签是否在标签列表中存在
+      const tagExists = tags.some(tag => tag.term === initialTag);
+      if (tagExists) {
+        onTagSelect(initialTag);
+      }
+    }
+  }, [initialTag, tags, selectedTag, onTagSelect]);
 
   const handleTagClick = useMemoizedFn((tag: string) => {
     console.log('Tag clicked:', tag); // 添加调试信息

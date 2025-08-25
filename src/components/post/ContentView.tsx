@@ -39,7 +39,9 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
 
         // CSS 加载完成后，重新高亮所有代码块
         setTimeout(async () => {
-          await highlightAfterCSSLoad(content);
+          const cleanedContent = cleanCodeMirrorContent(content);
+          const sanitizedContent = DOMPurify.sanitize(cleanedContent);
+          await highlightAfterCSSLoad(sanitizedContent);
         }, 50);
 
       } catch (error) {
@@ -61,7 +63,10 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
 
     // 动态加载所需语言包并高亮代码
     const highlightCode = async () => {
-      await performCompleteHighlight(content);
+      // 使用处理后的内容进行语言提取，而不是原始内容
+      const cleanedContent = cleanCodeMirrorContent(content);
+      const sanitizedContent = DOMPurify.sanitize(cleanedContent);
+      await performCompleteHighlight(sanitizedContent);
     };
 
     highlightCode();
@@ -72,7 +77,9 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
     if (!cssLoaded) return;
 
     const setupHighlightOnMount = async () => {
-      const cleanup = await highlightOnMount(content);
+      const cleanedContent = cleanCodeMirrorContent(content);
+      const sanitizedContent = DOMPurify.sanitize(cleanedContent);
+      const cleanup = await highlightOnMount(sanitizedContent);
       return cleanup;
     };
 

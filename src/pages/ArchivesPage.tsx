@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useInfiniteScroll, useLatest, useMemoizedFn } from 'ahooks';
+import useUrlState from '@ahooksjs/use-url-state';
 import { GetPostListByCategories, GetPostListByDate } from '../services/PostList';
 import { getCurrentTheme } from '../constants/colors';
 import TagsFilter from '../components/archives/TagsFilter';
@@ -14,6 +15,14 @@ type SearchMode = 'none' | 'tag' | 'date';
 
 export default function ArchivesPage() {
   const colors = getCurrentTheme();
+  
+  // 使用 useUrlState 管理 URL 查询参数
+  const [urlState, setUrlState] = useUrlState({
+    tag: '',
+    year: '',
+    month: ''
+  });
+  
   const [searchMode, setSearchMode] = useState<SearchMode>('none');
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [searchYear, setSearchYear] = useState<number>(0);
@@ -24,6 +33,10 @@ export default function ArchivesPage() {
   // 用于自动滚动加载的 ref
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const dateFilterRef = useRef<DateFilterRef>(null);
+
+
+
+
 
   // 使用useLatest确保在异步回调中获取最新值
   const latestSearchMode = useLatest(searchMode);
@@ -128,16 +141,56 @@ export default function ArchivesPage() {
     }
   );
 
+  // 初始化时从URL参数中恢复状态
+  useEffect(() => {
+    const { tag, year, month } = urlState;
+
+    if (tag && tag !== selectedTag) {
+      setSelectedTag(tag);
+      setSearchMode('tag');
+      // 延迟触发搜索，确保状态已更新
+      setTimeout(() => {
+        tagReload();
+      }, 100);
+    } else if (year && month) {
+      const yearNum = parseInt(year, 10);
+      const monthNum = parseInt(month, 10);
+      if (!isNaN(yearNum) && !isNaN(monthNum) && monthNum >= 1 && monthNum <= 12) {
+        if (yearNum !== searchYear || monthNum !== searchMonth) {
+          setSearchYear(yearNum);
+          setSearchMonth(monthNum);
+          setSearchMode('date');
+          // 延迟触发搜索，确保状态已更新
+          setTimeout(() => {
+            dateReload();
+          }, 100);
+        }
+      }
+    }
+  }, [urlState, selectedTag, searchYear, searchMonth, tagReload, dateReload]);
+
   const handleTagSelect = useMemoizedFn((tag: string) => {
     console.log('Selected tag:', tag); // 添加调试信息
     setSelectedTag(tag);
     setSearchMode('tag');
+    // 更新URL参数
+    setUrlState({
+      tag: tag,
+      year: undefined,
+      month: undefined
+    });
   });
 
   const handleTagSearch = useMemoizedFn((tag: string) => {
     console.log('Search tag:', tag); // 添加调试信息
     setSelectedTag(tag);
     setSearchMode('tag');
+    // 更新URL参数
+    setUrlState({
+      tag: tag,
+      year: undefined,
+      month: undefined
+    });
     // 使用setTimeout确保状态更新后再触发重新加载
     setTimeout(() => {
       tagReload();
@@ -149,6 +202,12 @@ export default function ArchivesPage() {
     setSearchYear(year);
     setSearchMonth(month);
     setSearchMode('date');
+    // 更新URL参数
+    setUrlState({
+      tag: undefined,
+      year: year.toString(),
+      month: month.toString()
+    });
     // 使用setTimeout确保状态更新后再触发重新加载
     setTimeout(() => {
       dateReload();
@@ -300,12 +359,15 @@ export default function ArchivesPage() {
             onTagSelect={handleTagSelect}
             onTagSearch={handleTagSearch}
             selectedTag={selectedTag}
+            initialTag={urlState.tag || ''}
           />
           <DateFilter 
             ref={dateFilterRef}
             onDateSearch={handleDateSearch} 
             onRefreshRequest={handleRefreshRequest}
             showRefreshButton={searchMode === 'date'}
+            initialYear={urlState.year ? parseInt(urlState.year, 10) : undefined}
+            initialMonth={urlState.month ? parseInt(urlState.month, 10) : undefined}
           />
           <ResultsDisplay
             data={getCurrentData()}
@@ -332,6 +394,7 @@ export default function ArchivesPage() {
               onTagSelect={handleTagSelect}
               onTagSearch={handleTagSearch}
               selectedTag={selectedTag}
+              initialTag={urlState.tag || ''}
             />
           </div>
           <div style={pcDateFilterStyles}>
@@ -340,6 +403,8 @@ export default function ArchivesPage() {
             onDateSearch={handleDateSearch} 
             onRefreshRequest={handleRefreshRequest}
             showRefreshButton={searchMode === 'date'}
+            initialYear={urlState.year ? parseInt(urlState.year, 10) : undefined}
+            initialMonth={urlState.month ? parseInt(urlState.month, 10) : undefined}
           />
           </div>
         </div>

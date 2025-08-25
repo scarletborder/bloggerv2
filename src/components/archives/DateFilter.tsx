@@ -9,6 +9,8 @@ interface DateFilterProps {
   onDateSearch: (year: number, month: number) => void;
   onRefreshRequest?: () => void;
   showRefreshButton?: boolean;
+  initialYear?: number;
+  initialMonth?: number;
 }
 
 export interface DateFilterRef {
@@ -23,12 +25,14 @@ export const saveCacheForDate = async (year: number, month: number, posts: PostI
 const DateFilter = forwardRef<DateFilterRef, DateFilterProps>(({ 
   onDateSearch, 
   onRefreshRequest, 
-  showRefreshButton = false 
+  showRefreshButton = false,
+  initialYear,
+  initialMonth
 }, ref) => {
   const colors = getCurrentTheme();
   const [dateState, setDateState] = useSetState({
-    selectedYear: new Date().getFullYear(),
-    selectedMonth: new Date().getMonth() + 1
+    selectedYear: initialYear || new Date().getFullYear(),
+    selectedMonth: initialMonth || new Date().getMonth() + 1
   });
   const [cachedCounts, setCachedCounts] = useSetState<Record<string, Record<string, number>>>({});
 
@@ -41,6 +45,20 @@ const DateFilter = forwardRef<DateFilterRef, DateFilterProps>(({
     };
     initCache();
   }, []);
+
+  // 处理初始值变化时的自动搜索
+  useEffect(() => {
+    if (initialYear && initialMonth) {
+      // 如果有初始值且与当前状态不同，触发搜索
+      const { selectedYear, selectedMonth } = dateState;
+      if (selectedYear === initialYear && selectedMonth === initialMonth) {
+        // 延迟触发搜索，确保组件已完全初始化
+        setTimeout(() => {
+          onDateSearch(initialYear, initialMonth);
+        }, 200);
+      }
+    }
+  }, [initialYear, initialMonth, dateState, onDateSearch]);
 
   // 暴露方法给父组件
   useImperativeHandle(ref, () => ({
