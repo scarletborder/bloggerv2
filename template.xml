@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html b:css='false' b:version='2' class='v2' expr:dir='data:blog.languageDirection'
+  expr:lang='data:blog.locale' xmlns='http://www.w3.org/1999/xhtml'
+  xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data'
+  xmlns:expr='http://www.google.com/2005/gml/expr'>
+
+  <head>
+
+    <!-- 粘贴 编译后的 index.html head -->
+    <meta charset="UTF-8" />
+    <link href='https://s2.loli.net/2025/04/14/LnsCqG8ZVcrJN4l.png' rel='shortcut icon'
+      type='image/vnd.microsoft.icon' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>绯境之外~Outside of Scarlet</title>
+    <style id="theme-blocking-styles">
+      /*<![CDATA[*/
+      /* 阻塞样式，确保页面在加载时立即有正确的背景色 */
+      html,
+      body,
+      #root {
+      background-color: #f5f5f9 !important;
+      color: #212529 !important;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      transition: none !important;
+      /* 禁用过渡动画，避免闪烁 */
+      }
+
+      /* 暗色模式样式 */
+      html[data-theme="dark"],
+      html[data-theme="dark"] body,
+      html[data-theme="dark"] #root {
+      background-color: #101013 !important;
+      color: #ffffff !important;
+      }
+
+      /* 浅色模式样式 */
+      html[data-theme="light"],
+      html[data-theme="light"] body,
+      html[data-theme="light"] #root {
+      background-color: #f5f5f9 !important;
+      color: #212529 !important;
+      }
+/*]]>*/
+    </style>
+    <script>
+      /*<![CDATA[*/
+      (function () {
+      try {
+      // 从 localStorage 获取主题
+      let theme = localStorage.getItem('theme');
+
+      // 如果没有手动设置主题，才使用系统偏好
+      if (theme === null || theme === undefined) {
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      theme = prefersDark ? 'dark' : 'light';
+      }
+
+      // 立即设置主题属性，让CSS立即生效
+      document.documentElement.setAttribute('data-theme', theme);
+
+      // 在页面加载完成后移除阻塞样式，让正常的CSS接管
+      function enableTransitions() {
+      const blockingStyles = document.getElementById('theme-blocking-styles');
+      if (blockingStyles) {
+      blockingStyles.remove();
+      }
+      }
+
+      // 在DOMContentLoaded和load事件后都尝试移除，确保React应用启动后
+      if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', enableTransitions);
+      window.addEventListener('load', enableTransitions);
+      } else {
+      enableTransitions();
+      }
+
+      } catch (e) {
+      // 出现错误时，设置默认浅色主题
+      document.documentElement.setAttribute('data-theme', 'light');
+      }
+      })();
+/*]]>*/
+    </script>
+
+    <script type="module" crossorigin="anonymous"
+      src="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index-Cz4wVjAg.js"></script>
+    <link rel="modulepreload" crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-CxYD_R7g.js" />
+    <link rel="modulepreload" crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper-DWLuqPWW.js" />
+    <link rel="modulepreload" crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-react-BWuxF3F4.js" />
+    <link rel="modulepreload" crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-archivespage-XfMgVqP8.js" />
+    <link rel="modulepreload" crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-homepage-CDSpJjR_.js" />
+    <link rel="modulepreload" crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-toolspage-C7OaPS7S.js" />
+    <link rel="modulepreload" crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-prismjs-YBpcdEAa.js" />
+    <link rel="modulepreload" crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-postpage-C9Y_eN6K.js" />
+    <link rel="stylesheet" crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper-BH4JZYC6.css" />
+    <link rel="stylesheet" crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index-pv73oGHo.css" />
+
+    <!-- END Paste -->
+    <script
+      src='https://cdn.jsdelivr.net/gh/scarletborder/public_js@main/blogs/apis.google.com_js_plusone.js'
+      type='text/javascript' />
+
+    <!-- 不使用Blogger管理颜色 -->
+    <b:skin><![CDATA[ ]]></b:skin>
+
+  </head>
+  <!-- head 终于结束 -->
+
+
+  <!-- body 开始 -->
+  <body>
+    <div id="root"></div>
+  </body>
+
+  <b:section id="footer">
+  </b:section>
+</html>

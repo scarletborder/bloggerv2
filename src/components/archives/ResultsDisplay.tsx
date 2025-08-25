@@ -4,6 +4,7 @@ import { useMemoizedFn } from 'ahooks';
 import { getCurrentTheme } from '../../constants/colors';
 
 import { type PostItem } from '../../models/PostItem';
+import { useNavigate } from 'react-router-dom';
 
 interface ResultsDisplayProps {
   data: {
@@ -27,11 +28,13 @@ export default function ResultsDisplay({
 }: ResultsDisplayProps) {
   const colors = getCurrentTheme();
   const ref = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   // 将点击处理函数移到组件顶层，符合Hooks规则
   const handlePostClick = useMemoizedFn((postPath: string) => {
     console.log('Navigate to:', postPath);
     // 这里可以添加导航逻辑
+    navigate(`/${postPath}`);
   });
 
   const formatDate = (timestamp: number): string => {
