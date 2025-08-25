@@ -28,15 +28,9 @@ export default function ArchivesPage() {
   const [searchYear, setSearchYear] = useState<number>(0);
   const [searchMonth, setSearchMonth] = useState<number>(0);
 
-
-
   // 用于自动滚动加载的 ref
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const dateFilterRef = useRef<DateFilterRef>(null);
-
-
-
-
 
   // 使用useLatest确保在异步回调中获取最新值
   const latestSearchMode = useLatest(searchMode);

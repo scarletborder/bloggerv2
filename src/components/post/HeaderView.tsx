@@ -1,5 +1,6 @@
 import React from 'react';
 import { isMobile } from 'react-device-detect';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderViewProps {
   title: string;
@@ -12,6 +13,7 @@ interface HeaderViewProps {
  * 文章头部组件 - 显示标题、发布时间、更新时间和标签
  */
 const HeaderView: React.FC<HeaderViewProps> = ({ title, published, updated, tags }) => {
+  const navigate = useNavigate();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -111,8 +113,8 @@ const HeaderView: React.FC<HeaderViewProps> = ({ title, published, updated, tags
                 className="post-tag"
                 style={tagStyles}
                 onClick={() => {
-                  // TODO: 实现标签搜索功能
                   console.log('Search for tag:', tag);
+                  navigate(`/archives?tag=${tag}`);
                 }}
               >
                 #{tag}
