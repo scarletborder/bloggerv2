@@ -2,25 +2,8 @@ import React, { useEffect, useState } from 'react';
 import DOMPurify from 'dompurify';
 // @ts-ignore - prismjs doesn't have built-in types
 import Prism from 'prismjs';
-// 导入常用语言支持
-// @ts-ignore
-import 'prismjs/components/prism-javascript';
-// @ts-ignore
-import 'prismjs/components/prism-typescript';
-// @ts-ignore
-import 'prismjs/components/prism-jsx';
-// @ts-ignore
-import 'prismjs/components/prism-tsx';
-// @ts-ignore
-import 'prismjs/components/prism-json';
-// @ts-ignore
-import 'prismjs/components/prism-css';
-// @ts-ignore
-import 'prismjs/components/prism-python';
-// @ts-ignore
-import 'prismjs/components/prism-bash';
-// @ts-ignore
-import 'prismjs/components/prism-sql';
+// 使用动态语言加载器
+import { extractLanguagesFromHTML, loadMultiplePrismLanguages } from './prismLanguageLoader';
 import useTheme from '../../hooks/useTheme';
 
 interface ContentViewProps {
@@ -85,15 +68,27 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
         setCssLoaded(true);
 
         // CSS 加载完成后，重新高亮所有代码块
-        setTimeout(() => {
-          const codeBlocks = document.querySelectorAll('pre code[class*="language-"]');
-          codeBlocks.forEach((block) => {
-            try {
-              Prism.highlightElement(block as HTMLElement);
-            } catch (error) {
-              console.warn('Failed to highlight code block:', error);
+        setTimeout(async () => {
+          try {
+            // 从内容中提取需要的语言包
+            const requiredLanguages = extractLanguagesFromHTML(content);
+            
+            if (requiredLanguages.length > 0) {
+              // 加载所需的语言包
+              await loadMultiplePrismLanguages(requiredLanguages);
             }
-          });
+
+            const codeBlocks = document.querySelectorAll('pre code[class*="language-"]');
+            codeBlocks.forEach((block) => {
+              try {
+                Prism.highlightElement(block as HTMLElement);
+              } catch (error) {
+                console.warn('Failed to highlight code block:', error);
+              }
+            });
+          } catch (error) {
+            console.warn('Failed to load languages or highlight after CSS load:', error);
+          }
         }, 50);
 
       } catch (error) {
@@ -109,16 +104,30 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
     // 只有在 CSS 加载完成后才执行高亮
     if (!cssLoaded) return;
 
-    // 等待 DOM 渲染完成后执行高亮
-    const highlightCode = () => {
-      setTimeout(() => {
-        try {
-          // 使用 Prism.highlightAll() 重新高亮所有代码块
-          Prism.highlightAll();
-        } catch (error) {
-          console.warn('Failed to highlight code blocks:', error);
+    // 动态加载所需语言包并高亮代码
+    const highlightCode = async () => {
+      try {
+        // 从内容中提取需要的语言包
+        const requiredLanguages = extractLanguagesFromHTML(content);
+        
+        if (requiredLanguages.length > 0) {
+          console.log('Loading languages:', requiredLanguages);
+          // 加载所需的语言包
+          await loadMultiplePrismLanguages(requiredLanguages);
         }
-      }, 100);
+
+        // 等待一小段时间确保语言包加载完成
+        setTimeout(() => {
+          try {
+            // 使用 Prism.highlightAll() 重新高亮所有代码块
+            Prism.highlightAll();
+          } catch (error) {
+            console.warn('Failed to highlight code blocks:', error);
+          }
+        }, 100);
+      } catch (error) {
+        console.warn('Failed to load languages or highlight code blocks:', error);
+      }
     };
 
     highlightCode();
@@ -128,16 +137,33 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
   useEffect(() => {
     if (!cssLoaded) return;
 
-    const timer = setTimeout(() => {
+    const highlightOnMount = async () => {
       try {
-        Prism.highlightAll();
-      } catch (error) {
-        console.warn('Failed to highlight code blocks on mount:', error);
-      }
-    }, 200);
+        // 从内容中提取需要的语言包
+        const requiredLanguages = extractLanguagesFromHTML(content);
+        
+        if (requiredLanguages.length > 0) {
+          // 加载所需的语言包
+          await loadMultiplePrismLanguages(requiredLanguages);
+        }
 
-    return () => clearTimeout(timer);
-  }, [cssLoaded]);
+        // 延迟执行高亮
+        const timer = setTimeout(() => {
+          try {
+            Prism.highlightAll();
+          } catch (error) {
+            console.warn('Failed to highlight code blocks on mount:', error);
+          }
+        }, 200);
+
+        return () => clearTimeout(timer);
+      } catch (error) {
+        console.warn('Failed to load languages on mount:', error);
+      }
+    };
+
+    highlightOnMount();
+  }, [cssLoaded, content]);
 
   // 清理和简化 CodeMirror 生成的复杂 HTML 结构
   const cleanCodeMirrorContent = (htmlContent: string): string => {
@@ -462,7 +488,6 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
       padding: 0 !important;
       border-radius: 0 !important;
       font-size: inherit !important;
-      color: inherit !important;
       display: block;
       white-space: pre-wrap;
       word-break: break-word;
