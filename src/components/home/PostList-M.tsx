@@ -214,7 +214,7 @@ function MobilePageToggle({
         onClick={onPrevious}
         disabled={!canGoPrevious}
       >
-        ← 上一页
+        ←
       </button>
 
       <div style={pageInfoStyles}>
@@ -226,7 +226,7 @@ function MobilePageToggle({
         onClick={onNext}
         disabled={!canGoNext}
       >
-        下一页 →
+        →
       </button>
     </div>
   );
