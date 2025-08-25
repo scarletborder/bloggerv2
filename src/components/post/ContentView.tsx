@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import DOMPurify from 'dompurify';
-import useTheme from '../../hooks/useTheme';
+import React, { useEffect, useState } from "react";
+import DOMPurify from "dompurify";
+import useTheme from "../../hooks/useTheme";
 
 // 导入拆分后的模块
-import { loadThemeStyles } from './cssLoader';
-import { generateContentStyles, generateInlineStyles } from './contentStyles';
-import { cleanCodeMirrorContent } from './codeMirrorCleaner';
-import { 
-  performCompleteHighlight, 
-  highlightAfterCSSLoad, 
-  highlightOnMount 
-} from './prismHighlighter';
-import { removeCodeBlockEnhancements, createCodeBlockObserver } from './codeBlockEnhancer';
+import { loadThemeStyles } from "./cssLoader";
+import { generateContentStyles, generateInlineStyles } from "./contentStyles";
+import { cleanCodeMirrorContent } from "./codeMirrorCleaner";
+import {
+  performCompleteHighlight,
+  highlightAfterCSSLoad,
+  highlightOnMount,
+} from "./prismHighlighter";
+import {
+  removeCodeBlockEnhancements,
+  createCodeBlockObserver,
+} from "./codeBlockEnhancer";
 
 interface ContentViewProps {
   content: string;
@@ -43,9 +46,8 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
           const sanitizedContent = DOMPurify.sanitize(cleanedContent);
           await highlightAfterCSSLoad(sanitizedContent);
         }, 50);
-
       } catch (error) {
-        console.warn('Failed to load some CSS files:', error);
+        console.warn("Failed to load some CSS files:", error);
         setCssLoaded(true); // 即使失败也标记为已完成，避免卡住
       }
     };
@@ -84,8 +86,8 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
     };
 
     let cleanup: (() => void) | undefined;
-    
-    setupHighlightOnMount().then(cleanupFn => {
+
+    setupHighlightOnMount().then((cleanupFn) => {
       cleanup = cleanupFn;
     });
 
@@ -102,11 +104,11 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
 
     // 创建观察器来监听动态添加的代码块
     const observer = createCodeBlockObserver();
-    
+
     // 开始观察 DOM 变化
     observer.observe(document.body, {
       childList: true,
-      subtree: true
+      subtree: true,
     });
 
     return () => {
@@ -116,7 +118,7 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
 
   // 清理和简化 CodeMirror 生成的复杂 HTML 结构
   const cleanedContent = cleanCodeMirrorContent(content);
-  
+
   // 使用 DOMPurify 清理传入的 HTML 字符串，防止 XSS 攻击
   const sanitizedContent = DOMPurify.sanitize(cleanedContent);
 
@@ -128,7 +130,9 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
     <>
       <style>{contentStyles}</style>
       <div
-        className={`blog-content ${theme === 'dark' ? 'cm-s-yonce' : 'cm-s-duotone-light'}`}
+        className={`blog-content ${
+          theme === "dark" ? "cm-s-yonce" : "cm-s-duotone-light"
+        }`}
         style={inlineStyles}
         dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       />

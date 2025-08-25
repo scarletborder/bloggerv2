@@ -93,6 +93,8 @@
     <link rel="modulepreload" crossorigin="anonymous"
       href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-react.js" />
     <link rel="modulepreload" crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-ahooks.js" />
+    <link rel="modulepreload" crossorigin="anonymous"
       href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-archivespage.js" />
     <link rel="modulepreload" crossorigin="anonymous"
       href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-homepage.js" />
@@ -102,6 +104,8 @@
       href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-prismjs.js" />
     <link rel="modulepreload" crossorigin="anonymous"
       href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-postpage.js" />
+    <link rel="modulepreload" crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-searchpage.js" />
     <link rel="stylesheet" crossorigin="anonymous"
       href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.css" />
     <link rel="stylesheet" crossorigin="anonymous"

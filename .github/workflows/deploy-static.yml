@@ -72,10 +72,12 @@ jobs:
           curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor.js || true
           curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.js || true
           curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-react.js || true
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-ahooks.js || true
           curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-archivespage.js || true
           curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-homepage.js || true
           curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-toolspage.js || true
           curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-prismjs.js || true
           curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-postpage.js || true
+          curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-searchpage.js || true
           curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.css || true
           curl --fail-with-body https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.css || true
