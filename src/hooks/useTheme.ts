@@ -1,5 +1,5 @@
-import { useEffect, useCallback, useState } from 'react';
-import { themeManager, type ThemeMode } from '../utils/themeManager';
+import { useEffect, useCallback, useState } from "react";
+import { themeManager, type ThemeMode } from "../utils/themeManager";
 
 interface UseThemeOptions {
   localStorageKey?: string; // 保持向后兼容，但实际不使用
@@ -18,18 +18,18 @@ const useTheme = (_options: UseThemeOptions = {}): UseThemeReturn => {
 
   // 订阅主题变化
   useEffect(() => {
-    const unsubscribe = themeManager.subscribe((newTheme) => {
+    // 定义订阅的回调函数
+    const handleThemeChange = (newTheme: ThemeMode) => {
       setTheme(newTheme);
-    });
+    };
 
-    // 确保当前状态与主题管理器同步
-    const currentTheme = themeManager.getTheme();
-    if (currentTheme !== theme) {
-      setTheme(currentTheme);
-    }
+    // 添加订阅
+    const unsubscribe = themeManager.subscribe(handleThemeChange);
 
-    return unsubscribe;
-  }, [theme]);
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const setThemeMode = useCallback((mode: ThemeMode) => {
     themeManager.setTheme(mode);

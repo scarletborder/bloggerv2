@@ -1,6 +1,6 @@
-import React from 'react';
-import useTheme from '../hooks/useTheme';
-import { isMobile } from 'react-device-detect';
+import React from "react";
+import useTheme from "../hooks/useTheme";
+import { isMobile } from "react-device-detect";
 
 interface ThemeViewProps {
   children: React.ReactNode;
@@ -11,50 +11,50 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
 
   // PC 端字体大小 (px)
   const pcFontSizes = {
-    p: '16px',
-    span: '16px',
-    div: '16px',
-    a: '16px',
-    h1: '32px',
-    h2: '28px',
-    h3: '24px',
-    h4: '20px',
-    h5: '18px',
-    h6: '16px',
-    pre: '14px',
-    code: '14px',
-    small: '14px',
-    label: '16px',
-    input: '16px',
-    button: '16px',
-    li: '16px',
-    blockquote: '16px',
-    caption: '14px',
-    figcaption: '14px',
+    p: "16px",
+    span: "16px",
+    div: "16px",
+    a: "16px",
+    h1: "32px",
+    h2: "28px",
+    h3: "24px",
+    h4: "20px",
+    h5: "18px",
+    h6: "16px",
+    pre: "14px",
+    code: "14px",
+    small: "14px",
+    label: "16px",
+    input: "16px",
+    button: "16px",
+    li: "16px",
+    blockquote: "16px",
+    caption: "14px",
+    figcaption: "14px",
   };
 
   // 移动端字体大小 (px) - 修复过大的字体问题
   const mobileFontSizes = {
-    p: '16px',
-    span: '16px',
-    div: '16px',
-    a: '16px',
-    h1: '28px',
-    h2: '24px',
-    h3: '22px',
-    h4: '20px',
-    h5: '18px',
-    h6: '16px',
-    pre: '14px',
-    code: '14px',
-    small: '14px',
-    label: '16px',
-    input: '16px',
-    button: '16px',
-    li: '16px',
-    blockquote: '16px',
-    caption: '14px',
-    figcaption: '14px',
+    p: "16px",
+    span: "16px",
+    div: "16px",
+    a: "16px",
+    h1: "28px",
+    h2: "24px",
+    h3: "22px",
+    h4: "20px",
+    h5: "18px",
+    h6: "16px",
+    pre: "14px",
+    code: "14px",
+    small: "14px",
+    label: "16px",
+    input: "16px",
+    button: "16px",
+    li: "16px",
+    blockquote: "16px",
+    caption: "14px",
+    figcaption: "14px",
   };
 
   const currentFontSizes = isMobile ? mobileFontSizes : pcFontSizes;
@@ -63,68 +63,89 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     // 移除背景色设置，避免与HTML/CSS样式冲突
     // backgroundColor: 'var(--bg-color)',
     // color: 'var(--text-color)',
-    minHeight: '100vh',
-    width: '100%',
-    maxWidth: '100vw',
-    overflowX: 'hidden',
-    position: 'relative',
-    wordWrap: 'break-word',
+    minHeight: "100vh",
+    width: "100%",
+    maxWidth: "100vw",
+    overflowX: "hidden",
+    position: "relative",
+    wordWrap: "break-word",
     fontFamily: isMobile
       ? '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
       : '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-    lineHeight: isMobile ? '1.6' : '1.5',
+    lineHeight: isMobile ? "1.6" : "1.5",
     // 移除过渡效果，避免闪烁
     // transition: 'background-color 0.3s ease, color 0.3s ease',
-  };  // 创建全局样式字符串 - 使用 CSS 变量
+  }; // 创建全局样式字符串 - 使用 CSS 变量
   const globalStyles = `
     html, body {
-      ${isMobile ? `
+      ${
+        isMobile
+          ? `
         overflow-x: hidden;
         max-width: 100vw;
         position: relative;
         touch-action: pan-y;
-      ` : ''}
+      `
+          : ""
+      }
     }
 
     * {
       box-sizing: border-box;
-      ${isMobile ? `
+      ${
+        isMobile
+          ? `
         max-width: 100%;
         overflow-wrap: break-word;
         word-wrap: break-word;
         hyphens: auto;
-      ` : ''}
+      `
+          : ""
+      }
     }
 
     p {
       font-size: ${currentFontSizes.p};
-      margin: ${isMobile ? '12px 0' : '16px 0'};
+      margin: ${isMobile ? "12px 0" : "16px 0"};
       color: var(--text-color);
-      ${isMobile ? `
+      ${
+        isMobile
+          ? `
         max-width: 100%;
         overflow-wrap: break-word;
         word-wrap: break-word;
-      ` : ''}
-    }
-
-    span {
-      font-size: ${currentFontSizes.span};
-      color: var(--text-color);
-      ${isMobile ? `
-        max-width: 100%;
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-      ` : ''}
+      `
+          : ""
+      }
     }
 
     div {
       font-size: ${currentFontSizes.div};
       color: var(--text-color);
-      ${isMobile ? `
+      ${
+        isMobile
+          ? `
         max-width: 100%;
         overflow-wrap: break-word;
         word-wrap: break-word;
-      ` : ''}
+      `
+          : ""
+      }
+    }
+
+    /* 使用 :where() 将特异性降为 0，确保后续样式可覆盖 */
+    :where(span) {
+      font-size: ${currentFontSizes.span};
+      color: var(--text-color);
+      ${
+        isMobile
+          ? `
+        max-width: 100%;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+      `
+          : ""
+      }
     }
 
     a {
@@ -142,7 +163,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     h1 {
       font-size: ${currentFontSizes.h1};
       font-weight: 700;
-      margin: ${isMobile ? '16px 0 12px' : '32px 0 24px'};
+      margin: ${isMobile ? "16px 0 12px" : "32px 0 24px"};
       color: var(--text-color);
       line-height: 1.2;
     }
@@ -150,7 +171,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     h2 {
       font-size: ${currentFontSizes.h2};
       font-weight: 600;
-      margin: ${isMobile ? '14px 0 10px' : '28px 0 20px'};
+      margin: ${isMobile ? "14px 0 10px" : "28px 0 20px"};
       color: var(--text-color);
       line-height: 1.3;
     }
@@ -158,7 +179,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     h3 {
       font-size: ${currentFontSizes.h3};
       font-weight: 600;
-      margin: ${isMobile ? '12px 0 8px' : '24px 0 16px'};
+      margin: ${isMobile ? "12px 0 8px" : "24px 0 16px"};
       color: var(--text-color);
       line-height: 1.3;
     }
@@ -166,7 +187,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     h4 {
       font-size: ${currentFontSizes.h4};
       font-weight: 600;
-      margin: ${isMobile ? '10px 0 6px' : '20px 0 12px'};
+      margin: ${isMobile ? "10px 0 6px" : "20px 0 12px"};
       color: var(--text-color);
       line-height: 1.4;
     }
@@ -174,7 +195,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     h5 {
       font-size: ${currentFontSizes.h5};
       font-weight: 600;
-      margin: ${isMobile ? '8px 0 4px' : '18px 0 10px'};
+      margin: ${isMobile ? "8px 0 4px" : "18px 0 10px"};
       color: var(--text-color);
       line-height: 1.4;
     }
@@ -182,7 +203,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     h6 {
       font-size: ${currentFontSizes.h6};
       font-weight: 600;
-      margin: ${isMobile ? '6px 0 2px' : '16px 0 8px'};
+      margin: ${isMobile ? "6px 0 2px" : "16px 0 8px"};
       color: var(--text-color);
       line-height: 1.4;
     }
@@ -192,8 +213,8 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
       background-color: var(--surface-color);
       border: 1px solid var(--border-color);
       border-radius: 4px;
-      padding: ${isMobile ? '12px' : '16px'};
-      margin: ${isMobile ? '12px 0' : '16px 0'};
+      padding: ${isMobile ? "12px" : "16px"};
+      margin: ${isMobile ? "12px 0" : "16px 0"};
       overflow-x: auto;
       color: var(--text-color);
       font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
@@ -202,7 +223,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     code {
       font-size: ${currentFontSizes.code};
       background-color: var(--surface-color);
-      padding: ${isMobile ? '2px 4px' : '2px 6px'};
+      padding: ${isMobile ? "2px 4px" : "2px 6px"};
       border-radius: 3px;
       color: var(--text-color);
       font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
@@ -225,7 +246,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
       background-color: var(--bg-color);
       border: 1px solid var(--border-color);
       border-radius: 4px;
-      padding: ${isMobile ? '8px' : '12px'};
+      padding: ${isMobile ? "8px" : "12px"};
       outline: none;
       transition: border-color 0.2s ease;
       max-width: 100%;
@@ -242,7 +263,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
       background-color: var(--primary-color);
       border: none;
       border-radius: 4px;
-      padding: ${isMobile ? '8px 16px' : '12px 24px'};
+      padding: ${isMobile ? "8px 16px" : "12px 24px"};
       cursor: pointer;
       transition: background-color 0.2s ease;
       font-weight: 500;
@@ -255,15 +276,15 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     li {
       font-size: ${currentFontSizes.li};
       color: var(--text-color);
-      margin: ${isMobile ? '6px 0' : '8px 0'};
+      margin: ${isMobile ? "6px 0" : "8px 0"};
     }
 
     blockquote {
       font-size: ${currentFontSizes.blockquote};
       color: var(--text-secondary-color);
       border-left: 3px solid var(--primary-color);
-      padding-left: ${isMobile ? '12px' : '16px'};
-      margin: ${isMobile ? '12px 0' : '16px 0'};
+      padding-left: ${isMobile ? "12px" : "16px"};
+      margin: ${isMobile ? "12px 0" : "16px 0"};
       font-style: italic;
     }
 
@@ -271,13 +292,13 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
       font-size: ${currentFontSizes.caption};
       color: var(--text-secondary-color);
       text-align: center;
-      margin: ${isMobile ? '6px 0' : '8px 0'};
+      margin: ${isMobile ? "6px 0" : "8px 0"};
     }
 
     table {
       border-collapse: collapse;
       width: 100%;
-      margin: ${isMobile ? '12px 0' : '16px 0'};
+      margin: ${isMobile ? "12px 0" : "16px 0"};
       max-width: 100%;
       overflow-x: auto;
       display: block;
@@ -287,7 +308,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     th, td {
       font-size: ${currentFontSizes.p};
       border: 1px solid var(--border-color);
-      padding: ${isMobile ? '8px' : '12px'};
+      padding: ${isMobile ? "8px" : "12px"};
       text-align: left;
     }
 
@@ -299,7 +320,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     hr {
       border: none;
       border-top: 1px solid var(--border-color);
-      margin: ${isMobile ? '20px 0' : '32px 0'};
+      margin: ${isMobile ? "20px 0" : "32px 0"};
     }
 
     /* 滚动条样式 */
@@ -339,23 +360,28 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     // document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
 
     // 动态创建并注入样式
-    const styleId = 'theme-view-global-styles';
+    const styleId = "theme-view-global-styles";
     let styleElement = document.getElementById(styleId) as HTMLStyleElement;
 
     if (!styleElement) {
-      styleElement = document.createElement('style');
+      styleElement = document.createElement("style");
       styleElement.id = styleId;
-      document.head.appendChild(styleElement);
+      // 插入到 <head> 顶部，降低后续样式覆盖风险
+      const first = document.head.firstChild;
+      if (first) {
+        document.head.insertBefore(styleElement, first);
+      } else {
+        document.head.appendChild(styleElement);
+      }
+    } else if (document.head.firstChild !== styleElement) {
+      // 若已存在但不在顶部，则移动到顶部
+      document.head.insertBefore(styleElement, document.head.firstChild);
     }
 
     styleElement.innerHTML = globalStyles;
   }, [globalStyles, theme]);
 
-  return (
-    <div style={containerStyles}>
-      {children}
-    </div>
-  );
+  return <div style={containerStyles}>{children}</div>;
 };
 
 export default ThemeView;
