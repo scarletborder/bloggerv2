@@ -84,30 +84,28 @@
       })();
 /*]]>*/
     </script>
-
     <script type="module" crossorigin="anonymous"
-      src="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index-Cz4wVjAg.js"></script>
+      src="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.js"></script>
     <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-CxYD_R7g.js" />
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor.js" />
     <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper-DWLuqPWW.js" />
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.js" />
     <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-react-BWuxF3F4.js" />
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-react.js" />
     <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-archivespage-XfMgVqP8.js" />
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-archivespage.js" />
     <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-homepage-CDSpJjR_.js" />
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-homepage.js" />
     <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-toolspage-C7OaPS7S.js" />
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-toolspage.js" />
     <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-prismjs-YBpcdEAa.js" />
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-prismjs.js" />
     <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-postpage-C9Y_eN6K.js" />
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-postpage.js" />
     <link rel="stylesheet" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper-BH4JZYC6.css" />
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.css" />
     <link rel="stylesheet" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index-pv73oGHo.css" />
-
+      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.css" />
     <!-- END Paste -->
     <script
       src='https://cdn.jsdelivr.net/gh/scarletborder/public_js@main/blogs/apis.google.com_js_plusone.js'
