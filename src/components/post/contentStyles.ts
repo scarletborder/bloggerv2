@@ -10,7 +10,7 @@ import { generateCodeBlockEnhancementStyles } from "./codeBlockStyles";
  * @param theme 当前主题 ('dark' | 'light')
  * @returns CSS 样式字符串
  */
-export const generateContentStyles = (theme: string): string => {
+export const generateContentStyles = (theme: 'dark' | 'light'): string => {
   return `
     .blog-content {
       line-height: 1.6;
