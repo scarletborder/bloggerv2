@@ -70,82 +70,79 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
     position: "relative",
     wordWrap: "break-word",
     fontFamily: isMobile
-      ? '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
-      : '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      ? '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif'
+      : '"Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif',
     lineHeight: isMobile ? "1.6" : "1.5",
     // 移除过渡效果，避免闪烁
     // transition: 'background-color 0.3s ease, color 0.3s ease',
   }; // 创建全局样式字符串 - 使用 CSS 变量
   const globalStyles = `
     html, body {
-      ${
-        isMobile
-          ? `
+      ${isMobile
+      ? `
         overflow-x: hidden;
         max-width: 100vw;
         position: relative;
         touch-action: pan-y;
       `
-          : ""
-      }
+      : ""
+    }
     }
 
     * {
       box-sizing: border-box;
-      ${
-        isMobile
-          ? `
+      ${isMobile
+      ? `
         max-width: 100%;
         overflow-wrap: break-word;
         word-wrap: break-word;
         hyphens: auto;
       `
-          : ""
-      }
+      : ""
+    }
     }
 
     p {
       font-size: ${currentFontSizes.p};
+      font-weight: 400;
       margin: ${isMobile ? "12px 0" : "16px 0"};
       color: var(--text-color);
-      ${
-        isMobile
-          ? `
+      line-height: 1.6;
+      ${isMobile
+      ? `
         max-width: 100%;
         overflow-wrap: break-word;
         word-wrap: break-word;
       `
-          : ""
-      }
+      : ""
+    }
     }
 
     div {
       font-size: ${currentFontSizes.div};
       color: var(--text-color);
-      ${
-        isMobile
-          ? `
+      ${isMobile
+      ? `
         max-width: 100%;
         overflow-wrap: break-word;
         word-wrap: break-word;
       `
-          : ""
-      }
+      : ""
+    }
     }
 
     /* 使用 :where() 将特异性降为 0，确保后续样式可覆盖 */
     :where(span) {
       font-size: ${currentFontSizes.span};
       color: var(--text-color);
-      ${
-        isMobile
-          ? `
+      ${isMobile
+      ? `
         max-width: 100%;
         overflow-wrap: break-word;
         word-wrap: break-word;
       `
-          : ""
-      }
+      : ""
+    }
     }
 
     a {
@@ -162,7 +159,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
 
     h1 {
       font-size: ${currentFontSizes.h1};
-      font-weight: 700;
+      font-weight: 600;
       margin: ${isMobile ? "16px 0 12px" : "32px 0 24px"};
       color: var(--text-color);
       line-height: 1.2;
@@ -170,7 +167,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
 
     h2 {
       font-size: ${currentFontSizes.h2};
-      font-weight: 600;
+      font-weight: 500;
       margin: ${isMobile ? "14px 0 10px" : "28px 0 20px"};
       color: var(--text-color);
       line-height: 1.3;
@@ -178,7 +175,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
 
     h3 {
       font-size: ${currentFontSizes.h3};
-      font-weight: 600;
+      font-weight: 500;
       margin: ${isMobile ? "12px 0 8px" : "24px 0 16px"};
       color: var(--text-color);
       line-height: 1.3;
@@ -186,7 +183,7 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
 
     h4 {
       font-size: ${currentFontSizes.h4};
-      font-weight: 600;
+      font-weight: 500;
       margin: ${isMobile ? "10px 0 6px" : "20px 0 12px"};
       color: var(--text-color);
       line-height: 1.4;
@@ -285,7 +282,9 @@ const ThemeView: React.FC<ThemeViewProps> = ({ children }) => {
       border-left: 3px solid var(--primary-color);
       padding-left: ${isMobile ? "12px" : "16px"};
       margin: ${isMobile ? "12px 0" : "16px 0"};
-      font-style: italic;
+      font-style: normal;
+      font-weight: 400;
+      opacity: 0.95;
     }
 
     caption, figcaption {

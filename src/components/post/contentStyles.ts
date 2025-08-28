@@ -13,13 +13,17 @@ import { generateCodeBlockEnhancementStyles } from "./codeBlockStyles";
 export const generateContentStyles = (theme: string): string => {
   return `
     .blog-content {
-      line-height: 1.7;
+      line-height: 1.6;
       color: var(--text-color);
       /* 桌面端基础字号 (18px) */
       font-size: 18px;
       font-size: 1.125rem; /* 18 / 16 */
+      font-weight: 400;
       max-width: 100%;
       word-break: break-word;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
 
     .blog-content h1,
@@ -72,24 +76,36 @@ export const generateContentStyles = (theme: string): string => {
       margin: 1rem 0;
       font-size: 14px;
       font-size: 0.875rem; /* 14 / 16 */
+      font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
+      font-weight: 400;
+      line-height: 1.5;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "kern" 0;
     }
 
     .blog-content code {
-      background-color: ${
-        theme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"
-      };
+      background-color: ${theme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"
+    };
       padding: 2px 6px;
       padding: 0.125rem 0.375rem;
       border-radius: 4px;
       border-radius: 0.25rem;
-      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
       /* 使用 em 单位使行内代码块大小相对于周围文本，这是推荐做法 */
       font-size: 0.9em;
+      font-weight: 400;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "kern" 0;
     }
 
     .blog-content pre code {
       background-color: transparent;
       padding: 0;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      font-variant-numeric: inherit;
+      font-feature-settings: inherit;
     }
 
     .blog-content blockquote {
@@ -98,7 +114,9 @@ export const generateContentStyles = (theme: string): string => {
       margin: 16px 0;
       margin: 1rem 0;
       color: var(--text-secondary-color);
-      font-style: italic;
+      font-style: normal;
+      font-weight: 400;
+      opacity: 0.95;
       background-color: var(--surface-color);
       padding: 12px 16px;
       padding: 0.75rem 1rem;
@@ -160,6 +178,9 @@ export const generateContentStyles = (theme: string): string => {
       border-radius: 0.5rem;
       color: ${theme === "dark" ? "#f8f8f2" : "#333"};
       overflow-x: auto;
+      font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "kern" 0;
     }
 
     /* 清理后的 CodeMirror 块样式 */
@@ -173,11 +194,14 @@ export const generateContentStyles = (theme: string): string => {
       overflow-x: auto;
       margin: 16px 0;
       margin: 1rem 0;
-      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
       font-size: 14px;
       font-size: 0.875rem;
+      font-weight: 400;
       line-height: 1.5;
       border: 1px solid var(--border-color);
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "kern" 0;
     }
 
     .blog-content .cleaned-codemirror-block code {
@@ -263,6 +287,9 @@ export const generateContentStyles = (theme: string): string => {
         margin: 0.75rem 0;
         padding: 8px 12px;
         padding: 0.5rem 0.75rem;
+        font-style: normal;
+        font-weight: 400;
+        opacity: 0.95;
       }
       
       .blog-content img,
@@ -310,13 +337,24 @@ export const generateContentStyles = (theme: string): string => {
         margin: 0.75rem 0;
         font-size: 13px;
         font-size: 0.8125rem;
+        font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
+        font-variant-numeric: tabular-nums;
+        font-feature-settings: "kern" 0;
       }
 
-      .blog-content .cleaned-codemirror-block code {
-        font-size: inherit !important;
-      }
-      
-      .blog-content .katex {
+    .blog-content .cleaned-codemirror-block code {
+      background-color: transparent !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
+      font-weight: inherit !important;
+      font-variant-numeric: inherit !important;
+      font-feature-settings: inherit !important;
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }      .blog-content .katex {
         font-size: 1em;
       }
       
@@ -324,6 +362,22 @@ export const generateContentStyles = (theme: string): string => {
         margin: 16px 0;
         margin: 1rem 0;
              }
+     }
+
+     /* 代码块中英文字体大小统一 */
+     .blog-content pre,
+     .blog-content code,
+     .blog-content .CodeMirror-scroll,
+     .blog-content .cleaned-codemirror-block {
+       /* 确保中英文字符使用统一的字体设置 */
+       text-size-adjust: 100%;
+       -webkit-text-size-adjust: 100%;
+       -moz-text-size-adjust: 100%;
+       /* 禁用字体大小的自动调整 */
+       font-size-adjust: none;
+       /* 确保字符间距一致 */
+       letter-spacing: 0;
+       word-spacing: 0;
      }
 
      /* 代码块增强功能样式 */
