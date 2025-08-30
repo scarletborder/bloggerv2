@@ -19,24 +19,19 @@ export function CommentItemComponent({ comment, setCtx }: CommentItemComponentPr
   const linkIconRef = useRef<HTMLSpanElement>(null);
 
   const handleReplyClick = () => {
-    // 处理回复点击事件
-    if (comment.source !== 'blogger') return; // 仅允许回复 Blogger 评论
+    if (comment.source !== 'blogger') return;
     const meta = comment.meta as MetaBlogger;
     setCtx({ replyToId: meta.id });
   };
 
-  // Handle click outside for mobile
   useEffect(() => {
     if (!isMobile || !showTooltip) return;
-
     const handleClickOutside = (event: MouseEvent) => {
-      // 检查点击事件是否发生在 linkIconRef 及其子元素之外
       if (linkIconRef.current && !linkIconRef.current.contains(event.target as Node)) {
         setShowTooltip(false);
         setTooltipText('');
       }
     };
-
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, [showTooltip]);
@@ -58,12 +53,9 @@ export function CommentItemComponent({ comment, setCtx }: CommentItemComponentPr
   const handleLinkIconClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
     if (!comment.author.url) return;
-
     if (isMobile) {
       if (showTooltip) {
-        // Second click: copy URL
         try {
           await navigator.clipboard.writeText(comment.author.url);
           setShowToast(true);
@@ -74,12 +66,10 @@ export function CommentItemComponent({ comment, setCtx }: CommentItemComponentPr
         setShowTooltip(false);
         setTooltipText('');
       } else {
-        // First click: show tooltip
         setShowTooltip(true);
         setTooltipText(comment.author.url);
       }
     } else {
-      // PC: copy URL directly
       try {
         await navigator.clipboard.writeText(comment.author.url);
         setShowToast(true);
@@ -100,6 +90,8 @@ export function CommentItemComponent({ comment, setCtx }: CommentItemComponentPr
       minute: '2-digit'
     });
   };
+
+  // ==================== 样式定义区 (CSS-in-JS) ====================
 
   const commentItemStyles: React.CSSProperties = {
     padding: isMobile ? '16px' : '20px',
@@ -206,12 +198,10 @@ export function CommentItemComponent({ comment, setCtx }: CommentItemComponentPr
     wordBreak: 'break-word',
   };
 
-  // ==================== 修改开始 ====================
-
   const actionsStyles: React.CSSProperties = {
     marginTop: '12px',
     display: 'flex',
-    justifyContent: 'flex-end', // 将按钮对齐到右侧
+    justifyContent: 'flex-end',
   };
 
   const replyButtonStyles: React.CSSProperties = {
@@ -226,7 +216,34 @@ export function CommentItemComponent({ comment, setCtx }: CommentItemComponentPr
     transition: 'background-color 0.2s ease',
   };
 
+  // ==================== 新增：引用块的样式 ====================
+  const quoteBlockStyles: React.CSSProperties = {
+    margin: '0 0 12px 0',
+    padding: '8px 12px',
+    borderLeft: `4px solid ${colors.border}`,
+    backgroundColor: colors.background,
+    color: colors.textSecondary,
+    fontSize: '13px',
+    borderRadius: '4px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  };
   // ==================== 修改结束 ====================
+
+  /**
+   * 创建被引用内容的摘要
+   * @param htmlContent - 被引用评论的HTML内容
+   * @returns 纯文本摘要
+   */
+  const createBrief = (htmlContent: string): string => {
+    // 创建一个临时div来解析HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlContent;
+    // 获取纯文本，并截断
+    const text = tempDiv.textContent || tempDiv.innerText || "";
+    return text.length > 50 ? `${text.substring(0, 50)}...` : text;
+  };
 
   return (
     <div style={commentItemStyles}>
@@ -256,7 +273,6 @@ export function CommentItemComponent({ comment, setCtx }: CommentItemComponentPr
             ) : (
               comment.author.name
             )}
-
             {comment.author.url && (
               <span
                 ref={linkIconRef}
@@ -268,35 +284,35 @@ export function CommentItemComponent({ comment, setCtx }: CommentItemComponentPr
                 🔗
               </span>
             )}
-
             <SourceIcon source={comment.source} />
           </div>
-          <div style={dateStyles}>
-            {formatDate(comment.timeStamp)}
-          </div>
-
+          <div style={dateStyles}>{formatDate(comment.timeStamp)}</div>
           {comment.author.url && showTooltip && tooltipText && (
             <div style={tooltipStyles}>
-              <span style={getTooltipTextStyles()}>
-                {tooltipText}
-              </span>
+              <span style={getTooltipTextStyles()}>{tooltipText}</span>
             </div>
           )}
         </div>
       </div>
+
+      {/* ==================== 新增：条件渲染引用块 ==================== */}
+      {comment.inReplyTo && (
+        <div style={quoteBlockStyles}>
+          {`> ${comment.inReplyTo.author.name}: ${createBrief(comment.inReplyTo.content)}`}
+        </div>
+      )}
+      {/* ==================== 修改结束 ==================== */}
+
       <div
         style={contentStyles}
         dangerouslySetInnerHTML={{ __html: comment.content }}
       />
-
-      {/* ==================== 修改开始 ==================== */}
 
       <div style={actionsStyles}>
         {comment.source === 'blogger' && (
           <button
             style={replyButtonStyles}
             onClick={handleReplyClick}
-            // 鼠标悬停时改变背景色以提供反馈
             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = colors.border)}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
           >
@@ -305,13 +321,7 @@ export function CommentItemComponent({ comment, setCtx }: CommentItemComponentPr
         )}
       </div>
 
-      {/* ==================== 修改结束 ==================== */}
-
-      {showToast && (
-        <div style={toastStyles}>
-          复制成功！
-        </div>
-      )}
+      {showToast && <div style={toastStyles}>复制成功！</div>}
     </div>
   );
 }

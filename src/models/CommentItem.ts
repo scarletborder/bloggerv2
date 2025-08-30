@@ -12,7 +12,15 @@ export type CommentItem = {
 
   // 来源, blogger, disqus
   source: "blogger" | "disqus";
-  meta: MetaBlogger | MetaDisqus;
+  meta: MetaBlogger;
+
+  // 粗略的回复
+  inReplyTo?: {
+    author: {
+      name: string;
+    };
+    content: string;
+  }
 }
 
 type Author = {
@@ -23,10 +31,10 @@ type Author = {
   image?: string;
 }
 
-export type MetaBlogger = {
+export interface MetaBlogger {
   id: string;
   replyToId: string | null;
 }
 
-export type MetaDisqus = {
+export interface MetaDisqus {
 }

@@ -1,43 +1,52 @@
 import React, { useEffect, useRef, useState } from 'react';
+import _ from 'lodash';
 import { useBoolean } from 'ahooks';
-import type { Timeout } from 'ahooks/lib/useRequest/src/types';
+// 不再需要 Timeout 类型
+// import type { Timeout } from 'ahooks/lib/useRequest/src/types'; 
 import type { CommentsState } from './types';
 import type { SetState } from 'ahooks/lib/useSetState';
 
 type CommentFormProps = {
   Ctx: CommentsState;
   setCtx: SetState<CommentsState>;
-  onCommentSubmitted: () => void; // 接收来自 CommentArea 的刷新函数
+  onCommentSubmitted: () => void;
 }
 
-/**
- * 优化后的Blogger评论表单组件。
- * 允许用户在当前页面输入内容，然后通过“剪贴板继承”的方式在弹出窗口中快速发布。
- */
 export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx, onCommentSubmitted }) => {
   const { blogId, postId, replyToId } = Ctx;
 
-  // 新增 state 来管理本地文本框的内容
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, { set: setIsSubmitting }] = useBoolean(false);
-  const pollTimerRef = useRef<Timeout | null>(null);
 
-  // 当回复目标变化时 (用户点击了另一条评论的回复)，清空文本框
+  // 使用一个 Ref 来确保 focus 事件处理函数只被有效执行一次
+  const isWaitingForPopupClose = useRef(false);
+
   useEffect(() => {
     setCommentText('');
   }, [replyToId]);
 
-  // 当组件卸载时，确保清除任何正在运行的定时器
+  // 新增 Effect 来处理 focus 事件的监听和清理
   useEffect(() => {
-    return () => {
-      if (pollTimerRef.current) {
-        clearInterval(pollTimerRef.current);
+    const handleFocus = () => {
+      // 只有当我们确实在等待弹出窗口关闭时，才响应 focus 事件
+      if (isWaitingForPopupClose.current) {
+        console.log('主窗口获得焦点，判定评论流程结束，触发刷新...');
+        isWaitingForPopupClose.current = false; // 重置标志
+        window.location.reload(); // 刷新页面以加载新评论
       }
     };
-  }, []);
+
+    // 添加事件监听
+    window.addEventListener('focus', handleFocus);
+
+    // 组件卸载时，清理监听器
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+    };
+    // onCommentSubmitted 和 setIsSubmitting 是函数，通常是稳定的，但为了严谨可以加入依赖
+  }, [onCommentSubmitted, setIsSubmitting]);
 
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    // 1. 阻止按钮的默认行为，防止页面刷新
     event.preventDefault();
 
     if (!commentText.trim()) {
@@ -68,21 +77,8 @@ export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx, onComment
       return;
     }
 
-    // 2. 改进轮询逻辑
-    pollTimerRef.current = setInterval(() => {
-      // 检查 popup 是否存在且已关闭
-      // `popup.closed` 是关键属性
-      if (!popup || popup.closed) {
-        if (pollTimerRef.current) clearInterval(pollTimerRef.current);
-
-        setIsSubmitting(false);
-        setCommentText('');
-        console.log('评论窗口已关闭，触发刷新...');
-
-        // 3. 调用从父组件传入的回调函数，而不是刷新整个页面
-        onCommentSubmitted();
-      }
-    }, 500);
+    // 不再使用 setInterval 轮询，而是设置一个标志，告诉 focus 监听器我们正在等待
+    isWaitingForPopupClose.current = true;
   };
 
   const handleCancelReply = () => {
@@ -94,7 +90,6 @@ export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx, onComment
       <h3>
         {replyToId ? '正在回复...' : '发表新评论'}
       </h3>
-      {/* 修改 textarea，使其变为一个受控组件 */}
       <textarea
         placeholder="在此输入您的评论..."
         rows={6}
@@ -104,7 +99,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx, onComment
       />
       <div className="form-actions" style={{ marginTop: '10px' }}>
         <button type="button" onClick={handleSubmit} disabled={isSubmitting}>
-          {isSubmitting ? '等待窗口...' : '发布评论 (内容已复制)'}
+          {isSubmitting ? '等待窗口关闭...' : '发布评论 (内容已复制)'}
         </button>
         {replyToId && (
           <button type="button" onClick={handleCancelReply} style={{ marginLeft: '10px' }}>
