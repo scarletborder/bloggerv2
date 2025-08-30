@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react-swc";
 import viteCompression from "vite-plugin-compression";
 import removeConsole from "vite-plugin-remove-console";
 
+const ENABLE_HASH = false;
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
   // 仅生产环境使用 CDN base，开发环境保持默认
@@ -40,32 +42,32 @@ export default defineConfig(({ mode }) => ({
     minify: true, // 启用代码混淆和压缩
     rollupOptions: {
       output: {
-        // 主入口文件的名称，通常不需要 hash
-        entryFileNames: "assets/index-[hash].js", // 添加 hash
-        // chunk 文件的名称，启用 hash，用于缓存 busting
-        chunkFileNames: "assets/[name]-[hash].js", // 启用 hash
-        // 其他资源的名称，启用 hash
+        // 主入口文件的名称，根据 ENABLE_HASH 决定是否添加 hash
+        entryFileNames: ENABLE_HASH ? "assets/index-[hash].js" : "assets/index.js",
+        // chunk 文件的名称，根据 ENABLE_HASH 决定是否添加 hash
+        chunkFileNames: ENABLE_HASH ? "assets/[name]-[hash].js" : "assets/[name].js",
+        // 其他资源的名称，根据 ENABLE_HASH 决定是否添加 hash
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name?.split(".") || [];
           const ext = info[info.length - 1];
 
-          // CSS 文件保持 chunk 名称，启用 hash
+          // CSS 文件，根据 ENABLE_HASH 决定是否添加 hash
           if (ext === "css") {
-            return `assets/[name]-[hash].css`; // 启用 hash
+            return ENABLE_HASH ? `assets/[name]-[hash].css` : `assets/[name].css`;
           }
 
-          // 图片文件保持原名或使用固定名称，启用 hash
+          // 图片文件，根据 ENABLE_HASH 决定是否添加 hash
           if (/png|jpe?g|gif|svg|webp|avif/i.test(ext)) {
-            return `assets/images/[name]-[hash].[ext]`; // 启用 hash
+            return ENABLE_HASH ? `assets/images/[name]-[hash].[ext]` : `assets/images/[name].[ext]`;
           }
 
-          // 字体文件，启用 hash
+          // 字体文件，根据 ENABLE_HASH 决定是否添加 hash
           if (/woff2?|eot|ttf|otf/i.test(ext)) {
-            return `assets/fonts/[name]-[hash].[ext]`; // 启用 hash
+            return ENABLE_HASH ? `assets/fonts/[name]-[hash].[ext]` : `assets/fonts/[name].[ext]`;
           }
 
-          // 其他资源文件，启用 hash
-          return `assets/[name]-[hash].[ext]`; // 启用 hash
+          // 其他资源文件，根据 ENABLE_HASH 决定是否添加 hash
+          return ENABLE_HASH ? `assets/[name]-[hash].[ext]` : `assets/[name].[ext]`;
         },
         // manualChunks 仍然保持禁用状态
       },
