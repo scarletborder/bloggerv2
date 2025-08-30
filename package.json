@@ -11,6 +11,12 @@
   },
   "dependencies": {
     "@ahooksjs/use-url-state": "^3.5.1",
+    "@deox/blogger-feed": "^0.0.9",
+    "@fortawesome/fontawesome-svg-core": "^7.0.0",
+    "@fortawesome/free-brands-svg-icons": "^7.0.0",
+    "@fortawesome/free-regular-svg-icons": "^7.0.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
+    "@fortawesome/react-fontawesome": "^3.0.1",
     "@react-spring/web": "^10.0.1",
     "@use-gesture/react": "^10.3.1",
     "ahooks": "^3.9.4",

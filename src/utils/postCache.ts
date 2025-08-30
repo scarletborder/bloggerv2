@@ -6,7 +6,7 @@ import type { PostItem } from '../models/PostItem';
 interface CacheEntry {
   key: string; // 格式: "年份/月份"
   posts: PostItem[];
-  timestamp: number;
+  timestamp: number; // milliseconds 
   expire: number; // 过期时间戳
 }
 

@@ -20,6 +20,7 @@ type PostListByDateRequest = {
 }
 
 type SinglePost = {
+  _id: string;
   // 文章存储路径
   // example `/2024/08/abcd.html`
   path: string;
@@ -68,6 +69,7 @@ export default async function GetPostList(req: PostListRequest): Promise<PostLis
       let linkPath = entry.link.find(link => link.rel === 'alternate')?.href || '';
       linkPath = linkPath.split("//")[1].split("/").slice(1).join("/");
       return {
+        _id: entry.id.$t,
         path: linkPath,
         title: entry.title.$t,
         tags: tags,
@@ -97,6 +99,7 @@ export async function GetPostListByCategories(req: PostListByCategoryRequest): P
       let linkPath = entry.link.find(link => link.rel === 'alternate')?.href || '';
       linkPath = linkPath.split("//")[1].split("/").slice(1).join("/");
       return {
+        _id: entry.id.$t,
         path: linkPath,
         title: entry.title.$t,
         tags: tags,
@@ -143,6 +146,7 @@ export async function GetPostListByDate(req: PostListByDateRequest): Promise<Pos
       let linkPath = entry.link.find(link => link.rel === 'alternate')?.href || '';
       linkPath = linkPath.split("//")[1].split("/").slice(1).join("/");
       return {
+        _id: entry.id.$t,
         path: linkPath,
         title: entry.title.$t,
         tags: tags,

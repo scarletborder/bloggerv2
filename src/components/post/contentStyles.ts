@@ -3,7 +3,7 @@
  * 根据主题生成博客内容的 CSS 样式
  */
 
-import { generateCodeBlockEnhancementStyles } from "./codeBlockStyles";
+import { generateCodeBlockEnhancementStyles } from "./codeBlocks/codeBlockStyles";
 
 /**
  * 生成内容样式的 CSS 字符串

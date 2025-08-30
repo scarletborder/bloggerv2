@@ -379,6 +379,7 @@ export default function PostListMobile({ }: PostListMobileProps) {
               </div>
             )}
             <MobilePostItem
+              _id={post._id}
               path={post.path}
               title={post.title}
               tags={post.tags}

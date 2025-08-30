@@ -49,6 +49,7 @@ export const SearchPostsByQuery = async (
         entry.link.find((link) => link.rel === "alternate")?.href || "";
       linkPath = linkPath.split("//")[1].split("/").slice(1).join("/");
       return {
+        _id: entry.id.$t,
         path: linkPath,
         title: entry.title.$t,
         tags: tags,

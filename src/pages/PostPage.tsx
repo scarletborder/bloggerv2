@@ -5,6 +5,7 @@ import { getPostDetail, type PostDetail } from '../services/PostDetail';
 import HeaderView from '../components/post/HeaderView';
 import ContentView from '../components/post/ContentView';
 import TableOfContents from '../components/post/TableOfContents';
+import CommentArea from '../components/post/comments/CommentArea';
 
 /**
  * 文章详情页面
@@ -210,6 +211,10 @@ const PostPage: React.FC = () => {
 
         {/* 文章内容 */}
         <ContentView content={post.content} />
+
+        {/* 评论区 */}
+        <CommentArea postId={post._id} />
+
       </main>
 
       {/* 悬浮的回到顶部按钮（仅移动端） */}
