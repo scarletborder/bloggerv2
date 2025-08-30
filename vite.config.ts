@@ -77,9 +77,6 @@ export default defineConfig(({ mode }) => ({
             if (id.includes("swiper")) {
               return "vendor-swiper";
             }
-            if (id.includes("ahooks")) {
-              return "vendor-ahooks";
-            }
             return "vendor";
           }
           if (id.includes("/src/pages/")) {
