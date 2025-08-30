@@ -38,7 +38,7 @@ export default function SearchInput({
     }
   });
 
-  useKeyPress("enter", handleSearch);
+  useKeyPress("Enter", handleSearch);
 
   const handleKeyDown = useMemoizedFn((e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
@@ -55,8 +55,8 @@ export default function SearchInput({
         ? "180px"
         : "240px"
       : isMobile
-      ? "100%"
-      : "600px",
+        ? "100%"
+        : "600px",
     margin: compact ? "0" : "0 auto",
   };
 
@@ -89,8 +89,8 @@ export default function SearchInput({
     padding: compact
       ? "8px 36px 8px 12px"
       : isMobile
-      ? "14px 16px"
-      : "16px 20px",
+        ? "14px 16px"
+        : "16px 20px",
     fontSize: compact ? "14px" : isMobile ? "16px" : "18px",
     borderRadius: compact ? "20px" : isMobile ? "12px" : "12px 0 0 12px",
     border: compact
@@ -104,8 +104,8 @@ export default function SearchInput({
     borderRight: compact
       ? "1px solid var(--border-color)"
       : isMobile
-      ? `2px solid ${colors.primary}`
-      : "none",
+        ? `2px solid ${colors.primary}`
+        : "none",
     minWidth: 0,
   };
 
