@@ -108,6 +108,7 @@ export default function CommentList({ Ctx, setCtx, ClickReplyButton }: CommentLi
                 key={comment.timeStamp}
                 comment={comment}
                 setCtx={setCtx}
+                ClickReplyButton={ClickReplyButton}
               />
             ))}
           </div>
