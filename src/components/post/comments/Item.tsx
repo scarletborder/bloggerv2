@@ -9,9 +9,10 @@ import type { CommentsState } from './types';
 interface CommentItemComponentProps {
   comment: CommentItem;
   setCtx: SetState<CommentsState>;
+  ClickReplyButton: () => void;
 }
 
-export function CommentItemComponent({ comment, setCtx }: CommentItemComponentProps) {
+export function CommentItemComponent({ comment, setCtx, ClickReplyButton }: CommentItemComponentProps) {
   const colors = getCurrentTheme();
   const [showTooltip, setShowTooltip] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -22,6 +23,7 @@ export function CommentItemComponent({ comment, setCtx }: CommentItemComponentPr
     if (comment.source !== 'blogger') return;
     const meta = comment.meta as MetaBlogger;
     setCtx({ replyToId: meta.id });
+    setInterval(ClickReplyButton);
   };
 
   useEffect(() => {

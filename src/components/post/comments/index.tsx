@@ -42,7 +42,7 @@ export default function CommentArea({ postId, blogId }: CommentAreaProps) {
   };
 
 
-  const CommentsListComp = <CommentList Ctx={state} setCtx={setState} />;
+  const CommentsListComp = <CommentList Ctx={state} setCtx={setState} ClickReplyButton={handlePostCommentClick} />;
   // 对 CommentFormComp 的引用保持不变
   const CommentFormComp = <CommentForm Ctx={state} setCtx={setState} onCommentSubmitted={triggerRefresh} />;
 

@@ -11,9 +11,10 @@ import type { CommentItem } from '../../../models/CommentItem';
 type CommentListProps = {
   Ctx: CommentsState;
   setCtx: SetState<CommentsState>;
+  ClickReplyButton: () => void;
 }
 
-export default function CommentList({ Ctx, setCtx }: CommentListProps) {
+export default function CommentList({ Ctx, setCtx, ClickReplyButton }: CommentListProps) {
   const colors = getCurrentTheme();
   const { postId, refreshKey } = Ctx;
   const latestPostId = useLatest(postId);
@@ -119,6 +120,7 @@ export default function CommentList({ Ctx, setCtx }: CommentListProps) {
                   <CommentItemComponent
                     comment={ele.data}
                     setCtx={setCtx}
+                    ClickReplyButton={ClickReplyButton}
                   />
                 </div>
               ))}
