@@ -8,30 +8,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout static branch
         uses: actions/checkout@v4
+        with:
+          ref: 'static'
 
       - name: Install curl
         run: |
           sudo apt-get update
           sudo apt-get install -y curl
 
-      - name: Send Purge Requests to jsDelivr
+      - name: Send Purge Requests to jsDelivr for all assets
         run: |
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.js" &
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor.js" &
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.js" &
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-react.js" &
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-ahooks.js" &
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-archivespage.js" &
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-homepage.js" &
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-toolspage.js" &
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-prismjs.js" &
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-postpage.js" &
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-searchpage.js" &
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.css" &
-          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.css" &
-          
+          for file in $(find assets -type f); do
+            url="https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/$file"
+            echo "Purging $url"
+            curl -sS "$url" &
+          done
+
           # 等待所有后台 curl 进程完成
           wait
           echo "All purge requests have been sent."
