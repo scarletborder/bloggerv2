@@ -1,9 +1,16 @@
-name: Deploy Static Assets
+name: Manual Deploy Static Assets
 
 on:
-  push:
-    branches:
-      - release
+  workflow_dispatch:
+    inputs:
+      enable_hash:
+        description: 'Enable hash in filenames for vite.config.ts'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+        - 'true'
+        - 'false'
 
 permissions:
   contents: write
@@ -31,6 +38,14 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Update ENABLE_HASH in vite.config.ts
+        run: |
+          if [ "${{ github.event.inputs.enable_hash }}" == "true" ]; then
+            sed -i 's/const ENABLE_HASH = false;/const ENABLE_HASH = true;/g' vite.config.ts
+          else
+            sed -i 's/const ENABLE_HASH = true;/const ENABLE_HASH = false;/g' vite.config.ts
+          fi
 
       - name: Build project
         run: pnpm run build
@@ -102,4 +117,4 @@ jobs:
           force_orphan: true
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: 'Deploy static assets from release branch'
+          commit_message: 'Manual deploy static assets from release branch'
