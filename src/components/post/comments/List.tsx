@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useVirtualList, useLatest, useUpdateEffect } from 'ahooks';
+import { useVirtualList, useLatest } from 'ahooks';
 import { isMobile } from 'react-device-detect';
 import { GetPostLegacyComments } from '../../../services/BloggerComment';
 import { getCurrentTheme } from '../../../constants/colors';
