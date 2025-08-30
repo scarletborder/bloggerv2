@@ -23,7 +23,7 @@ export function CommentItemComponent({ comment, setCtx, ClickReplyButton }: Comm
     if (comment.source !== 'blogger') return;
     const meta = comment.meta as MetaBlogger;
     setCtx({ replyToId: meta.id });
-    setInterval(ClickReplyButton);
+    ClickReplyButton();
   };
 
   useEffect(() => {

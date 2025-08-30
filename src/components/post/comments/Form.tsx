@@ -9,10 +9,9 @@ import type { SetState } from 'ahooks/lib/useSetState';
 type CommentFormProps = {
   Ctx: CommentsState;
   setCtx: SetState<CommentsState>;
-  onCommentSubmitted: () => void;
 }
 
-export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx, onCommentSubmitted }) => {
+export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx }) => {
   const { blogId, postId, replyToId } = Ctx;
 
   const [commentText, setCommentText] = useState('');
@@ -44,7 +43,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx, onComment
       window.removeEventListener('focus', handleFocus);
     };
     // onCommentSubmitted 和 setIsSubmitting 是函数，通常是稳定的，但为了严谨可以加入依赖
-  }, [onCommentSubmitted, setIsSubmitting]);
+  }, [setIsSubmitting]);
 
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();

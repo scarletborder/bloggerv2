@@ -23,17 +23,7 @@ export default function CommentArea({ postId, blogId }: CommentAreaProps) {
     replyToId: null,
     loading: true,
     totalComments: 0,
-    refreshKey: 0, // 初始值为 0
   });
-
-  // 定义一个传递给 CommentForm 的刷新函数
-  // 这个函数将更新 refreshKey，从而触发 CommentList 的刷新
-  const triggerRefresh = () => {
-    setState(prev => ({
-      replyToId: null, // 提交后清除回复目标
-      refreshKey: (prev.refreshKey || 0) + 1, // 增加 refreshKey
-    }));
-  };
 
   // 2. "发表评论" 按钮的点击处理函数
   const handlePostCommentClick = () => {
@@ -44,7 +34,7 @@ export default function CommentArea({ postId, blogId }: CommentAreaProps) {
 
   const CommentsListComp = <CommentList Ctx={state} setCtx={setState} ClickReplyButton={handlePostCommentClick} />;
   // 对 CommentFormComp 的引用保持不变
-  const CommentFormComp = <CommentForm Ctx={state} setCtx={setState} onCommentSubmitted={triggerRefresh} />;
+  const CommentFormComp = <CommentForm Ctx={state} setCtx={setState} />;
 
   const containerStyles: React.CSSProperties = {
     marginTop: '32px',

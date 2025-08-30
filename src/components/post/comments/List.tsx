@@ -16,7 +16,7 @@ type CommentListProps = {
 
 export default function CommentList({ Ctx, setCtx, ClickReplyButton }: CommentListProps) {
   const colors = getCurrentTheme();
-  const { postId, refreshKey } = Ctx;
+  const { postId } = Ctx;
   const latestPostId = useLatest(postId);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -60,12 +60,6 @@ export default function CommentList({ Ctx, setCtx, ClickReplyButton }: CommentLi
   useEffect(() => {
     fetchAllComments();
   }, [postId]);
-
-  useUpdateEffect(() => {
-    if (refreshKey > 0) {
-      fetchAllComments();
-    }
-  }, [refreshKey]);
 
 
   const scrollAreaStyles: React.CSSProperties = {
