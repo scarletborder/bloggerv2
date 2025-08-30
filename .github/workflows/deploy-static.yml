@@ -11,12 +11,12 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout release branch
         uses: actions/checkout@v5
         with:
-          fetch-depth: 0  # 获取完整历史，确保能访问所有分支
+          fetch-depth: 0 # 获取完整历史，确保能访问所有分支
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -34,6 +34,45 @@ jobs:
 
       - name: Build project
         run: pnpm run build
+
+      - name: Find built assets and generate report
+        id: generate-report
+        run: |
+          # 定义 CDN 基础路径
+          CDN_BASE="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/"
+
+          # 查找带有 hash 的 JS 文件 (例如: index-xxxxxxxx.js)
+          JS_FILE=$(find dist/assets -name "index-*.js" | head -n 1)
+          # 提取文件名，例如 index-xxxxxxxx.js
+          JS_FILENAME=$(basename "$JS_FILE")
+          # 构造完整的 JS CDN URL
+          JS_CDN_URL="${CDN_BASE}assets/${JS_FILENAME}"
+
+          # 查找带有 hash 的 CSS 文件 (例如: index-xxxxxxxx.css)
+          CSS_FILE=$(find dist/assets -name "index-*.css" | head -n 1)
+          # 提取文件名，例如 index-xxxxxxxx.css
+          CSS_FILENAME=$(basename "$CSS_FILE")
+          # 构造完整的 CSS CDN URL
+          CSS_CDN_URL="${CDN_BASE}assets/${CSS_FILENAME}"
+
+          # 生成报告内容
+          REPORT_CONTENT="<script crossorigin='anonymous' src='${JS_CDN_URL}' type='module'></script>\n"
+          REPORT_CONTENT+="<link crossorigin='anonymous' href='${CSS_CDN_URL}' rel='stylesheet'/>"
+
+          # 将报告内容写入文件
+          echo -e "$REPORT_CONTENT" > build_report.txt
+
+          # 将报告内容作为工作流输出 (可选，方便其他步骤或工作流使用) [5, 7, 8, 10]
+          echo "report_content=$(echo -e "$REPORT_CONTENT" | sed 's/"/\\"/g' | sed ':a;N;s/\n/\\n/g;ba')" >> $GITHUB_OUTPUT
+          echo "js_cdn_url=${JS_CDN_URL}" >> $GITHUB_OUTPUT
+          echo "css_cdn_url=${CSS_CDN_URL}" >> $GITHUB_OUTPUT
+
+      - name: Upload Build Report as Artifact
+        uses: actions/upload-artifact@v4 # 使用 v4 版本上传 Artifact [1, 4, 6, 11]
+        with:
+          name: build-report
+          path: build_report.txt
+          retention-days: 7 # 保留 Artifact 7 天
 
       - name: Check if static branch exists
         id: check-branch
