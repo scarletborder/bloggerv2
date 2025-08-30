@@ -5,7 +5,6 @@ import { getPostDetail, type PostDetail } from '../services/PostDetail';
 import HeaderView from '../components/post/HeaderView';
 import ContentView from '../components/post/ContentView';
 import TableOfContents from '../components/post/TableOfContents';
-import CommentList from '../components/post/comments/List';
 import { Seperator } from '../components/post/common';
 import CommentArea from '../components/post/comments';
 
