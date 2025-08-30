@@ -1,19 +1,29 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
-import type { CommentItem } from '../../../models/CommentItem';
+import type { CommentItem, MetaBlogger } from '../../../models/CommentItem';
 import { getCurrentTheme } from '../../../constants/colors';
 import { SourceIcon } from '../common';
+import type { SetState } from 'ahooks/lib/useSetState';
+import type { CommentsState } from './types';
 
 interface CommentItemComponentProps {
   comment: CommentItem;
+  setCtx: SetState<CommentsState>;
 }
 
-export function CommentItemComponent({ comment }: CommentItemComponentProps) {
+export function CommentItemComponent({ comment, setCtx }: CommentItemComponentProps) {
   const colors = getCurrentTheme();
   const [showTooltip, setShowTooltip] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [tooltipText, setTooltipText] = useState('');
   const linkIconRef = useRef<HTMLSpanElement>(null);
+
+  const handleReplyClick = () => {
+    // 处理回复点击事件
+    if (comment.source !== 'blogger') return; // 仅允许回复 Blogger 评论
+    const meta = comment.meta as MetaBlogger;
+    setCtx({ replyToId: meta.id });
+  };
 
   // Handle click outside for mobile
   useEffect(() => {
@@ -45,7 +55,7 @@ export function CommentItemComponent({ comment }: CommentItemComponentProps) {
     }
   };
 
-  const handleIconClick = async (e: React.MouseEvent) => {
+  const handleLinkIconClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -121,11 +131,9 @@ export function CommentItemComponent({ comment }: CommentItemComponentProps) {
     color: colors.text,
   };
 
-  // ==================== 修改开始 ====================
-
   const authorInfoStyles: React.CSSProperties = {
     flex: 1,
-    position: 'relative', // 1. 设置为新的定位上下文
+    position: 'relative',
   };
 
   const authorNameStyles: React.CSSProperties = {
@@ -142,7 +150,6 @@ export function CommentItemComponent({ comment }: CommentItemComponentProps) {
     cursor: 'pointer',
     fontSize: '16px',
     userSelect: 'none',
-    // 2. 移除了 position: 'relative'
   };
 
   const tooltipStyles: React.CSSProperties = {
@@ -156,7 +163,6 @@ export function CommentItemComponent({ comment }: CommentItemComponentProps) {
   };
 
   const getTooltipTextStyles = (): React.CSSProperties => ({
-    // 4. 优化 Tooltip 内部文本样式
     backgroundColor: colors.background,
     padding: '6px 10px',
     borderRadius: '6px',
@@ -169,8 +175,6 @@ export function CommentItemComponent({ comment }: CommentItemComponentProps) {
     maxWidth: '100%',
     boxSizing: 'border-box',
   });
-
-  // ==================== 修改结束 ====================
 
   const toastStyles: React.CSSProperties = {
     position: 'fixed',
@@ -201,6 +205,28 @@ export function CommentItemComponent({ comment }: CommentItemComponentProps) {
     fontSize: '14px',
     wordBreak: 'break-word',
   };
+
+  // ==================== 修改开始 ====================
+
+  const actionsStyles: React.CSSProperties = {
+    marginTop: '12px',
+    display: 'flex',
+    justifyContent: 'flex-end', // 将按钮对齐到右侧
+  };
+
+  const replyButtonStyles: React.CSSProperties = {
+    background: 'none',
+    border: 'none',
+    color: colors.textSecondary,
+    cursor: 'pointer',
+    fontSize: '13px',
+    fontWeight: '500',
+    padding: '4px 8px',
+    borderRadius: '6px',
+    transition: 'background-color 0.2s ease',
+  };
+
+  // ==================== 修改结束 ====================
 
   return (
     <div style={commentItemStyles}>
@@ -237,7 +263,7 @@ export function CommentItemComponent({ comment }: CommentItemComponentProps) {
                 style={linkIconStyles}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                onClick={handleIconClick}
+                onClick={handleLinkIconClick}
               >
                 🔗
               </span>
@@ -262,6 +288,25 @@ export function CommentItemComponent({ comment }: CommentItemComponentProps) {
         style={contentStyles}
         dangerouslySetInnerHTML={{ __html: comment.content }}
       />
+
+      {/* ==================== 修改开始 ==================== */}
+
+      <div style={actionsStyles}>
+        {comment.source === 'blogger' && (
+          <button
+            style={replyButtonStyles}
+            onClick={handleReplyClick}
+            // 鼠标悬停时改变背景色以提供反馈
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = colors.border)}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+          >
+            回复
+          </button>
+        )}
+      </div>
+
+      {/* ==================== 修改结束 ==================== */}
+
       {showToast && (
         <div style={toastStyles}>
           复制成功！

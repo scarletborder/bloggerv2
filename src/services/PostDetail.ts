@@ -1,11 +1,10 @@
-import { BloggerFeed } from "@deox/blogger-feed";
 import { getPostContent, type GetContentByPathParams } from "../actions/blogger.service";
-import { BLOG_BASE, BLOG_URL } from "../constants/feedapi";
 
 // 文章详情页面所需的数据结构
 export type PostDetail = {
+  blogId: string;
   // blogger post唯一url， 可以获取Legacy Comment， 未来也会去做disqus评论的key
-  _id: string;
+  postId: string;
 
   title: string;
   content: string;
@@ -39,9 +38,11 @@ export async function getPostDetail(path: string): Promise<PostDetail> {
 
     // 提取内容
     const content = entry.content.$t;
+    const { postId, blogId } = getStringAfterPost(entry.id.$t, '');
 
     return {
-      _id: getStringAfterPost(entry.id.$t, ''),
+      postId: postId,
+      blogId: blogId,
       title: entry.title.$t,
       content,
       published: entry.published.toISOString(),
@@ -56,15 +57,34 @@ export async function getPostDetail(path: string): Promise<PostDetail> {
   }
 }
 
-function getStringAfterPost(inputString: string, defaultValue: string): string {
-  const keyword = 'post-';
-  const keywordIndex = inputString.indexOf(keyword);
+function getStringAfterPost(inputString: string, defaultValue: string): {
+  postId: string;
+  blogId: string;
+} {
+  const blogIdKeyword = 'blog-';
+  const postKeyword = 'post-';
 
-  if (keywordIndex !== -1) {
-    // Return the substring after the keyword
-    return inputString.substring(keywordIndex + keyword.length);
+  const blogIdIndex = inputString.indexOf(blogIdKeyword);
+  const postIndex = inputString.indexOf(postKeyword);
+
+  let blogId = '';
+  let postId = '';
+
+  if (blogIdIndex !== -1) {
+    const blogIdStart = blogIdIndex + blogIdKeyword.length;
+    const blogIdEnd = inputString.indexOf('.', blogIdStart);
+    blogId = (blogIdEnd !== -1 ? inputString.substring(blogIdStart, blogIdEnd) : inputString.substring(blogIdStart)).trim();
+  }
+
+  if (postIndex !== -1) {
+    const postStart = postIndex + postKeyword.length;
+    const postEnd = inputString.indexOf('.', postStart);
+    postId = (postEnd !== -1 ? inputString.substring(postStart, postEnd) : inputString.substring(postStart)).trim();
+  }
+
+  if (blogId || postId) {
+    return { blogId, postId };
   } else {
-    // Return the default value if the keyword is not found
-    return defaultValue;
+    return { blogId: defaultValue, postId: defaultValue };
   }
 }

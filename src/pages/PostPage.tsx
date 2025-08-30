@@ -5,7 +5,9 @@ import { getPostDetail, type PostDetail } from '../services/PostDetail';
 import HeaderView from '../components/post/HeaderView';
 import ContentView from '../components/post/ContentView';
 import TableOfContents from '../components/post/TableOfContents';
-import CommentArea from '../components/post/comments/CommentArea';
+import CommentList from '../components/post/comments/List';
+import { Seperator } from '../components/post/common';
+import CommentArea from '../components/post/comments';
 
 /**
  * 文章详情页面
@@ -165,7 +167,6 @@ const PostPage: React.FC = () => {
     );
   }
 
-  // 渲染错误状态
   if (error || !post) {
     return (
       <div style={pageStyles}>
@@ -212,8 +213,10 @@ const PostPage: React.FC = () => {
         {/* 文章内容 */}
         <ContentView content={post.content} />
 
+        {isMobile && <Seperator />}
+
         {/* 评论区 */}
-        <CommentArea postId={post._id} />
+        <CommentArea postId={post.postId} blogId={post.blogId} />
 
       </main>
 

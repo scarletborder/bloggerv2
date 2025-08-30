@@ -12,6 +12,7 @@ export type CommentItem = {
 
   // 来源, blogger, disqus
   source: "blogger" | "disqus";
+  meta: MetaBlogger | MetaDisqus;
 }
 
 type Author = {
@@ -20,4 +21,12 @@ type Author = {
   // personal website or email
   url?: string;
   image?: string;
+}
+
+export type MetaBlogger = {
+  id: string;
+  replyToId: string | null;
+}
+
+export type MetaDisqus = {
 }
