@@ -1,0 +1,37 @@
+name: Purge jsDelivr Cache
+
+on:
+  workflow_dispatch:
+
+jobs:
+  purge-cache:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install curl
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+
+      - name: Send Purge Requests to jsDelivr
+        run: |
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.js" &
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor.js" &
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.js" &
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-react.js" &
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-ahooks.js" &
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-archivespage.js" &
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-homepage.js" &
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-toolspage.js" &
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-prismjs.js" &
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-postpage.js" &
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-searchpage.js" &
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.css" &
+          curl -sS "https://purge.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.css" &
+          
+          # 等待所有后台 curl 进程完成
+          wait
+          echo "All purge requests have been sent."
