@@ -1,4 +1,7 @@
+import { useTitle } from "ahooks";
+
 function ToolsPage() {
+  useTitle("Tools - 绯境之外");
   return (
     <div>
       <h1>工具页面</h1>

@@ -5,8 +5,10 @@ import PostListSimple from "../components/home/PostListSimple";
 import PostListMobile from "../components/home/PostList-M";
 import Blogroll from "../components/home/Blogroll";
 import SiteTitle from "../components/home/SiteTitle";
+import { useTitle } from "ahooks";
 
 function HomePage() {
+  useTitle("Home-绯境之外");
   if (isMobile) {
     // Mobile Layout
     return (

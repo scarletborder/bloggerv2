@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
-import { useInfiniteScroll, useLatest, useMemoizedFn } from 'ahooks';
+import { useInfiniteScroll, useLatest, useMemoizedFn, useTitle } from 'ahooks';
 import useUrlState from '@ahooksjs/use-url-state';
 import { GetPostListByCategories, GetPostListByDate } from '../services/PostList';
 import { getCurrentTheme } from '../constants/colors';
@@ -15,14 +15,14 @@ type SearchMode = 'none' | 'tag' | 'date';
 
 export default function ArchivesPage() {
   const colors = getCurrentTheme();
-  
+
   // 使用 useUrlState 管理 URL 查询参数
   const [urlState, setUrlState] = useUrlState({
     tag: '',
     year: '',
     month: ''
   });
-  
+
   const [searchMode, setSearchMode] = useState<SearchMode>('none');
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [searchYear, setSearchYear] = useState<number>(0);
@@ -37,6 +37,8 @@ export default function ArchivesPage() {
   const latestSelectedTag = useLatest(selectedTag);
   const latestSearchYear = useLatest(searchYear);
   const latestSearchMonth = useLatest(searchMonth);
+
+  useTitle("Archives-绯境之外");
 
   // 标签搜索的无限滚动
   const {
@@ -86,7 +88,7 @@ export default function ArchivesPage() {
       const startIndex = d?.list ? d.list.length : 0;
       const currentYear = latestSearchYear.current;
       const currentMonth = latestSearchMonth.current;
-      
+
       console.log('useInfiniteScroll: Loading data for', currentYear, currentMonth, 'startIndex:', startIndex);
 
       // 如果是第一次加载，先检查缓存
@@ -355,9 +357,9 @@ export default function ArchivesPage() {
             selectedTag={selectedTag}
             initialTag={urlState.tag || ''}
           />
-          <DateFilter 
+          <DateFilter
             ref={dateFilterRef}
-            onDateSearch={handleDateSearch} 
+            onDateSearch={handleDateSearch}
             onRefreshRequest={handleRefreshRequest}
             showRefreshButton={searchMode === 'date'}
             initialYear={urlState.year ? parseInt(urlState.year, 10) : undefined}
@@ -392,14 +394,14 @@ export default function ArchivesPage() {
             />
           </div>
           <div style={pcDateFilterStyles}>
-            <DateFilter 
-            ref={dateFilterRef}
-            onDateSearch={handleDateSearch} 
-            onRefreshRequest={handleRefreshRequest}
-            showRefreshButton={searchMode === 'date'}
-            initialYear={urlState.year ? parseInt(urlState.year, 10) : undefined}
-            initialMonth={urlState.month ? parseInt(urlState.month, 10) : undefined}
-          />
+            <DateFilter
+              ref={dateFilterRef}
+              onDateSearch={handleDateSearch}
+              onRefreshRequest={handleRefreshRequest}
+              showRefreshButton={searchMode === 'date'}
+              initialYear={urlState.year ? parseInt(urlState.year, 10) : undefined}
+              initialMonth={urlState.month ? parseInt(urlState.month, 10) : undefined}
+            />
           </div>
         </div>
 

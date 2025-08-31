@@ -7,6 +7,7 @@ import {
   useMemoizedFn,
   useUpdateEffect,
   useFocusWithin,
+  useTitle,
 } from "ahooks";
 import useUrlState from "@ahooksjs/use-url-state";
 import { getCurrentTheme } from "../constants/colors";
@@ -23,6 +24,8 @@ export default function SearchPage() {
   const [urlState, setUrlState] = useUrlState({ q: "" });
   const [searchQuery, setSearchQuery] = useState(urlState.q);
   const latestQuery = useLatest(searchQuery);
+
+  useTitle(`${searchQuery} Results`);
 
   // 检测页面搜索输入框区域是否有焦点
   const isPageSearchFocused = useFocusWithin(pageSearchInputRef);

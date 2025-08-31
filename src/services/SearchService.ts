@@ -23,9 +23,6 @@ type SearchResponse = {
 export const SearchPostsByQuery = async (
   req: SearchRequest
 ): Promise<SearchResponse> => {
-  // 模拟网络延迟
-  await new Promise((resolve) => setTimeout(resolve, 600));
-
   const { query } = req;
 
   if (!query) {

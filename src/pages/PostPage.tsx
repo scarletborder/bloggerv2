@@ -7,6 +7,7 @@ import ContentView from '../components/post/ContentView';
 import TableOfContents from '../components/post/TableOfContents';
 import { Seperator } from '../components/post/common';
 import CommentArea from '../components/post/comments';
+import { useTitle } from 'ahooks';
 
 /**
  * 文章详情页面
@@ -17,6 +18,8 @@ const PostPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useTitle(`${post?.title ?? "Loading"} - 绯境之外`);
 
   useEffect(() => {
     const loadPost = async () => {
