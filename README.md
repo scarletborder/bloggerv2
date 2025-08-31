@@ -28,7 +28,7 @@ Blogger 也能如此美丽
   - [x] Tag Filter
 - [x] Search
 - [x] Discuss(Comments)
-- [ ] Pages
+- [x] Pages
 - [ ] More Docs
 
 ## 说明

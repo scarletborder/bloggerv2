@@ -171,7 +171,7 @@ const WithNav: React.FC<WithNavProps> = ({ children }) => {
   const navItems = [
     { title: "HOME", to: "/" },
     { title: "ARCHIVES", to: "/archives" },
-    { title: "TOOLS", to: "/tools" },
+    { title: "PAGES", to: "/pages" },
   ];
 
   return (

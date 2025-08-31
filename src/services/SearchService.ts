@@ -29,7 +29,6 @@ export const SearchPostsByQuery = async (
     return { list: [], total: 0 };
   }
 
-  // 模拟后端过滤数据
   const params: GetPostListParams = {
     "start-index": 1,
     "max-results": 1000,

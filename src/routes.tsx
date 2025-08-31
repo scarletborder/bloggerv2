@@ -25,8 +25,8 @@ export default function AppRoutes() {
       <Route path="/" element={<PageView children={<Pages.HomePage />} />} />
       {/* 工具页面 */}
       <Route
-        path="/tools"
-        element={<PageView children={<Pages.ToolsPage />} />}
+        path="/pages"
+        element={<PageView children={<Pages.PagesPage />} />}
       />
       {/* 归档页面 */}
       <Route
@@ -37,6 +37,12 @@ export default function AppRoutes() {
       <Route
         path="/search"
         element={<WithNav children={<Pages.SearchPage />} />}
+      />
+
+      {/* page */}
+      <Route
+        path="/p/:id"
+        element={<PageView children={<Pages.PagePage />} />}
       />
       {/* 文章页面 - 捕获所有路径作为文章路径 */}
       <Route path="/*" element={<PageView children={<Pages.PostPage />} />} />
