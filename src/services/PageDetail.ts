@@ -1,6 +1,3 @@
-import { BloggerFeed } from "@deox/blogger-feed";
-import type { PostItem } from "../models/PostItem";
-import { BLOG_BASE } from "../constants/feedapi";
 import { getPageContent } from "../actions/blogger.service";
 
 // 文章详情页面所需的数据结构
