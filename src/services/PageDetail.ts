@@ -37,9 +37,6 @@ export async function getPageDetail(path: string): Promise<PageDetail> {
   };
 }
 
-
-
-
 function getStringAfterPage(inputString: string, defaultValue: string): {
   pageId: string;
   blogId: string;

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html b:css='false' b:version='2' class='v2' expr:dir='data:blog.languageDirection'
+<html b:css='false' b:js='false' b:version='2' class='v2' expr:dir='data:blog.languageDirection'
   expr:lang='data:blog.locale' xmlns='http://www.w3.org/1999/xhtml'
   xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data'
   xmlns:expr='http://www.google.com/2005/gml/expr'>
 
+  <!--<head>-->
   <head>
-
-    <!-- 粘贴 编译后的 index.html head -->
-    <meta charset="UTF-8" />
+    <meta charset='UTF-8' />
     <link href='https://s2.loli.net/2025/04/14/LnsCqG8ZVcrJN4l.png' rel='shortcut icon'
       type='image/vnd.microsoft.icon' />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta content='width=device-width, initial-scale=1.0' name='viewport' />
     <title>绯境之外~Outside of Scarlet</title>
-    <style id="theme-blocking-styles">
+    <style id='theme-blocking-styles'>
       /*<![CDATA[*/
       /* 阻塞样式，确保页面在加载时立即有正确的背景色 */
       html,
@@ -48,6 +48,22 @@
     <script>
       /*<![CDATA[*/
       (function () {
+      const { search, hash, pathname } = window.location;
+
+      // 条件1: URL 中包含 ?sc=... 查询参数
+      const hasSuccessParam = search.includes('sc=');
+
+      // 条件2: URL 中包含 #c... 哈希
+      const hasCommentHash = hash.startsWith('#c');
+
+      // 条件3 (备用): 检查旧的 window.name 方式，作为补充
+      const hasSuccessName = pathname.startsWith('new-comment-');
+
+      // 如果满足URL条件，或者满足备用的 window.name 条件，就认为是成功弹窗
+      const isCommentSuccessPopup = (hasSuccessParam && hasCommentHash) || hasSuccessName; 
+      if (isCommentSuccessPopup) {
+        window.close();
+      }
       try {
       // 从 localStorage 获取主题
       let theme = localStorage.getItem('theme');
@@ -84,32 +100,14 @@
       })();
 /*]]>*/
     </script>
-    <script type="module" crossorigin="anonymous"
-      src="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.js"></script>
-    <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor.js" />
-    <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.js" />
-    <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-react.js" />
-    <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-ahooks.js" />
-    <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-archivespage.js" />
-    <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-homepage.js" />
-    <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-toolspage.js" />
-    <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-prismjs.js" />
-    <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-postpage.js" />
-    <link rel="modulepreload" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/page-searchpage.js" />
-    <link rel="stylesheet" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-swiper.css" />
-    <link rel="stylesheet" crossorigin="anonymous"
-      href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.css" />
+    <!-- 粘贴 编译后的 index.html head -->
+
+    <script crossorigin='anonymous'
+      src='https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.js' type='module' />
+    <link crossorigin='anonymous'
+      href='https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.css'
+      rel='stylesheet' />
+
     <!-- END Paste -->
     <script
       src='https://cdn.jsdelivr.net/gh/scarletborder/public_js@main/blogs/apis.google.com_js_plusone.js'
@@ -118,15 +116,15 @@
     <!-- 不使用Blogger管理颜色 -->
     <b:skin><![CDATA[ ]]></b:skin>
 
-  </head>
+  </head><!--</head>-->
   <!-- head 终于结束 -->
 
 
   <!-- body 开始 -->
   <body>
-    <div id="root"></div>
+    <div id='root' />
+    <!--</body>-->
   </body>
 
-  <b:section id="footer">
-  </b:section>
+  <b:section id='footer' />
 </html>
