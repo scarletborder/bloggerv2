@@ -11,7 +11,6 @@ const PagePage: React.FC = () => {
   const [pageDetail, setPageDetail] = useState<PageDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useTitle(`${pageDetail?.title ?? "Loading"} - 绯境之外`);
 
@@ -31,45 +30,19 @@ const PagePage: React.FC = () => {
     }
   }, [pathname]);
 
-  // 监听滚动，显示/隐藏回到顶部按钮（仅移动端）
-  useEffect(() => {
-    if (!isMobile) return;
-
-    const handleScroll = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      setShowScrollTop(scrollTop > 300);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // 回到顶部功能
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
-
-  // 页面容器样式
   const pageStyles: React.CSSProperties = {
     backgroundColor: 'var(--background-color)',
     minHeight: '100vh',
     color: 'var(--text-color)',
   };
 
-  // 主内容区域样式 - 占满整个宽度
-  const mainStyles: React.CSSProperties = {
+  const iframeStyles: React.CSSProperties = {
     width: '100%',
-    maxWidth: '100%',
-    minWidth: '100%',
-    margin: '0 auto',
-    padding: isMobile ? '16px 4px' : '32px',
-    position: 'relative',
+    height: 'calc(100vh - 150px)',
+    border: 'none',
+    borderRadius: '8px',
   };
 
-  // 加载状态样式
   const loadingStyles: React.CSSProperties = {
     display: 'flex',
     justifyContent: 'center',
@@ -79,7 +52,6 @@ const PagePage: React.FC = () => {
     color: 'var(--text-secondary-color)',
   };
 
-  // 错误状态样式
   const errorStyles: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
@@ -115,29 +87,6 @@ const PagePage: React.FC = () => {
     transition: 'background-color 0.2s ease',
   };
 
-  // 悬浮的回到顶部按钮样式（仅移动端）
-  const scrollTopButtonStyles: React.CSSProperties = {
-    position: 'fixed',
-    bottom: '20px',
-    right: '20px',
-    width: '50px',
-    height: '50px',
-    borderRadius: '50%',
-    backgroundColor: 'var(--primary-color)',
-    color: 'var(--surface-color)',
-    border: 'none',
-    fontSize: '20px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    display: showScrollTop && isMobile ? 'flex' : 'none',
-    alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-    transition: 'all 0.3s ease',
-    zIndex: 1000,
-  };
-
-  // 渲染加载状态
   if (loading) {
     return (
       <div style={pageStyles}>
@@ -173,51 +122,14 @@ const PagePage: React.FC = () => {
     );
   }
 
-  // 渲染页面内容
   return (
     <div style={pageStyles}>
-      <main style={mainStyles}>
-        {/* 页面标题 */}
-        <h1 style={{ fontSize: isMobile ? '1.5rem' : '2rem', marginBottom: '16px' }}>
-          {pageDetail.title}
-        </h1>
-
-        {/* 页面内容 - 直接渲染 HTML */}
-        <div
-          dangerouslySetInnerHTML={{ __html: pageDetail.content }}
-          style={{
-            fontSize: isMobile ? '14px' : '16px',
-            lineHeight: '1.6',
-          }}
-        />
-      </main>
-
-      {/* 悬浮的回到顶部按钮（仅移动端） */}
-      <button
-        style={scrollTopButtonStyles}
-        onClick={scrollToTop}
-        onMouseEnter={(e) => {
-          if (isMobile) return;
-          e.currentTarget.style.backgroundColor = 'var(--primary-hover-color)';
-          e.currentTarget.style.transform = 'scale(1.1)';
-        }}
-        onMouseLeave={(e) => {
-          if (isMobile) return;
-          e.currentTarget.style.backgroundColor = 'var(--primary-color)';
-          e.currentTarget.style.transform = 'scale(1)';
-        }}
-        onTouchStart={(e) => {
-          e.currentTarget.style.backgroundColor = 'var(--primary-hover-color)';
-          e.currentTarget.style.transform = 'scale(0.95)';
-        }}
-        onTouchEnd={(e) => {
-          e.currentTarget.style.backgroundColor = 'var(--primary-color)';
-          e.currentTarget.style.transform = 'scale(1)';
-        }}
-        aria-label="回到顶部"
-      >
-        ↑
-      </button>
+      <iframe
+        style={iframeStyles}
+        srcDoc={pageDetail.content}
+        title={pageDetail.title}
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+      />
     </div>
   );
 };
