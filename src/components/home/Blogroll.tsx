@@ -13,7 +13,8 @@ export default function Blogroll({ isMobile = false }: BlogrollProps) {
 
   React.useEffect(() => {
     let isMounted = true;
-    fetch("/blogroll.json")
+    const staticUrl = (window as any).__static_url;
+    fetch(`${staticUrl}/blogroll.json`)
       .then((res) => res.json())
       .then((data) => {
         if (!isMounted) return;
