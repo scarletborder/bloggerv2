@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import viteCompression from "vite-plugin-compression";
 import removeConsole from "vite-plugin-remove-console";
 
@@ -13,7 +13,11 @@ export default defineConfig(({ mode }) => ({
       ? "https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/"
       : "/",
   plugins: [
-    react(),
+    react({
+      babel: {
+        plugins: ['babel-plugin-react-compiler'],
+      },
+    }),
     viteCompression({
       verbose: true,
       disable: false,
@@ -23,6 +27,11 @@ export default defineConfig(({ mode }) => ({
     }),
     removeConsole(),
   ],
+  optimizeDeps: {
+    rollupOptions: {
+      
+    }
+  },
   server: {
     proxy: {
       "/proxy-api": {
@@ -63,7 +72,7 @@ export default defineConfig(({ mode }) => ({
 
           // 字体文件，根据 ENABLE_HASH 决定是否添加 hash
           if (/woff2?|eot|ttf|otf/i.test(ext)) {
-            return ENABLE_HASH ? `assets/fonts/[name]-[hash].[ext]` : `assets/fonts/[name].[ext]`;
+            return ENABLE_HASH ? `assetsc/fonts/[name]-[hash].[ext]` : `assets/fonts/[name].[ext]`;
           }
 
           // 其他资源文件，根据 ENABLE_HASH 决定是否添加 hash
