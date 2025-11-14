@@ -17,6 +17,7 @@
 html {
   background-color: var(--bg-color);
   color: var(--text-color);
+  font-family: var(--td-font-family);
   font-feature-settings:
     'kern' 1,
     'liga' 1,
@@ -32,19 +33,7 @@ body {
   padding: 0;
   background-color: var(--bg-color);
   color: var(--text-color);
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'SF Pro Text',
-    'Segoe UI',
-    'Helvetica Neue',
-    'PingFang SC',
-    'Hiragino Sans GB',
-    'Microsoft YaHei',
-    Arial,
-    sans-serif;
-  font-weight: 400;
+  font: var(--td-font-body-medium);
   font-feature-settings:
     'kern' 1,
     'liga' 1,
