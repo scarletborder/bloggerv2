@@ -4,13 +4,29 @@ on:
   push:
     branches:
       - release
+  pull_request:
+    types:
+      - closed
+    branches:
+      - release
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   build-and-deploy:
+    if: |
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+
     runs-on: ubuntu-latest
+
+    env:
+      DEPLOY_ENV: "CDN"
+      CDN_BASEURL: "https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/"
+      API_ENDPOINT: "https://blog.scarletborder.cn"
 
     steps:
       - name: Checkout release branch
@@ -26,8 +42,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
+          node-version: "22"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -38,34 +54,38 @@ jobs:
       - name: Find built assets and generate report
         id: generate-report
         run: |
-          # 定义 CDN 基础路径
-          CDN_BASE="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/"
+          CDN_BASE="${{ env.CDN_BASEURL }}"
+          REPORT_FILE="build_report.txt"
 
-          # 查找带有 hash 的 JS 文件 (例如: index-xxxxxxxx.js)
-          JS_FILE=$(find dist/assets -name "index-*.js" | head -n 1)
-          # 提取文件名，例如 index-xxxxxxxx.js
-          JS_FILENAME=$(basename "$JS_FILE")
-          # 构造完整的 JS CDN URL
-          JS_CDN_URL="${CDN_BASE}assets/${JS_FILENAME}"
+          # 清空报告文件，以便重新写入
+          > "$REPORT_FILE"
 
-          # 查找带有 hash 的 CSS 文件 (例如: index-xxxxxxxx.css)
-          CSS_FILE=$(find dist/assets -name "index-*.css" | head -n 1)
-          # 提取文件名，例如 index-xxxxxxxx.css
-          CSS_FILENAME=$(basename "$CSS_FILE")
-          # 构造完整的 CSS CDN URL
-          CSS_CDN_URL="${CDN_BASE}assets/${CSS_FILENAME}"
+          echo "--- Generating CSS <link> tags ---"
+          # 查找所有 .css 文件，排序以保证顺序一致，然后生成 <link> 标签
+          for CSS_FILE in $(find dist/assets -name "*.css" | sort); do
+            CSS_FILENAME=$(basename "$CSS_FILE")
+            CSS_CDN_URL="${CDN_BASE}assets/${CSS_FILENAME}"
+            echo "Found CSS: ${CSS_FILENAME}"
+            echo "<link crossorigin='anonymous' href='${CSS_CDN_URL}' rel='stylesheet'/>" >> "$REPORT_FILE"
+          done
 
-          # 生成报告内容
-          REPORT_CONTENT="<script crossorigin='anonymous' src='${JS_CDN_URL}' type='module'></script>\n"
-          REPORT_CONTENT+="<link crossorigin='anonymous' href='${CSS_CDN_URL}' rel='stylesheet'/>"
+          echo "--- Generating JS <script> tags ---"
+          # 查找所有 .js 文件，排序以保证顺序一致，然后生成 <script> 标签
+          for JS_FILE in $(find dist/assets -name "*.js" | sort); do
+            JS_FILENAME=$(basename "$JS_FILE")
+            JS_CDN_URL="${CDN_BASE}assets/${JS_FILENAME}"
+            echo "Found JS: ${JS_FILENAME}"
+            echo "<script crossorigin='anonymous' src='${JS_CDN_URL}' type='module'></script>" >> "$REPORT_FILE"
+          done
 
-          # 将报告内容写入文件
-          echo -e "$REPORT_CONTENT" > build_report.txt
+          echo "--- Build Report Generated ---"
+          cat "$REPORT_FILE"
 
-          # 将报告内容作为工作流输出 (可选，方便其他步骤或工作流使用) [5, 7, 8, 10]
-          echo "report_content=$(echo -e "$REPORT_CONTENT" | sed 's/"/\\"/g' | sed ':a;N;s/\n/\\n/g;ba')" >> $GITHUB_OUTPUT
-          echo "js_cdn_url=${JS_CDN_URL}" >> $GITHUB_OUTPUT
-          echo "css_cdn_url=${CSS_CDN_URL}" >> $GITHUB_OUTPUT
+          # 将完整的、多行的报告内容设置为 GitHub Actions 的输出
+          # 使用 <<EOF 语法可以安全地处理多行字符串
+          echo "report_content<<EOF" >> $GITHUB_OUTPUT
+          cat "$REPORT_FILE" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Upload Build Report as Artifact
         uses: actions/upload-artifact@v4 # 使用 v4 版本上传 Artifact [1, 4, 6, 11]
@@ -100,6 +120,6 @@ jobs:
           publish_dir: ./dist
           publish_branch: static
           force_orphan: true
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: 'Deploy static assets from release branch'
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: "Deploy static assets from release branch"
