@@ -6,6 +6,10 @@ import tseslint from 'typescript-eslint';
 import { globalIgnores } from 'eslint/config';
 import tencentEslintConfig from 'eslint-config-tencent/flat';
 
+const GlobalConstants = {
+  __API_ENDPOINT__: 'readonly',
+};
+
 export default tseslint.config([
   globalIgnores(['dist', 'vite.config.ts']),
   ...tencentEslintConfig({
@@ -21,7 +25,10 @@ export default tseslint.config([
     ],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        ...GlobalConstants,
+      },
     },
   },
   reactHooks.configs.flat.recommended,

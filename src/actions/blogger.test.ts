@@ -12,7 +12,7 @@ import {
   PostContentResponseSchema,
   PageListResponseSchema,
 } from './blogger.types';
-import { BLOG_URL } from '../constants/feedapi';
+import { BLOG_BASE } from '../constants/feedapi';
 
 // We still mock the global `fetch` function.
 const fetchSpy = vi.spyOn(globalThis, 'fetch');
@@ -73,7 +73,7 @@ describe('Blogger API Service - Structural Tests', () => {
       const result = await getPostList({ 'start-index': 1, 'max-results': 1 });
 
       // Assert: Verify the fetch call and the structure of the result.
-      const expectedUrl = `${BLOG_URL}/feeds/posts/summary?alt=json&start-index=1&max-results=1`;
+      const expectedUrl = `${BLOG_BASE}/feeds/posts/summary?alt=json&start-index=1&max-results=1`;
       expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, expect.anything());
 
       // Use Zod's `safeParse` to verify the structure. `success` should be true.
@@ -121,7 +121,7 @@ describe('Blogger API Service - Structural Tests', () => {
       const result = await getPostContent({ path: '/test-post.html' });
 
       // Assert
-      const expectedUrl = `${BLOG_URL}/feeds/posts/default?alt=json&path=%2Ftest-post.html`;
+      const expectedUrl = `${BLOG_BASE}/feeds/posts/default?alt=json&path=%2Ftest-post.html`;
       expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, expect.anything());
 
       expect(PostContentResponseSchema.safeParse(mockResponse).success).toBe(true);
@@ -166,7 +166,7 @@ describe('Blogger API Service - Structural Tests', () => {
       const result = await getPageList({ 'start-index': 1, 'max-results': 5 });
 
       // Assert
-      const expectedUrl = `${BLOG_URL}/feeds/pages/summary?alt=json&start-index=1&max-results=5`;
+      const expectedUrl = `${BLOG_BASE}/feeds/pages/summary?alt=json&start-index=1&max-results=5`;
       expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, expect.anything());
 
       expect(PageListResponseSchema.safeParse(mockResponse).success).toBe(true);
@@ -190,8 +190,8 @@ describe('Blogger API Service - Structural Tests', () => {
       await getPostListByCategories(['Tag One', 'Tag Two']);
 
       // Assert
-      const expectedPath =        `${encodeURIComponent('Tag One')}/${encodeURIComponent('Tag Two')}`;
-      const expectedUrl = `${BLOG_URL}/feeds/posts/summary/-/${expectedPath}?alt=json&`;
+      const expectedPath = `${encodeURIComponent('Tag One')}/${encodeURIComponent('Tag Two')}`;
+      const expectedUrl = `${BLOG_BASE}/feeds/posts/summary/-/${expectedPath}?alt=json&`;
       expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, expect.anything());
     });
   });
@@ -212,7 +212,7 @@ describe('Blogger API Service - Structural Tests', () => {
       const result = await getAllTags();
 
       // Assert
-      const expectedUrl = `${BLOG_URL}/feeds/posts/summary?alt=json&start-index=1&max-results=0`;
+      const expectedUrl = `${BLOG_BASE}/feeds/posts/summary?alt=json&start-index=1&max-results=0`;
       expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, expect.anything());
 
       // The result should be the category array itself, not the whole response.

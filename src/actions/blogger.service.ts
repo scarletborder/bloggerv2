@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { BLOG_URL, API_TIMEOUT } from '../constants/feedapi';
+import { BLOG_BASE, API_TIMEOUT } from '../constants/feedapi';
 import {
   PostListResponseSchema,
   PageListResponseSchema,
@@ -75,7 +75,7 @@ function createFeedApiMethod<
       }
     }
 
-    const url = `${BLOG_URL}${requestPath}?alt=json&${searchParams.toString()}`;
+    const url = `${BLOG_BASE}${requestPath}?alt=json&${searchParams.toString()}`;
 
     const rawJson = await fetchBloggerApi(url);
 

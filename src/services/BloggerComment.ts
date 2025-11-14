@@ -1,6 +1,7 @@
 import { BloggerFeed } from '@deox/blogger-feed';
 import { keyBy, forEach } from 'lodash';
-import { BLOG_BASE } from '../constants/feedapi';
+import {
+  API_URL_PREFIX } from '../constants/feedapi';
 import type { CommentItem } from '../models/CommentItem';
 
 export type LegacyCommentRequest = {
@@ -30,7 +31,7 @@ function transformComment(comments: any): CommentItem {
 }
 
 export async function GetPostLegacyComments(req: LegacyCommentRequest): Promise<LegacyCommentResponse> {
-  const feed = new BloggerFeed(BLOG_BASE, {
+  const feed = new BloggerFeed(API_URL_PREFIX, {
     jsonp: true,
   });
 
@@ -104,7 +105,7 @@ export async function GetNewestComments({
   postId: string;
   minTimestamp: number;
 }): Promise<CommentItem[]> {
-  const feed = new BloggerFeed(BLOG_BASE, {
+  const feed = new BloggerFeed(API_URL_PREFIX, {
     jsonp: true,
   });
 
