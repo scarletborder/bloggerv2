@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { useBoolean } from 'ahooks';
 // 不再需要 Timeout 类型
-// import type { Timeout } from 'ahooks/lib/useRequest/src/types'; 
+// import type { Timeout } from 'ahooks/lib/useRequest/src/types';
 import type { CommentsState } from './types';
 import type { SetState } from 'ahooks/lib/useSetState';
 
 type CommentFormProps = {
   Ctx: CommentsState;
   setCtx: SetState<CommentsState>;
-}
+};
 
 export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx }) => {
   const { blogId, postId, replyToId } = Ctx;
@@ -68,7 +68,11 @@ export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx }) => {
     }
 
     const popupOptions = 'width=600,height=550,resizable=yes,scrollbars=yes';
-    const popup = window.open(finalUrl, `blogger-comment-${Date.now()}`, popupOptions);
+    const popup = window.open(
+      finalUrl,
+      `blogger-comment-${Date.now()}`,
+      popupOptions,
+    );
 
     if (!popup) {
       alert('评论窗口被浏览器拦截，请允许弹出窗口后重试。');
@@ -86,29 +90,37 @@ export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx }) => {
 
   return (
     <div className="comment-form-container">
-      <h3>
-        {replyToId ? '正在回复...' : '发表新评论'}
-      </h3>
+      <h3>{replyToId ? '正在回复...' : '发表新评论'}</h3>
       <textarea
         placeholder="在此输入您的评论..."
         rows={6}
         value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
-        style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '8px' }}
+        style={{
+          width: '100%',
+          padding: '10px',
+          border: '1px solid #ccc',
+          borderRadius: '8px',
+        }}
       />
       <div className="form-actions" style={{ marginTop: '10px' }}>
         <button type="button" onClick={handleSubmit} disabled={isSubmitting}>
           {isSubmitting ? '等待窗口关闭...' : '发布评论 (内容已复制)'}
         </button>
         {replyToId && (
-          <button type="button" onClick={handleCancelReply} style={{ marginLeft: '10px' }}>
+          <button
+            type="button"
+            onClick={handleCancelReply}
+            style={{ marginLeft: '10px' }}
+          >
             取消回复
           </button>
         )}
       </div>
       <p style={{ fontSize: '0.9em', color: '#666', marginTop: '10px' }}>
-        <strong>提示：</strong>点击发布后，您的评论内容将<strong>自动复制</strong>。
-        请在弹出的新窗口中<strong>粘贴 (Ctrl+V)</strong>并完成发布。
+        <strong>提示：</strong>点击发布后，您的评论内容将
+        <strong>自动复制</strong>。 请在弹出的新窗口中
+        <strong>粘贴 (Ctrl+V)</strong>并完成发布。
       </p>
     </div>
   );

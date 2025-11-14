@@ -8,5 +8,4 @@ export interface CommentsState {
   // state
   loading: boolean;
   totalComments: number;
-
 }

@@ -1,52 +1,52 @@
-import React from "react";
-import useTheme from "../hooks/useTheme";
+import React from 'react';
+import useTheme from '../hooks/useTheme';
 
 const ThemeToggle: React.FC = () => {
   const { theme, themeMode, toggleTheme } = useTheme({
-    localStorageKey: "theme",
+    localStorageKey: 'theme',
   });
 
   // 获取滑块位置 - 使用calc确保不超出边界
   const getSliderPosition = () => {
-    return themeMode === "light" ? "2px" : "calc(100% - 26px)";
+    return themeMode === 'light' ? '2px' : 'calc(100% - 26px)';
   };
 
   const containerStyles: React.CSSProperties = {
-    position: "relative",
-    width: "50px",
-    height: "28px",
-    backgroundColor: theme === "dark" ? "#333" : "#ddd",
-    borderRadius: "14px",
-    cursor: "pointer",
-    transition: "background-color 0.3s ease",
-    border: "1px solid var(--border-color)",
+    position: 'relative',
+    width: '50px',
+    height: '28px',
+    backgroundColor: theme === 'dark' ? '#333' : '#ddd',
+    borderRadius: '14px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
+    border: '1px solid var(--border-color)',
   };
 
   const sliderStyles: React.CSSProperties = {
-    position: "absolute",
-    top: "2px",
+    position: 'absolute',
+    top: '2px',
     left: getSliderPosition(),
-    width: "24px",
-    height: "24px",
-    backgroundColor: theme === "dark" ? "#222" : "#fff",
-    borderRadius: "50%",
-    transition: "all 0.3s ease",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+    width: '24px',
+    height: '24px',
+    backgroundColor: theme === 'dark' ? '#222' : '#fff',
+    borderRadius: '50%',
+    transition: 'all 0.3s ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
   };
 
   const iconStyles: React.CSSProperties = {
-    width: "14px",
-    height: "14px",
-    fill: theme === "dark" ? "#fff" : "#666",
-    transition: "fill 0.3s ease",
+    width: '14px',
+    height: '14px',
+    fill: theme === 'dark' ? '#fff' : '#666',
+    transition: 'fill 0.3s ease',
   };
 
   // 根据当前主题显示不同的图标
   const renderContent = () => {
-    if (theme === "dark") {
+    if (theme === 'dark') {
       // 月亮图标
       return (
         <svg
@@ -72,7 +72,7 @@ const ThemeToggle: React.FC = () => {
   };
 
   const getTooltipText = () => {
-    return themeMode === "dark" ? "Dark Mode" : "Light Mode";
+    return themeMode === 'dark' ? 'Dark Mode' : 'Light Mode';
   };
 
   return (
@@ -83,7 +83,7 @@ const ThemeToggle: React.FC = () => {
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
+        if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           toggleTheme();
         }

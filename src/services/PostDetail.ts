@@ -1,4 +1,7 @@
-import { getPostContent, type GetContentByPathParams } from "../actions/blogger.service";
+import {
+  getPostContent,
+  type GetContentByPathParams,
+} from '../actions/blogger.service';
 
 // 文章详情页面所需的数据结构
 export type PostDetail = {
@@ -34,7 +37,7 @@ export async function getPostDetail(path: string): Promise<PostDetail> {
     }
 
     // 提取标签
-    const tags = entry.category?.map(cat => cat.term) || [];
+    const tags = entry.category?.map((cat) => cat.term) || [];
 
     // 提取内容
     const content = entry.content.$t;
@@ -49,7 +52,7 @@ export async function getPostDetail(path: string): Promise<PostDetail> {
       updated: entry.updated.toISOString(),
       tags,
       path,
-      url: entry.link.find(link => link.rel === 'alternate')?.href || '',
+      url: entry.link.find((link) => link.rel === 'alternate')?.href || '',
     };
   } catch (error) {
     console.error('Failed to fetch post detail:', error);
@@ -57,7 +60,10 @@ export async function getPostDetail(path: string): Promise<PostDetail> {
   }
 }
 
-function getStringAfterPost(inputString: string, defaultValue: string): {
+function getStringAfterPost(
+  inputString: string,
+  defaultValue: string,
+): {
   postId: string;
   blogId: string;
 } {
@@ -73,13 +79,21 @@ function getStringAfterPost(inputString: string, defaultValue: string): {
   if (blogIdIndex !== -1) {
     const blogIdStart = blogIdIndex + blogIdKeyword.length;
     const blogIdEnd = inputString.indexOf('.', blogIdStart);
-    blogId = (blogIdEnd !== -1 ? inputString.substring(blogIdStart, blogIdEnd) : inputString.substring(blogIdStart)).trim();
+    blogId = (
+      blogIdEnd !== -1
+        ? inputString.substring(blogIdStart, blogIdEnd)
+        : inputString.substring(blogIdStart)
+    ).trim();
   }
 
   if (postIndex !== -1) {
     const postStart = postIndex + postKeyword.length;
     const postEnd = inputString.indexOf('.', postStart);
-    postId = (postEnd !== -1 ? inputString.substring(postStart, postEnd) : inputString.substring(postStart)).trim();
+    postId = (
+      postEnd !== -1
+        ? inputString.substring(postStart, postEnd)
+        : inputString.substring(postStart)
+    ).trim();
   }
 
   if (blogId || postId) {

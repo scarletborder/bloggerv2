@@ -1,4 +1,4 @@
-import { getCurrentTheme } from "../../constants/colors";
+import { getCurrentTheme } from '../../constants/colors';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBlogger, faDisqus } from '@fortawesome/free-brands-svg-icons';
@@ -18,8 +18,6 @@ export function Seperator() {
   return <div style={separatorStyles} />;
 }
 
-
-
 // 定义组件接收的 props 类型
 interface SourceIconProps {
   source: CommentItem['source'];
@@ -34,7 +32,7 @@ export function SourceIcon({ source }: SourceIconProps) {
 
   // 定义统一的图标基础样式
   const iconBaseStyles: React.CSSProperties = {
-    fontSize: '16px',        // 使图标大小与作者名文字大小一致
+    fontSize: '16px', // 使图标大小与作者名文字大小一致
     verticalAlign: 'middle', // 优化图标与文字的垂直对齐
     transition: 'color 0.2s ease', // 添加颜色过渡动画
   };

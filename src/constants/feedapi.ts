@@ -1,12 +1,14 @@
-export const BLOG_BASE = "https://blog.scarletborder.cn"
+export const BLOG_BASE = 'https://blog.scarletborder.cn';
 /**
  * The full base URL of your Blogger blog.
  * This should NOT have a trailing slash.
  */
-export const BLOG_URL = import.meta.env.DEV ? "/proxy-api" : BLOG_BASE;
+export const BLOG_URL = import.meta.env.DEV ? '/proxy-api' : BLOG_BASE;
 
 // 为一些pkg提供的完整资源请求前缀
-export const API_URL_PREFIX = import.meta.env.DEV ? `${window.location.origin}/proxy-api` : BLOG_BASE;
+export const API_URL_PREFIX = import.meta.env.DEV
+  ? `${window.location.origin}/proxy-api`
+  : BLOG_BASE;
 
 /**
  * Default timeout for API requests in milliseconds.

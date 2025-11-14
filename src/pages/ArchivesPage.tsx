@@ -2,14 +2,18 @@ import React, { useState, useRef, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useInfiniteScroll, useLatest, useMemoizedFn, useTitle } from 'ahooks';
 import useUrlState from '@ahooksjs/use-url-state';
-import { GetPostListByCategories, GetPostListByDate } from '../services/PostList';
+import {
+  GetPostListByCategories,
+  GetPostListByDate,
+} from '../services/PostList';
 import { getCurrentTheme } from '../constants/colors';
 import TagsFilter from '../components/archives/TagsFilter';
-import DateFilter, { saveCacheForDate, type DateFilterRef } from '../components/archives/DateFilter';
+import DateFilter, {
+  saveCacheForDate,
+  type DateFilterRef,
+} from '../components/archives/DateFilter';
 import PostCacheManager from '../utils/postCache';
 import ResultsDisplay from '../components/archives/ResultsDisplay';
-
-
 
 type SearchMode = 'none' | 'tag' | 'date';
 
@@ -20,7 +24,7 @@ export default function ArchivesPage() {
   const [urlState, setUrlState] = useUrlState({
     tag: '',
     year: '',
-    month: ''
+    month: '',
   });
 
   const [searchMode, setSearchMode] = useState<SearchMode>('none');
@@ -38,7 +42,7 @@ export default function ArchivesPage() {
   const latestSearchYear = useLatest(searchYear);
   const latestSearchMonth = useLatest(searchMonth);
 
-  useTitle("Archives-绯境之外");
+  useTitle('Archives-绯境之外');
 
   // 标签搜索的无限滚动
   const {
@@ -50,7 +54,8 @@ export default function ArchivesPage() {
     reload: tagReload,
   } = useInfiniteScroll(
     async (d) => {
-      if (latestSearchMode.current !== 'tag' || !latestSelectedTag.current) return { list: [] };
+      if (latestSearchMode.current !== 'tag' || !latestSelectedTag.current)
+        return { list: [] };
 
       const startIndex = d?.list ? d.list.length : 0;
       const result = await GetPostListByCategories({
@@ -70,7 +75,7 @@ export default function ArchivesPage() {
       isNoMore: (d) => d?.noMore === true,
       manual: true,
       threshold: 100, // 距离底部100px时开始加载
-    }
+    },
   );
 
   // 日期搜索的无限滚动
@@ -83,19 +88,37 @@ export default function ArchivesPage() {
     reload: dateReload,
   } = useInfiniteScroll(
     async (d) => {
-      if (latestSearchMode.current !== 'date' || !latestSearchYear.current || !latestSearchMonth.current) return { list: [] };
+      if (
+        latestSearchMode.current !== 'date' ||
+        !latestSearchYear.current ||
+        !latestSearchMonth.current
+      )
+        return { list: [] };
 
       const startIndex = d?.list ? d.list.length : 0;
       const currentYear = latestSearchYear.current;
       const currentMonth = latestSearchMonth.current;
 
-      console.log('useInfiniteScroll: Loading data for', currentYear, currentMonth, 'startIndex:', startIndex);
+      console.log(
+        'useInfiniteScroll: Loading data for',
+        currentYear,
+        currentMonth,
+        'startIndex:',
+        startIndex,
+      );
 
       // 如果是第一次加载，先检查缓存
       if (startIndex === 0) {
-        const cachedPosts = await PostCacheManager.getCache(currentYear, currentMonth);
+        const cachedPosts = await PostCacheManager.getCache(
+          currentYear,
+          currentMonth,
+        );
         if (cachedPosts !== null) {
-          console.log('useInfiniteScroll: Using cached data:', cachedPosts.length, 'posts');
+          console.log(
+            'useInfiniteScroll: Using cached data:',
+            cachedPosts.length,
+            'posts',
+          );
           return {
             list: cachedPosts,
             noMore: true, // 缓存数据是完整的，不需要分页
@@ -114,7 +137,13 @@ export default function ArchivesPage() {
       // 如果是第一次加载，保存到缓存
       if (startIndex === 0) {
         try {
-          console.log('useInfiniteScroll: Saving cache for:', currentYear, currentMonth, 'Posts:', result.list.length);
+          console.log(
+            'useInfiniteScroll: Saving cache for:',
+            currentYear,
+            currentMonth,
+            'Posts:',
+            result.list.length,
+          );
           await saveCacheForDate(currentYear, currentMonth, result.list);
           // 更新缓存显示
           dateFilterRef.current?.updateCacheDisplay();
@@ -134,7 +163,7 @@ export default function ArchivesPage() {
       isNoMore: (d) => d?.noMore === true,
       manual: true,
       threshold: 100, // 距离底部100px时开始加载
-    }
+    },
   );
 
   // 初始化时从URL参数中恢复状态
@@ -151,7 +180,12 @@ export default function ArchivesPage() {
     } else if (year && month) {
       const yearNum = parseInt(year, 10);
       const monthNum = parseInt(month, 10);
-      if (!isNaN(yearNum) && !isNaN(monthNum) && monthNum >= 1 && monthNum <= 12) {
+      if (
+        !isNaN(yearNum) &&
+        !isNaN(monthNum) &&
+        monthNum >= 1 &&
+        monthNum <= 12
+      ) {
         if (yearNum !== searchYear || monthNum !== searchMonth) {
           setSearchYear(yearNum);
           setSearchMonth(monthNum);
@@ -173,7 +207,7 @@ export default function ArchivesPage() {
     setUrlState({
       tag: tag,
       year: undefined,
-      month: undefined
+      month: undefined,
     });
   });
 
@@ -185,7 +219,7 @@ export default function ArchivesPage() {
     setUrlState({
       tag: tag,
       year: undefined,
-      month: undefined
+      month: undefined,
     });
     // 使用setTimeout确保状态更新后再触发重新加载
     setTimeout(() => {
@@ -202,7 +236,7 @@ export default function ArchivesPage() {
     setUrlState({
       tag: undefined,
       year: year.toString(),
-      month: month.toString()
+      month: month.toString(),
     });
     // 使用setTimeout确保状态更新后再触发重新加载
     setTimeout(() => {
@@ -277,7 +311,7 @@ export default function ArchivesPage() {
 
   // 样式定义
   const containerStyles: React.CSSProperties = {
-    maxHeight: isMobile ? "unset" : '100vh',
+    maxHeight: isMobile ? 'unset' : '100vh',
     backgroundColor: colors.background,
     color: colors.text,
     padding: isMobile ? 'unset 8px' : '18px 20px 0px',
@@ -362,13 +396,16 @@ export default function ArchivesPage() {
             onDateSearch={handleDateSearch}
             onRefreshRequest={handleRefreshRequest}
             showRefreshButton={searchMode === 'date'}
-            initialYear={urlState.year ? parseInt(urlState.year, 10) : undefined}
-            initialMonth={urlState.month ? parseInt(urlState.month, 10) : undefined}
+            initialYear={
+              urlState.year ? parseInt(urlState.year, 10) : undefined
+            }
+            initialMonth={
+              urlState.month ? parseInt(urlState.month, 10) : undefined
+            }
           />
           <ResultsDisplay
             data={getCurrentData()}
             loading={getCurrentLoading()}
-
             loadingMore={getCurrentLoadingMore()}
             noMore={getCurrentNoMore()}
             emptyMessage={getEmptyMessage()}
@@ -399,8 +436,12 @@ export default function ArchivesPage() {
               onDateSearch={handleDateSearch}
               onRefreshRequest={handleRefreshRequest}
               showRefreshButton={searchMode === 'date'}
-              initialYear={urlState.year ? parseInt(urlState.year, 10) : undefined}
-              initialMonth={urlState.month ? parseInt(urlState.month, 10) : undefined}
+              initialYear={
+                urlState.year ? parseInt(urlState.year, 10) : undefined
+              }
+              initialMonth={
+                urlState.month ? parseInt(urlState.month, 10) : undefined
+              }
             />
           </div>
         </div>
@@ -409,7 +450,6 @@ export default function ArchivesPage() {
           <ResultsDisplay
             data={getCurrentData()}
             loading={getCurrentLoading()}
-
             loadingMore={getCurrentLoadingMore()}
             noMore={getCurrentNoMore()}
             emptyMessage={getEmptyMessage()}

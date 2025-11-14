@@ -17,8 +17,8 @@ export const loadCSS = (href: string, id: string): Promise<void> => {
       existing.remove();
     }
 
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
     link.href = href;
     link.id = id;
 
@@ -39,41 +39,41 @@ export const loadThemeStyles = async (theme: string): Promise<void> => {
     // 加载基础 CSS（始终需要）
     await Promise.all([
       loadCSS(
-        "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css",
-        "katex-css"
+        'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css',
+        'katex-css',
       ),
       loadCSS(
-        "https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css",
-        "codemirror-base-css"
+        'https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css',
+        'codemirror-base-css',
       ),
     ]);
 
     // 根据主题加载不同的样式
-    if (theme === "dark") {
+    if (theme === 'dark') {
       await Promise.all([
         loadCSS(
-          "https://cdn.jsdelivr.net/gh/PrismJS/prism-themes@master/themes/prism-atom-dark.css",
-          "prism-theme-css"
+          'https://cdn.jsdelivr.net/gh/PrismJS/prism-themes@master/themes/prism-atom-dark.css',
+          'prism-theme-css',
         ),
         loadCSS(
-          "https://cdn.jsdelivr.net/npm/codemirror@5/theme/yonce.css",
-          "codemirror-theme-css"
+          'https://cdn.jsdelivr.net/npm/codemirror@5/theme/yonce.css',
+          'codemirror-theme-css',
         ),
       ]);
     } else {
       await Promise.all([
         loadCSS(
-          "https://cdn.jsdelivr.net/gh/PrismJS/prism-themes@master/themes/prism-one-light.css",
-          "prism-theme-css"
+          'https://cdn.jsdelivr.net/gh/PrismJS/prism-themes@master/themes/prism-one-light.css',
+          'prism-theme-css',
         ),
         loadCSS(
-          "https://cdn.jsdelivr.net/npm/codemirror@5/theme/duotone-light.css",
-          "codemirror-theme-css"
+          'https://cdn.jsdelivr.net/npm/codemirror@5/theme/duotone-light.css',
+          'codemirror-theme-css',
         ),
       ]);
     }
   } catch (error) {
-    console.warn("Failed to load some CSS files:", error);
+    console.warn('Failed to load some CSS files:', error);
     throw error;
   }
 };

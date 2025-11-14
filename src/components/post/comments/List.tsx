@@ -1,12 +1,12 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useVirtualList, useLatest } from "ahooks";
-import { isMobile } from "react-device-detect";
-import { GetPostLegacyComments } from "../../../services/BloggerComment";
-import { getCurrentTheme } from "../../../constants/colors";
-import { CommentItemComponent } from "./Item";
-import type { CommentsState } from "./types";
-import type { SetState } from "ahooks/lib/useSetState";
-import type { CommentItem } from "../../../models/CommentItem";
+import React, { useRef, useState, useEffect } from 'react';
+import { useVirtualList, useLatest } from 'ahooks';
+import { isMobile } from 'react-device-detect';
+import { GetPostLegacyComments } from '../../../services/BloggerComment';
+import { getCurrentTheme } from '../../../constants/colors';
+import { CommentItemComponent } from './Item';
+import type { CommentsState } from './types';
+import type { SetState } from 'ahooks/lib/useSetState';
+import type { CommentItem } from '../../../models/CommentItem';
 
 type CommentListProps = {
   Ctx: CommentsState;
@@ -59,7 +59,7 @@ export default function CommentList({
         loading: false,
       }));
     } catch (error) {
-      console.error("Failed to fetch comments:", error);
+      console.error('Failed to fetch comments:', error);
       setAllComments([]);
       setCtx((prev) => ({ ...prev, totalComments: 0, loading: false }));
     } finally {
@@ -73,17 +73,17 @@ export default function CommentList({
 
   const scrollAreaStyles: React.CSSProperties = {
     // 桌面端样式保持不变，移动端样式将不再直接使用在这个容器上
-    maxHeight: "min(600px, 80vh)",
-    minHeight: "max(10vh, 185px)",
-    overflowY: "scroll",
-    paddingRight: "8px",
+    maxHeight: 'min(600px, 80vh)',
+    minHeight: 'max(10vh, 185px)',
+    overflowY: 'scroll',
+    paddingRight: '8px',
   };
 
   const emptyStyles: React.CSSProperties = {
-    textAlign: "center",
-    padding: "40px 20px",
+    textAlign: 'center',
+    padding: '40px 20px',
     color: colors.textSecondary,
-    fontSize: "16px",
+    fontSize: '16px',
   };
 
   if (loading) {

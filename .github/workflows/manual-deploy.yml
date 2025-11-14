@@ -9,8 +9,8 @@ on:
         default: 'true'
         type: choice
         options:
-        - 'true'
-        - 'false'
+          - 'true'
+          - 'false'
 
 permissions:
   contents: write

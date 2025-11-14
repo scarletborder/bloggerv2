@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from "react";
-import { useSpring, animated, useTrail } from "@react-spring/web";
-import { useGesture } from "@use-gesture/react";
-import { getCurrentTheme } from "../../constants/colors";
-import { useUpdateEffect } from "ahooks";
-import { useTheme } from "../../hooks";
+import React, { useRef, useEffect } from 'react';
+import { useSpring, animated, useTrail } from '@react-spring/web';
+import { useGesture } from '@use-gesture/react';
+import { getCurrentTheme } from '../../constants/colors';
+import { useUpdateEffect } from 'ahooks';
+import { useTheme } from '../../hooks';
 
 interface Particle {
   id: number;
@@ -20,22 +20,22 @@ interface Particle {
 
 // 辅助函数：从CSS变量获取实际的颜色值
 const getComputedCSSColor = (cssVar: string): string => {
-  if (typeof window === "undefined") return "#007bff"; // 默认颜色
+  if (typeof window === 'undefined') return '#007bff'; // 默认颜色
 
   // 如果已经是具体的颜色值，直接返回
-  if (!cssVar.startsWith("var(")) {
+  if (!cssVar.startsWith('var(')) {
     return cssVar;
   }
 
   // 从CSS变量中提取变量名
-  const varName = cssVar.replace(/var\((--[^)]+)\)/, "$1");
+  const varName = cssVar.replace(/var\((--[^)]+)\)/, '$1');
 
   // 获取计算后的样式值
   const computedValue = getComputedStyle(document.documentElement)
     .getPropertyValue(varName)
     .trim();
 
-  return computedValue || "#007bff"; // 如果获取失败，返回默认颜色
+  return computedValue || '#007bff'; // 如果获取失败，返回默认颜色
 };
 
 const SiteTitle: React.FC = () => {
@@ -94,26 +94,26 @@ const SiteTitle: React.FC = () => {
   }));
 
   // 字符逐个显示动画
-  const mainTitle = "绯境之外";
-  const subTitle = "Outside of Scarlet";
+  const mainTitle = '绯境之外';
+  const subTitle = 'Outside of Scarlet';
 
   const [mainTitleTrail, mainTitleApi] = useTrail(mainTitle.length, () => ({
-    from: { opacity: 0, transform: "translateY(20px) rotateX(90deg)" },
-    to: { opacity: 1, transform: "translateY(0px) rotateX(0deg)" },
+    from: { opacity: 0, transform: 'translateY(20px) rotateX(90deg)' },
+    to: { opacity: 1, transform: 'translateY(0px) rotateX(0deg)' },
     delay: 100,
     config: { tension: 120, friction: 14 },
   }));
 
   const [subTitleTrail, subTitleApi] = useTrail(subTitle.length, () => ({
-    from: { opacity: 0, transform: "translateY(10px)" },
-    to: { opacity: 1, transform: "translateY(0px)" },
+    from: { opacity: 0, transform: 'translateY(10px)' },
+    to: { opacity: 1, transform: 'translateY(0px)' },
     delay: 800,
     config: { tension: 100, friction: 12 },
   }));
 
   // 主题变化时清除所有粒子并优雅地重置动画
   useUpdateEffect(() => {
-    console.log("theme changed:", theme);
+    console.log('theme changed:', theme);
     // 清除粒子
     particlesRef.current = [];
 
@@ -149,13 +149,13 @@ const SiteTitle: React.FC = () => {
       // 重置字符动画
       mainTitleApi.start({
         opacity: 1,
-        transform: "translateY(0px) rotateX(0deg)",
+        transform: 'translateY(0px) rotateX(0deg)',
         config: { tension: 120, friction: 14 },
       });
 
       subTitleApi.start({
         opacity: 1,
-        transform: "translateY(0px)",
+        transform: 'translateY(0px)',
         config: { tension: 100, friction: 12 },
       });
     }, 50); // 短暂延迟确保主题变化完成
@@ -205,14 +205,14 @@ const SiteTitle: React.FC = () => {
   const createParticle = (x: number, y: number): Particle => {
     const currentColors = getCurrentTheme();
     // 使用try-catch确保颜色获取不会导致错误
-    let primaryColor = "#007bff";
-    let primaryHoverColor = "#0056b3";
+    let primaryColor = '#007bff';
+    let primaryHoverColor = '#0056b3';
 
     try {
       primaryColor = getComputedCSSColor(currentColors.primary);
       primaryHoverColor = getComputedCSSColor(currentColors.primaryHover);
     } catch (error) {
-      console.warn("Failed to get computed colors, using fallback", error);
+      console.warn('Failed to get computed colors, using fallback', error);
     }
 
     return {
@@ -234,7 +234,7 @@ const SiteTitle: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     try {
@@ -282,14 +282,14 @@ const SiteTitle: React.FC = () => {
         livingParticles.push(
           createParticle(
             mousePos.current.x + offsetX,
-            mousePos.current.y + offsetY
-          )
+            mousePos.current.y + offsetY,
+          ),
         );
       }
 
       particlesRef.current = livingParticles;
     } catch (error) {
-      console.warn("Particle rendering error:", error);
+      console.warn('Particle rendering error:', error);
       // 清除粒子避免继续出错
       particlesRef.current = [];
     }
@@ -352,12 +352,12 @@ const SiteTitle: React.FC = () => {
       };
 
       resizeCanvas();
-      window.addEventListener("resize", resizeCanvas);
+      window.addEventListener('resize', resizeCanvas);
 
       updateParticles();
 
       return () => {
-        window.removeEventListener("resize", resizeCanvas);
+        window.removeEventListener('resize', resizeCanvas);
         if (animationFrameRef.current) {
           cancelAnimationFrame(animationFrameRef.current);
         }
@@ -372,33 +372,33 @@ const SiteTitle: React.FC = () => {
   const computedPrimaryColor = getComputedCSSColor(colors.primary);
 
   const containerStyles: React.CSSProperties = {
-    position: "relative",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "40px 20px",
-    minHeight: "200px",
-    maxHeight: "25vh",
-    overflow: "hidden",
-    cursor: "pointer",
-    userSelect: "none",
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '40px 20px',
+    minHeight: '200px',
+    maxHeight: '25vh',
+    overflow: 'hidden',
+    cursor: 'pointer',
+    userSelect: 'none',
   };
 
   const canvasStyles: React.CSSProperties = {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
-    width: "100%",
-    height: "100%",
-    pointerEvents: "none",
+    width: '100%',
+    height: '100%',
+    pointerEvents: 'none',
     zIndex: 1,
   };
 
   const titleContainerStyles: React.CSSProperties = {
-    position: "relative",
+    position: 'relative',
     zIndex: 2,
-    textAlign: "center",
+    textAlign: 'center',
   };
 
   return (
@@ -409,14 +409,14 @@ const SiteTitle: React.FC = () => {
       {/* 背景光晕 - 使用实际颜色值 */}
       <animated.div
         style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "400px",
-          height: "200px",
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '400px',
+          height: '200px',
           background: `radial-gradient(ellipse, ${computedPrimaryColor}33, transparent)`,
-          filter: "blur(30px)",
+          filter: 'blur(30px)',
           zIndex: 0,
           opacity: glowSpring.opacity,
         }}
@@ -427,12 +427,12 @@ const SiteTitle: React.FC = () => {
         <animated.div style={titleSpring}>
           <div
             style={{
-              fontSize: "clamp(3rem, 6vw, 4.5rem)",
-              fontWeight: "900",
-              marginBottom: "8px",
-              display: "flex",
-              justifyContent: "center",
-              gap: "2px",
+              fontSize: 'clamp(3rem, 6vw, 4.5rem)',
+              fontWeight: '900',
+              marginBottom: '8px',
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '2px',
             }}
           >
             {mainTitleTrail.map((style, index) => (
@@ -441,10 +441,10 @@ const SiteTitle: React.FC = () => {
                 style={{
                   ...style,
                   background: `linear-gradient(45deg, ${colors.primary}, ${colors.primaryHover})`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
                   textShadow: `0 0 20px ${computedPrimaryColor}66`,
-                  display: "inline-block",
+                  display: 'inline-block',
                 }}
               >
                 {mainTitle[index]}
@@ -457,12 +457,12 @@ const SiteTitle: React.FC = () => {
         <animated.div style={subtitleSpring}>
           <div
             style={{
-              fontSize: "clamp(1.2rem, 3vw, 1.8rem)",
-              fontWeight: "300",
-              letterSpacing: "3px",
-              display: "flex",
-              justifyContent: "center",
-              gap: "1px",
+              fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
+              fontWeight: '300',
+              letterSpacing: '3px',
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '1px',
             }}
           >
             {subTitleTrail.map((style, index) => (
@@ -471,10 +471,10 @@ const SiteTitle: React.FC = () => {
                 style={{
                   ...style,
                   color: colors.textSecondary,
-                  display: "inline-block",
+                  display: 'inline-block',
                 }}
               >
-                {subTitle[index] === " " ? "\u00A0" : subTitle[index]}
+                {subTitle[index] === ' ' ? '\u00A0' : subTitle[index]}
               </animated.span>
             ))}
           </div>

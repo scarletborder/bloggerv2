@@ -6,9 +6,15 @@ import { getCurrentTheme } from '../../constants/colors';
 import { usePaginationUrl } from '../../hooks';
 import { type PostItem as MobilePostItemProps } from '../../models/PostItem';
 
-interface PostListMobileProps { }
+interface PostListMobileProps {}
 
-function MobilePostItem({ path, title, tags, summary, published }: MobilePostItemProps) {
+function MobilePostItem({
+  path,
+  title,
+  tags,
+  summary,
+  published,
+}: MobilePostItemProps) {
   const colors = getCurrentTheme();
 
   const formatDate = (timestamp: number): string => {
@@ -22,8 +28,16 @@ function MobilePostItem({ path, title, tags, summary, published }: MobilePostIte
   // 为每个tag生成不同的颜色
   const getTagColor = (index: number): string => {
     const tagColors = [
-      '#007bff', '#28a745', '#dc3545', '#ffc107', '#17a2b8',
-      '#6f42c1', '#e83e8c', '#fd7e14', '#20c997', '#6c757d'
+      '#007bff',
+      '#28a745',
+      '#dc3545',
+      '#ffc107',
+      '#17a2b8',
+      '#6f42c1',
+      '#e83e8c',
+      '#fd7e14',
+      '#20c997',
+      '#6c757d',
     ];
     return tagColors[index % tagColors.length];
   };
@@ -108,13 +122,9 @@ function MobilePostItem({ path, title, tags, summary, published }: MobilePostIte
     <div>
       <div style={cardOuterStyles}>
         <Link to={`/${path}`} style={cardLinkStyles}>
-          <h3 style={titleStyles}>
-            {title}
-          </h3>
+          <h3 style={titleStyles}>{title}</h3>
           <div style={contentStyles}>
-            <div style={summaryStyles}>
-              {summary}
-            </div>
+            <div style={summaryStyles}>{summary}</div>
           </div>
           <div style={{ clear: 'both' }}></div>
         </Link>
@@ -145,7 +155,7 @@ function MobilePageToggle({
   pageSize,
   displayedItemsCount,
   onPrevious,
-  onNext
+  onNext,
 }: {
   current: number;
   total: number;
@@ -187,7 +197,7 @@ function MobilePageToggle({
   const disabledButtonStyles: React.CSSProperties = {
     ...buttonStyles,
     backgroundColor: colors.border,
-    color: "#627077",
+    color: '#627077',
     cursor: 'not-allowed',
     opacity: 0.6,
   };
@@ -217,9 +227,7 @@ function MobilePageToggle({
         ←
       </button>
 
-      <div style={pageInfoStyles}>
-        第 {current} 页
-      </div>
+      <div style={pageInfoStyles}>第 {current} 页</div>
 
       <button
         style={canGoNext ? activeButtonStyles : disabledButtonStyles}
@@ -232,12 +240,16 @@ function MobilePageToggle({
   );
 }
 
-export default function PostListMobile({ }: PostListMobileProps) {
+export default function PostListMobile({}: PostListMobileProps) {
   const colors = getCurrentTheme();
   const postListRef = useRef<HTMLDivElement>(null);
 
   // 使用URL参数同步分页状态 - 必须在组件顶层调用
-  const { startIndex: urlStartIndex, pageSize: urlPageSize, updateUrl } = usePaginationUrl({
+  const {
+    startIndex: urlStartIndex,
+    pageSize: urlPageSize,
+    updateUrl,
+  } = usePaginationUrl({
     defaultStartIndex: 0,
     defaultPageSize: 10,
   });
@@ -248,7 +260,8 @@ export default function PostListMobile({ }: PostListMobileProps) {
   const { data, loading, pagination } = usePagination(
     ({ current, pageSize }) => {
       // 使用URL中的startIndex或根据当前页计算
-      const startIndex = current === initialCurrent ? urlStartIndex : (current - 1) * pageSize;
+      const startIndex =
+        current === initialCurrent ? urlStartIndex : (current - 1) * pageSize;
 
       return GetPostList({
         current,
@@ -298,14 +311,17 @@ export default function PostListMobile({ }: PostListMobileProps) {
   };
 
   // 处理分页变化的回调函数
-  const handlePageChange = useCallback((newCurrent: number, newPageSize: number) => {
-    // 计算新的startIndex
-    const newStartIndex = (newCurrent - 1) * newPageSize;
-    // 更新URL参数
-    updateUrl(newStartIndex, newPageSize);
-    // 更新分页状态
-    pagination.onChange(newCurrent, newPageSize);
-  }, [updateUrl, pagination]);
+  const handlePageChange = useCallback(
+    (newCurrent: number, newPageSize: number) => {
+      // 计算新的startIndex
+      const newStartIndex = (newCurrent - 1) * newPageSize;
+      // 更新URL参数
+      updateUrl(newStartIndex, newPageSize);
+      // 更新分页状态
+      pagination.onChange(newCurrent, newPageSize);
+    },
+    [updateUrl, pagination],
+  );
 
   const containerStyles: React.CSSProperties = {
     maxWidth: '100%',
@@ -352,7 +368,11 @@ export default function PostListMobile({ }: PostListMobileProps) {
     return (
       <div ref={postListRef} style={containerStyles}>
         <h2 style={titleStyles}>最新文章</h2>
-        <div style={loadingStyles}>正在加载文章...<br />blogger api可能抽风,偶发加载时间超过10秒</div>
+        <div style={loadingStyles}>
+          正在加载文章...
+          <br />
+          blogger api可能抽风,偶发加载时间超过10秒
+        </div>
       </div>
     );
   }
@@ -395,8 +415,12 @@ export default function PostListMobile({ }: PostListMobileProps) {
         total={data.total}
         pageSize={pagination.pageSize}
         displayedItemsCount={data.list.length}
-        onPrevious={() => handlePageChange(pagination.current - 1, pagination.pageSize)}
-        onNext={() => handlePageChange(pagination.current + 1, pagination.pageSize)}
+        onPrevious={() =>
+          handlePageChange(pagination.current - 1, pagination.pageSize)
+        }
+        onNext={() =>
+          handlePageChange(pagination.current + 1, pagination.pageSize)
+        }
       />
     </div>
   );

@@ -6,23 +6,23 @@
   --light-surface: #ececf3;
   --light-text: #212529;
   --light-text-secondary: #627077;
-  --light-border: #82969F;
-  --light-primary: #82969F;
+  --light-border: #82969f;
+  --light-primary: #82969f;
   --light-primary-hover: #a4bbc6;
   --light-shadow: rgba(0, 0, 0, 0.1);
   --light-scrollbar-thumb: #627077;
   --light-scrollbar-track: #f1f1f1;
 
   /* 暗色模式颜色变量 */
-  --dark-background: #1A1A1E;
+  --dark-background: #1a1a1e;
   --dark-surface: #202027;
   --dark-text: rgba(255, 255, 255, 0.85);
-  --dark-text-secondary: #E6E6FF;
+  --dark-text-secondary: #e6e6ff;
   --dark-border: #a4a4c6;
-  --dark-primary: #C5C5ED;
+  --dark-primary: #c5c5ed;
   --dark-primary-hover: #a4a4c6;
   --dark-shadow: rgba(0, 0, 0, 0.3);
-  --dark-scrollbar-thumb: #E6E6FF;
+  --dark-scrollbar-thumb: #e6e6ff;
   --dark-scrollbar-track: #626277;
 
   /* 根据系统偏好设置初始主题 */
@@ -62,7 +62,7 @@
 }
 
 /* 手动主题切换 - 优先级最高 */
-html[data-theme="light"] {
+html[data-theme='light'] {
   --bg-color: var(--light-background);
   --surface-color: var(--light-surface);
   --text-color: var(--light-text);
@@ -75,7 +75,7 @@ html[data-theme="light"] {
   --scrollbar-track-color: var(--light-scrollbar-track);
 }
 
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   --bg-color: var(--dark-background);
   --surface-color: var(--dark-surface);
   --text-color: var(--dark-text);
@@ -98,9 +98,14 @@ html[data-theme="dark"] {
 html {
   background-color: var(--bg-color);
   color: var(--text-color);
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1,
+    'calt' 1;
   text-rendering: optimizeLegibility;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 body {
@@ -108,13 +113,29 @@ body {
   padding: 0;
   background-color: var(--bg-color);
   color: var(--text-color);
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'SF Pro Text',
+    'Segoe UI',
+    'Helvetica Neue',
+    'PingFang SC',
+    'Hiragino Sans GB',
+    'Microsoft YaHei',
+    Arial,
+    sans-serif;
   font-weight: 400;
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1,
+    'calt' 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   min-height: 100vh;
 }
 

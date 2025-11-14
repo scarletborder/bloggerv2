@@ -38,7 +38,6 @@ const CategorySchema = z.object({
   term: z.string(),
 });
 
-
 // =================================================================================
 // 2. ENTRY SCHEMAS (Schemas for individual posts or pages)
 // =================================================================================
@@ -90,7 +89,6 @@ export const PageContentEntrySchema = BaseEntrySchema.extend({
   content: TValueSchema,
 });
 
-
 // =================================================================================
 // 3. TOP-LEVEL RESPONSE SCHEMAS (Schemas for the entire API response object)
 // =================================================================================
@@ -104,7 +102,9 @@ const createListFeedSchema = <T extends z.ZodTypeAny>(entrySchema: T) =>
   z.object({
     feed: z.object({
       entry: z.array(entrySchema).optional().default([]), // Use .default([]) to handle cases with 0 entries gracefully
-      'openSearch$totalResults': TValueSchema.transform((val) => parseInt(val.$t, 10)),
+      openSearch$totalResults: TValueSchema.transform((val) =>
+        parseInt(val.$t, 10),
+      ),
     }),
   });
 
@@ -116,7 +116,9 @@ const createListFeedSchema = <T extends z.ZodTypeAny>(entrySchema: T) =>
 const createDetailFeedSchema = <T extends z.ZodTypeAny>(entrySchema: T) =>
   z.object({
     feed: z.object({
-      entry: z.array(entrySchema).length(1, { message: "Expected exactly one entry in the feed." }),
+      entry: z
+        .array(entrySchema)
+        .length(1, { message: 'Expected exactly one entry in the feed.' }),
     }),
   });
 
@@ -128,7 +130,9 @@ const createDetailFeedSchema = <T extends z.ZodTypeAny>(entrySchema: T) =>
 export const PostListResponseSchema = z.object({
   feed: z.object({
     entry: z.array(PostSummaryEntrySchema).optional().default([]),
-    'openSearch$totalResults': TValueSchema.transform((val) => parseInt(val.$t, 10)),
+    openSearch$totalResults: TValueSchema.transform((val) =>
+      parseInt(val.$t, 10),
+    ),
     // Add the blog-wide category list here
     category: z.array(CategorySchema).optional().default([]),
   }),
@@ -137,17 +141,23 @@ export const PostListResponseSchema = z.object({
 /**
  * Zod schema for the response of the "get page list" API endpoint.
  */
-export const PageListResponseSchema = createListFeedSchema(PageSummaryEntrySchema);
+export const PageListResponseSchema = createListFeedSchema(
+  PageSummaryEntrySchema,
+);
 
 /**
  * Zod schema for the response of the "get post content" API endpoint.
  */
-export const PostContentResponseSchema = createDetailFeedSchema(PostContentEntrySchema);
+export const PostContentResponseSchema = createDetailFeedSchema(
+  PostContentEntrySchema,
+);
 
 /**
  * Zod schema for the response of the "get page content" API endpoint.
  */
-export const PageContentResponseSchema = createDetailFeedSchema(PageContentEntrySchema);
+export const PageContentResponseSchema = createDetailFeedSchema(
+  PageContentEntrySchema,
+);
 
 /**
  * Zod schema for the response of the "get all tags" API endpoint.
@@ -158,7 +168,6 @@ export const AllTagsResponseSchema = z.object({
     category: z.array(CategorySchema).optional().default([]),
   }),
 });
-
 
 // =================================================================================
 // 4. INFERRED TYPESCRIPT TYPES

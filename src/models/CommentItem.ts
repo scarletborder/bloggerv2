@@ -7,11 +7,11 @@ export type CommentItem = {
   author: Author;
   content: string;
 
-  // milliseconds 
+  // milliseconds
   timeStamp: number;
 
   // 来源, blogger, disqus
-  source: "blogger" | "disqus";
+  source: 'blogger' | 'disqus';
   meta: MetaBlogger;
 
   // 粗略的回复
@@ -20,8 +20,8 @@ export type CommentItem = {
       name: string;
     };
     content: string;
-  }
-}
+  };
+};
 
 type Author = {
   name: string;
@@ -29,12 +29,11 @@ type Author = {
   // personal website or email
   url?: string;
   image?: string;
-}
+};
 
 export interface MetaBlogger {
   id: string;
   replyToId: string | null;
 }
 
-export interface MetaDisqus {
-}
+export interface MetaDisqus {}

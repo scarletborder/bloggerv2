@@ -30,7 +30,9 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
 
   React.useEffect(() => {
     const generateToc = () => {
-      const headings = document.querySelectorAll('.blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4, .blog-content h5, .blog-content h6');
+      const headings = document.querySelectorAll(
+        '.blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4, .blog-content h5, .blog-content h6',
+      );
       const items: TocItem[] = [];
 
       headings.forEach((heading, index) => {
@@ -195,8 +197,10 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
     position: 'fixed',
     left: isOpen ? `${tocWidth}px` : '0px',
     top: '50%',
-    transform: isOpen ? 'translateY(-50%) translateX(-100%)' : 'translateY(-50%)',
-    width: '1%',  // 变更: 宽度变窄
+    transform: isOpen
+      ? 'translateY(-50%) translateX(-100%)'
+      : 'translateY(-50%)',
+    width: '1%', // 变更: 宽度变窄
     height: '100px', // 变更: 高度变高
     backgroundColor: 'var(--surface-color)',
     border: '1px solid var(--border-color)',
@@ -212,8 +216,8 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
     zIndex: 101,
     transition: 'all 0.3s ease-in-out',
     // 变更: 调整 clip-path 使斜边更陡峭
-    clipPath: isOpen 
-      ? 'polygon(100% 0, 0 10%, 0 90%, 100% 100%)' 
+    clipPath: isOpen
+      ? 'polygon(100% 0, 0 10%, 0 90%, 100% 100%)'
       : 'polygon(0 0, 100% 10%, 100% 90%, 0 100%)',
   };
 
@@ -227,11 +231,11 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
       color: var(--surface-color) !important;
     }
   `;
-  
+
   return (
     <>
       <style>{hoverStyles}</style>
-      
+
       {!isMobile && (
         <>
           <nav style={pcContainerStyles}>
@@ -255,7 +259,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
               ))}
             </ul>
           </nav>
-          
+
           <button
             className="floating-toggle"
             style={floatingToggleStyles}

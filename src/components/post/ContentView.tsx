@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import DOMPurify from "dompurify";
-import useTheme from "../../hooks/useTheme";
+import React, { useEffect, useState } from 'react';
+import DOMPurify from 'dompurify';
+import useTheme from '../../hooks/useTheme';
 
 // 导入拆分后的模块
-import { loadThemeStyles } from "./codeBlocks/cssLoader";
-import { generateContentStyles, generateInlineStyles } from "./contentStyles";
-import { cleanCodeMirrorContent } from "./codeBlocks/codeMirrorCleaner";
+import { loadThemeStyles } from './codeBlocks/cssLoader';
+import { generateContentStyles, generateInlineStyles } from './contentStyles';
+import { cleanCodeMirrorContent } from './codeBlocks/codeMirrorCleaner';
 import {
   performCompleteHighlight,
   highlightAfterCSSLoad,
   highlightOnMount,
-} from "./codeBlocks/prismHighlighter";
+} from './codeBlocks/prismHighlighter';
 import {
   removeCodeBlockEnhancements,
   createCodeBlockObserver,
-} from "./codeBlocks/codeBlockEnhancer";
+} from './codeBlocks/codeBlockEnhancer';
 
 interface ContentViewProps {
   content: string;
@@ -47,7 +47,7 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
           await highlightAfterCSSLoad(sanitizedContent);
         }, 50);
       } catch (error) {
-        console.warn("Failed to load some CSS files:", error);
+        console.warn('Failed to load some CSS files:', error);
         setCssLoaded(true); // 即使失败也标记为已完成，避免卡住
       }
     };
@@ -130,8 +130,9 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
     <>
       <style>{contentStyles}</style>
       <div
-        className={`blog-content ${theme === "dark" ? "cm-s-yonce" : "cm-s-duotone-light"
-          }`}
+        className={`blog-content ${
+          theme === 'dark' ? 'cm-s-yonce' : 'cm-s-duotone-light'
+        }`}
         style={inlineStyles}
         dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       />

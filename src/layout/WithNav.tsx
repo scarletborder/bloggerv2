@@ -1,8 +1,8 @@
-import React from "react";
-import { isMobile } from "react-device-detect";
-import ThemeToggle from "../components/ThemeToggle";
-import useTheme from "../hooks/useTheme";
-import SearchInput from "../components/search/SearchInput";
+import React from 'react';
+import { isMobile } from 'react-device-detect';
+import ThemeToggle from '../components/ThemeToggle';
+import useTheme from '../hooks/useTheme';
+import SearchInput from '../components/search/SearchInput';
 
 interface NavButtonProps {
   title: string;
@@ -11,22 +11,22 @@ interface NavButtonProps {
 
 const NavButton: React.FC<NavButtonProps> = ({ title, to }) => {
   const buttonStyles: React.CSSProperties = {
-    padding: "8px 16px",
-    textDecoration: "none",
-    color: "var(--text-color)",
-    fontSize: "16px",
-    fontWeight: "500",
-    borderRadius: "4px",
-    transition: "all 0.2s ease",
-    cursor: "pointer",
-    backgroundColor: "transparent",
-    border: "none",
+    padding: '8px 16px',
+    textDecoration: 'none',
+    color: 'var(--text-color)',
+    fontSize: '16px',
+    fontWeight: '500',
+    borderRadius: '4px',
+    transition: 'all 0.2s ease',
+    cursor: 'pointer',
+    backgroundColor: 'transparent',
+    border: 'none',
   };
 
   const buttonHoverStyles: React.CSSProperties = {
     ...buttonStyles,
-    backgroundColor: "var(--primary-hover-color)",
-    color: "var(--bg-color)",
+    backgroundColor: 'var(--primary-hover-color)',
+    color: 'var(--bg-color)',
   };
 
   const [isHovered, setIsHovered] = React.useState(false);
@@ -55,16 +55,16 @@ const MobileNavSelect: React.FC<{
   };
 
   const selectStyles: React.CSSProperties = {
-    padding: "8px 8px",
-    borderRadius: "4px",
-    border: "1px solid var(--border-color)",
-    backgroundColor: "var(--surface-color)",
-    color: "var(--text-color)",
-    fontSize: "13px",
-    outline: "none",
-    cursor: "pointer",
-    width: "auto",
-    minWidth: "100px",
+    padding: '8px 8px',
+    borderRadius: '4px',
+    border: '1px solid var(--border-color)',
+    backgroundColor: 'var(--surface-color)',
+    color: 'var(--text-color)',
+    fontSize: '13px',
+    outline: 'none',
+    cursor: 'pointer',
+    width: 'auto',
+    minWidth: '100px',
   };
 
   return (
@@ -86,24 +86,24 @@ const MobileThemeButton: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
 
   const buttonStyles: React.CSSProperties = {
-    padding: "8px 12px",
-    borderRadius: "4px",
-    border: "1px solid var(--border-color)",
-    backgroundColor: "var(--surface-color)",
-    color: "var(--text-color)",
-    fontSize: "16px",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    transition: "all 0.2s ease",
-    minWidth: "40px",
-    height: "36px",
+    padding: '8px 12px',
+    borderRadius: '4px',
+    border: '1px solid var(--border-color)',
+    backgroundColor: 'var(--surface-color)',
+    color: 'var(--text-color)',
+    fontSize: '16px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.2s ease',
+    minWidth: '40px',
+    height: '36px',
   };
 
   return (
     <button style={buttonStyles} onClick={toggleTheme} aria-label="切换主题">
-      {theme === "dark" ? "🌙" : "☀️"}
+      {theme === 'dark' ? '🌙' : '☀️'}
     </button>
   );
 };
@@ -114,64 +114,64 @@ interface WithNavProps {
 
 const WithNav: React.FC<WithNavProps> = ({ children }) => {
   const navStyles: React.CSSProperties = {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: isMobile ? "0 16px" : "0 24px",
-    height: isMobile ? "56px" : "60px",
-    backgroundColor: "var(--surface-color)",
-    borderBottom: "1px solid var(--border-color)",
-    boxShadow: "0 2px 4px var(--shadow-color)",
-    position: "sticky",
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: isMobile ? '0 16px' : '0 24px',
+    height: isMobile ? '56px' : '60px',
+    backgroundColor: 'var(--surface-color)',
+    borderBottom: '1px solid var(--border-color)',
+    boxShadow: '0 2px 4px var(--shadow-color)',
+    position: 'sticky',
     top: 0,
     zIndex: 1000,
-    width: "100%",
-    maxWidth: "100vw",
-    boxSizing: "border-box",
-    overflowX: "hidden",
+    width: '100%',
+    maxWidth: '100vw',
+    boxSizing: 'border-box',
+    overflowX: 'hidden',
   };
 
   const leftSectionStyles: React.CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    gap: isMobile ? "12px" : "24px",
+    display: 'flex',
+    alignItems: 'center',
+    gap: isMobile ? '12px' : '24px',
     minWidth: 0, // 防止内容溢出
-    flex: isMobile ? "1" : "initial",
+    flex: isMobile ? '1' : 'initial',
   };
 
   const rightSectionStyles: React.CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    gap: isMobile ? "8px" : "16px", // 添加间距
+    display: 'flex',
+    alignItems: 'center',
+    gap: isMobile ? '8px' : '16px', // 添加间距
     minWidth: 0, // 防止内容溢出
-    flex: isMobile ? "0 0 auto" : "initial",
+    flex: isMobile ? '0 0 auto' : 'initial',
   };
 
   const containerStyles: React.CSSProperties = {
-    minHeight: "100vh",
-    backgroundColor: "inherit", // 继承而不是覆盖
-    color: "inherit", // 继承而不是覆盖
-    width: "100%",
-    maxWidth: "100vw",
-    overflowX: "hidden",
-    display: "flex",
-    flexDirection: "column",
-    position: "relative",
+    minHeight: '100vh',
+    backgroundColor: 'inherit', // 继承而不是覆盖
+    color: 'inherit', // 继承而不是覆盖
+    width: '100%',
+    maxWidth: '100vw',
+    overflowX: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
   };
 
   const contentStyles: React.CSSProperties = {
     flex: 1,
-    width: "100%",
-    maxWidth: "100%",
-    overflowX: "hidden",
-    padding: isMobile ? "16px" : "0",
-    boxSizing: "border-box",
+    width: '100%',
+    maxWidth: '100%',
+    overflowX: 'hidden',
+    padding: isMobile ? '16px' : '0',
+    boxSizing: 'border-box',
   };
 
   const navItems = [
-    { title: "HOME", to: "/" },
-    { title: "ARCHIVES", to: "/archives" },
-    { title: "PAGES", to: "/pages" },
+    { title: 'HOME', to: '/' },
+    { title: 'ARCHIVES', to: '/archives' },
+    { title: 'PAGES', to: '/pages' },
   ];
 
   return (

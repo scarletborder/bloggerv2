@@ -11,20 +11,25 @@ interface TagsFilterProps {
   initialTag?: string;
 }
 
-export default function TagsFilter({ onTagSelect, onTagSearch, selectedTag, initialTag }: TagsFilterProps) {
+export default function TagsFilter({
+  onTagSelect,
+  onTagSearch,
+  selectedTag,
+  initialTag,
+}: TagsFilterProps) {
   const colors = getCurrentTheme();
 
   const { data: tags = [], loading } = useRequest(getAllTags, {
     onError: (err) => {
       console.error('Failed to fetch tags:', err);
-    }
+    },
   });
 
   // 处理初始标签自动选择
   useEffect(() => {
     if (initialTag && tags.length > 0 && !selectedTag) {
       // 检查初始标签是否在标签列表中存在
-      const tagExists = tags.some(tag => tag.term === initialTag);
+      const tagExists = tags.some((tag) => tag.term === initialTag);
       if (tagExists) {
         onTagSelect(initialTag);
       }
@@ -39,8 +44,16 @@ export default function TagsFilter({ onTagSelect, onTagSearch, selectedTag, init
 
   const getTagColor = (index: number): string => {
     const tagColors = [
-      '#007bff', '#28a745', '#dc3545', '#ffc107', '#17a2b8',
-      '#6f42c1', '#e83e8c', '#fd7e14', '#20c997', '#6c757d'
+      '#007bff',
+      '#28a745',
+      '#dc3545',
+      '#ffc107',
+      '#17a2b8',
+      '#6f42c1',
+      '#e83e8c',
+      '#fd7e14',
+      '#20c997',
+      '#6c757d',
     ];
     return tagColors[index % tagColors.length];
   };
@@ -97,17 +110,25 @@ export default function TagsFilter({ onTagSelect, onTagSearch, selectedTag, init
     WebkitTextFillColor: 'transparent',
   };
 
-  const pcTagStyles = (index: number, isSelected: boolean): React.CSSProperties => ({
+  const pcTagStyles = (
+    index: number,
+    isSelected: boolean,
+  ): React.CSSProperties => ({
     padding: '10px 16px',
-    backgroundColor: isSelected ? getTagColor(index) : `${getTagColor(index)}30`,
+    backgroundColor: isSelected
+      ? getTagColor(index)
+      : `${getTagColor(index)}30`,
     color: isSelected ? '#ffffff' : colors.text,
     borderRadius: '20px',
     fontSize: '13px',
     fontWeight: '500',
     cursor: 'pointer',
-    transition: 'background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    transition:
+      'background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     textAlign: 'center',
-    boxShadow: isSelected ? `0 4px 12px ${getTagColor(index)}40` : '0 2px 6px rgba(0, 0, 0, 0.1)',
+    boxShadow: isSelected
+      ? `0 4px 12px ${getTagColor(index)}40`
+      : '0 2px 6px rgba(0, 0, 0, 0.1)',
     border: `1px solid ${colors.border}`,
     outline: 'none',
     position: 'relative',
@@ -118,9 +139,14 @@ export default function TagsFilter({ onTagSelect, onTagSearch, selectedTag, init
     minWidth: '0',
   });
 
-  const mobileTagStyles = (index: number, isSelected: boolean): React.CSSProperties => ({
+  const mobileTagStyles = (
+    index: number,
+    isSelected: boolean,
+  ): React.CSSProperties => ({
     padding: '8px 14px',
-    backgroundColor: isSelected ? getTagColor(index) : `${getTagColor(index)}30`,
+    backgroundColor: isSelected
+      ? getTagColor(index)
+      : `${getTagColor(index)}30`,
     color: isSelected ? '#ffffff' : colors.text,
     borderRadius: '16px',
     fontSize: '12px',
@@ -152,9 +178,7 @@ export default function TagsFilter({ onTagSelect, onTagSearch, selectedTag, init
 
   return (
     <div style={isMobile ? mobileContainerStyles : pcContainerStyles}>
-      <h3 style={titleStyles}>
-        🏷️ 文章标签
-      </h3>
+      <h3 style={titleStyles}>🏷️ 文章标签</h3>
       <div style={isMobile ? undefined : pcScrollContainerStyles}>
         <div style={isMobile ? mobileTagsGridStyles : pcTagsGridStyles}>
           {tags.map((tag, index) => {
@@ -162,19 +186,25 @@ export default function TagsFilter({ onTagSelect, onTagSearch, selectedTag, init
             return (
               <button
                 key={tag.term}
-                style={isMobile ? mobileTagStyles(index, isSelected) : pcTagStyles(index, isSelected)}
+                style={
+                  isMobile
+                    ? mobileTagStyles(index, isSelected)
+                    : pcTagStyles(index, isSelected)
+                }
                 onClick={() => handleTagClick(tag.term)}
                 title={tag.term} // 显示完整标签名作为 tooltip
                 onMouseEnter={(e) => {
                   if (!isMobile && !isSelected) {
                     e.currentTarget.style.backgroundColor = `${getTagColor(index)}50`;
-                    e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.15)';
+                    e.currentTarget.style.boxShadow =
+                      '0 4px 8px rgba(0, 0, 0, 0.15)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isMobile && !isSelected) {
                     e.currentTarget.style.backgroundColor = `${getTagColor(index)}30`;
-                    e.currentTarget.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.1)';
+                    e.currentTarget.style.boxShadow =
+                      '0 2px 6px rgba(0, 0, 0, 0.1)';
                   }
                 }}
               >

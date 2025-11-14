@@ -19,7 +19,7 @@ const PostPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  useTitle(`${post?.title ?? "Loading"} - 绯境之外`);
+  useTitle(`${post?.title ?? 'Loading'} - 绯境之外`);
 
   useEffect(() => {
     const loadPost = async () => {
@@ -35,7 +35,9 @@ const PostPage: React.FC = () => {
 
         // TODO: 处理path参数，将路径转换为API所需的格式
         // 这里先使用原始路径，稍后您可以根据需要进行处理
-        const processedPath = pathParam.startsWith('/') ? pathParam : `/${pathParam}`;
+        const processedPath = pathParam.startsWith('/')
+          ? pathParam
+          : `/${pathParam}`;
 
         const postDetail = await getPostDetail(processedPath);
         setPost(postDetail);
@@ -55,7 +57,8 @@ const PostPage: React.FC = () => {
     if (!isMobile) return;
 
     const handleScroll = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
       setShowScrollTop(scrollTop > 300); // 滚动超过300px时显示按钮
     };
 
@@ -67,7 +70,7 @@ const PostPage: React.FC = () => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   };
 
@@ -174,14 +177,13 @@ const PostPage: React.FC = () => {
       <div style={pageStyles}>
         <div style={errorStyles}>
           <h1 style={errorTitleStyles}>😔 页面加载失败</h1>
-          <p style={errorMessageStyles}>
-            {error || '找不到指定的文章'}
-          </p>
+          <p style={errorMessageStyles}>{error || '找不到指定的文章'}</p>
           <a
             href="/"
             style={backButtonStyles}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--primary-hover-color)';
+              e.currentTarget.style.backgroundColor =
+                'var(--primary-hover-color)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = 'var(--primary-color)';
@@ -219,7 +221,6 @@ const PostPage: React.FC = () => {
 
         {/* 评论区 */}
         <CommentArea postId={post.postId} blogId={post.blogId} />
-
       </main>
 
       {/* 悬浮的回到顶部按钮（仅移动端） */}

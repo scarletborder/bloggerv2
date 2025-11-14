@@ -59,7 +59,7 @@ const PostListPageToggle: React.FC<PostListPageToggleProps> = ({
 
   const buttonDisabledStyles: React.CSSProperties = {
     backgroundColor: colors.border,
-    color: "#627077",
+    color: '#627077',
     cursor: 'not-allowed',
     transform: 'none',
   };
@@ -72,9 +72,14 @@ const PostListPageToggle: React.FC<PostListPageToggleProps> = ({
     textAlign: 'center',
   };
 
-  const [hoveredButton, setHoveredButton] = React.useState<'prev' | 'next' | null>(null);
+  const [hoveredButton, setHoveredButton] = React.useState<
+    'prev' | 'next' | null
+  >(null);
 
-  const getButtonStyles = (buttonType: 'prev' | 'next', isDisabled: boolean) => {
+  const getButtonStyles = (
+    buttonType: 'prev' | 'next',
+    isDisabled: boolean,
+  ) => {
     if (isDisabled) {
       return { ...buttonStyles, ...buttonDisabledStyles };
     }
@@ -96,9 +101,7 @@ const PostListPageToggle: React.FC<PostListPageToggleProps> = ({
         ← 上一页
       </button>
 
-      <div style={pageInfoStyles}>
-        第 {current} 页
-      </div>
+      <div style={pageInfoStyles}>第 {current} 页</div>
 
       <button
         style={getButtonStyles('next', !canGoNext)}

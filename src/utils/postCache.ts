@@ -6,7 +6,7 @@ import type { PostItem } from '../models/PostItem';
 interface CacheEntry {
   key: string; // 格式: "年份/月份"
   posts: PostItem[];
-  timestamp: number; // milliseconds 
+  timestamp: number; // milliseconds
   expire: number; // 过期时间戳
 }
 
@@ -17,7 +17,7 @@ class PostCacheDB extends Dexie {
   constructor() {
     super('BlogPostCache');
     this.version(1).stores({
-      cacheEntries: 'key, timestamp, expire'
+      cacheEntries: 'key, timestamp, expire',
     });
   }
 }
@@ -40,15 +40,19 @@ export class PostCacheManager {
 
     // 如果是当前年月，缓存30分钟
     if (year === currentYear && month === currentMonth) {
-      return Date.now() + (30 * 60 * 1000); // 30分钟
+      return Date.now() + 30 * 60 * 1000; // 30分钟
     } else {
       // 其他情况缓存7天
-      return Date.now() + (7 * 24 * 60 * 60 * 1000); // 7天
+      return Date.now() + 7 * 24 * 60 * 60 * 1000; // 7天
     }
   }
 
   // 保存缓存
-  static async saveCache(year: number, month: number, posts: PostItem[]): Promise<void> {
+  static async saveCache(
+    year: number,
+    month: number,
+    posts: PostItem[],
+  ): Promise<void> {
     try {
       const key = this.generateKey(year, month);
       const expire = this.calculateExpireTime(year, month);
@@ -57,18 +61,23 @@ export class PostCacheManager {
         key,
         posts,
         timestamp: Date.now(),
-        expire
+        expire,
       };
 
       await db.cacheEntries.put(cacheEntry);
-      console.log(`缓存已保存: ${key}, 过期时间: ${new Date(expire).toLocaleString()}`);
+      console.log(
+        `缓存已保存: ${key}, 过期时间: ${new Date(expire).toLocaleString()}`,
+      );
     } catch (error) {
       console.error('保存缓存失败:', error);
     }
   }
 
   // 获取缓存
-  static async getCache(year: number, month: number): Promise<PostItem[] | null> {
+  static async getCache(
+    year: number,
+    month: number,
+  ): Promise<PostItem[] | null> {
     try {
       const key = this.generateKey(year, month);
       const cacheEntry = await db.cacheEntries.get(key);
@@ -147,7 +156,9 @@ export class PostCacheManager {
   }
 
   // 获取所有缓存的年月统计
-  static async getCachedDateCounts(): Promise<Record<string, Record<string, number>>> {
+  static async getCachedDateCounts(): Promise<
+    Record<string, Record<string, number>>
+  > {
     try {
       const allEntries = await db.cacheEntries.toArray();
       const now = Date.now();

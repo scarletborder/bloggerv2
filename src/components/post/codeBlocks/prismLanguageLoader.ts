@@ -12,8 +12,8 @@
  */
 
 // @ts-ignore - prismjs doesn't have built-in types
-import Prism from "prismjs";
-import components from "./prism-components.json"; // 假设您将提供的 JSON 保存为此文件
+import Prism from 'prismjs';
+import components from './prism-components.json'; // 假设您将提供的 JSON 保存为此文件
 
 // -----------------------------------------------------------------------------
 //  Data Processing: Generate Dependency and Alias Maps from Official JSON
@@ -39,7 +39,7 @@ const processLanguageData = () => {
   const languages = components.languages as Record<string, LanguageData>;
 
   for (const langId in languages) {
-    if (langId === "meta") {
+    if (langId === 'meta') {
       continue;
     }
     const langInfo = languages[langId];
@@ -83,7 +83,7 @@ const loadedLanguages = new Set<string>();
 const loadingPromises = new Map<string, Promise<void>>();
 
 // Prism.js CDN 基础 URL (保持版本同步)
-const PRISM_CDN_BASE = "https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components";
+const PRISM_CDN_BASE = 'https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components';
 
 /**
  * 通过 CDN 动态加载单个语言包
@@ -107,7 +107,7 @@ const loadSingleLanguage = async (language: string): Promise<void> => {
     }
 
     try {
-      const script = document.createElement("script");
+      const script = document.createElement('script');
       const scriptSrc = `${PRISM_CDN_BASE}/prism-${language}.min.js`;
       script.src = scriptSrc;
 
@@ -169,7 +169,7 @@ export const loadPrismLanguage = async (language: string): Promise<void> => {
 
   if (dependencies.length > 0) {
     const dependencyPromises = dependencies.map((dep) =>
-      loadPrismLanguage(dep)
+      loadPrismLanguage(dep),
     );
     await Promise.all(dependencyPromises);
   }
@@ -194,14 +194,14 @@ export const extractLanguagesFromHTML = (htmlContent: string): string[] => {
 
   while ((match = languageRegex.exec(htmlContent)) !== null) {
     const lang = match[1];
-    if (lang && lang !== "none") {
+    if (lang && lang !== 'none') {
       languages.add(lang);
     }
   }
 
   const result = Array.from(languages);
   if (result.length > 0) {
-    console.log("📋 Prism: Found languages to load:", result);
+    console.log('📋 Prism: Found languages to load:', result);
   }
   return result;
 };
@@ -211,7 +211,7 @@ export const extractLanguagesFromHTML = (htmlContent: string): string[] => {
  * @param languages 语言包数组
  */
 export const loadMultiplePrismLanguages = async (
-  languages: string[]
+  languages: string[],
 ): Promise<void> => {
   const loadPromises = languages.map((lang) => loadPrismLanguage(lang));
   await Promise.allSettled(loadPromises);
@@ -222,16 +222,16 @@ export const loadMultiplePrismLanguages = async (
  */
 export const preloadCommonLanguages = async (): Promise<void> => {
   const commonLanguages = [
-    "javascript", // or "js"
-    "typescript", // or "ts"
-    "python", // or "py"
-    "go",
-    "java",
-    "css",
-    "json",
-    "bash", // or "shell"
-    "sql",
-    "markup", // or "html"
+    'javascript', // or "js"
+    'typescript', // or "ts"
+    'python', // or "py"
+    'go',
+    'java',
+    'css',
+    'json',
+    'bash', // or "shell"
+    'sql',
+    'markup', // or "html"
   ];
   await loadMultiplePrismLanguages(commonLanguages);
 };
@@ -242,11 +242,11 @@ export const preloadCommonLanguages = async (): Promise<void> => {
 (async () => {
   try {
     // 预加载基础核心语言，几乎所有语言都依赖它们
-    await loadPrismLanguage("markup"); // 包括 clike
-    await loadPrismLanguage("css");
-    await loadPrismLanguage("javascript");
+    await loadPrismLanguage('markup'); // 包括 clike
+    await loadPrismLanguage('css');
+    await loadPrismLanguage('javascript');
   } catch (error) {
-    console.warn("Failed to preload base languages:", error);
+    console.warn('Failed to preload base languages:', error);
   }
 })();
 
@@ -254,15 +254,15 @@ export const preloadCommonLanguages = async (): Promise<void> => {
 //  Debug Tools
 // -----------------------------------------------------------------------------
 // 调试工具：在浏览器控制台中暴露测试函数
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   (window as any).debugPrismLanguageLoader = {
     extractLanguagesFromHTML,
     loadPrismLanguage,
     testExtraction: (html: string) => {
-      console.log("🧪 Testing language extraction:");
-      console.log("Input HTML:", html);
+      console.log('🧪 Testing language extraction:');
+      console.log('Input HTML:', html);
       const languages = extractLanguagesFromHTML(html);
-      console.log("Extracted languages:", languages);
+      console.log('Extracted languages:', languages);
       return languages;
     },
     testPythonHTML: () => {
@@ -276,19 +276,19 @@ if (typeof window !== "undefined") {
       return (window as any).debugPrismLanguageLoader.testExtraction(testHTML);
     },
     checkAliases: () => {
-      console.log("🔍 Language aliases map:");
-      console.log("python ->", languageAliases.get("python"));
-      console.log("py ->", languageAliases.get("py"));
-      console.log("sql ->", languageAliases.get("sql"));
-      console.log("javascript ->", languageAliases.get("javascript"));
-      console.log("js ->", languageAliases.get("js"));
+      console.log('🔍 Language aliases map:');
+      console.log('python ->', languageAliases.get('python'));
+      console.log('py ->', languageAliases.get('py'));
+      console.log('sql ->', languageAliases.get('sql'));
+      console.log('javascript ->', languageAliases.get('javascript'));
+      console.log('js ->', languageAliases.get('js'));
     },
     checkDependencies: () => {
-      console.log("📦 Language dependencies map:");
-      console.log("python deps:", languageDependencies.get("python"));
-      console.log("sql deps:", languageDependencies.get("sql"));
-      console.log("javascript deps:", languageDependencies.get("javascript"));
-      console.log("go deps:", languageDependencies.get("go"));
+      console.log('📦 Language dependencies map:');
+      console.log('python deps:', languageDependencies.get('python'));
+      console.log('sql deps:', languageDependencies.get('sql'));
+      console.log('javascript deps:', languageDependencies.get('javascript'));
+      console.log('go deps:', languageDependencies.get('go'));
     },
   };
 }

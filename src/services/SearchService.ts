@@ -1,8 +1,8 @@
 import {
   getPostList,
   type GetPostListParams,
-} from "../actions/blogger.service";
-import type { PostItem } from "../models/PostItem";
+} from '../actions/blogger.service';
+import type { PostItem } from '../models/PostItem';
 
 type SearchRequest = {
   query: string;
@@ -21,7 +21,7 @@ type SearchResponse = {
  * @returns Promise<SearchResponse>
  */
 export const SearchPostsByQuery = async (
-  req: SearchRequest
+  req: SearchRequest,
 ): Promise<SearchResponse> => {
   const { query } = req;
 
@@ -30,8 +30,8 @@ export const SearchPostsByQuery = async (
   }
 
   const params: GetPostListParams = {
-    "start-index": 1,
-    "max-results": 1000,
+    'start-index': 1,
+    'max-results': 1000,
     q: req.query,
   };
 
@@ -42,8 +42,8 @@ export const SearchPostsByQuery = async (
     list: entrys.map((entry) => {
       const tags = entry.category?.map((cat) => cat.term) || [];
       let linkPath =
-        entry.link.find((link) => link.rel === "alternate")?.href || "";
-      linkPath = linkPath.split("//")[1].split("/").slice(1).join("/");
+        entry.link.find((link) => link.rel === 'alternate')?.href || '';
+      linkPath = linkPath.split('//')[1].split('/').slice(1).join('/');
       return {
         _id: entry.id.$t,
         path: linkPath,
