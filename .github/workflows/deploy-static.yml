@@ -20,8 +20,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DEPLOY_ENV: "CDN"
-      CDN_BASEURL: "https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/"
       API_ENDPOINT: "https://blog.scarletborder.cn"
 
     steps:
@@ -45,12 +43,26 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build project
-        run: pnpm run build
+        run: DEPLOY_ENV='CDN' pnpm run build
+
+      - name: Deploy to static branch and get commit hash
+        id: deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: static
+          force_orphan: true
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: "Deploy static assets from release branch"
 
       - name: Find built assets and generate report
         id: generate-report
         run: |
-          CDN_BASE="${{ env.CDN_BASEURL }}"
+          COMMIT_HASH="${{ steps.deploy.outputs.commit_hash }}"
+          CDN_BASE="https://cdn.jsdelivr.net/gh/${{ github.repository }}@${COMMIT_HASH}/"
+          echo "Generated CDN Base URL: ${CDN_BASE}"
           REPORT_FILE="build_report.txt"
 
           # 清空报告文件，以便重新写入
@@ -73,6 +85,14 @@ jobs:
             echo "Found JS: ${JS_FILENAME}"
             echo "<script crossorigin='anonymous' src='${JS_CDN_URL}' type='module'></script>" >> "$REPORT_FILE"
           done
+
+          echo "--- Injecting global __CDN_URL__ variable ---"
+          # 使用 cat <<EOF 来安全地写入多行脚本
+          cat <<EOF >> "$REPORT_FILE"
+            <script>
+              window.__CDN_URL__ = '${CDN_BASE}';
+            </script>
+          EOF
 
           echo "--- Build Report Generated ---"
           cat "$REPORT_FILE"
@@ -98,24 +118,3 @@ jobs:
           else
             echo "branch_exists=false" >> $GITHUB_OUTPUT
           fi
-
-      - name: Create static branch if not exists
-        if: steps.check-branch.outputs.branch_exists == 'false'
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git checkout --orphan static
-          git reset --hard
-          git commit --allow-empty -m "Initial commit for static branch"
-          git push origin static
-
-      - name: Deploy to static branch
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: static
-          force_orphan: true
-          user_name: "github-actions[bot]"
-          user_email: "github-actions[bot]@users.noreply.github.com"
-          commit_message: "Deploy static assets from release branch"

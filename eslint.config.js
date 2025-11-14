@@ -8,6 +8,7 @@ import tencentEslintConfig from 'eslint-config-tencent/flat';
 
 const GlobalConstants = {
   __API_ENDPOINT__: 'readonly',
+  __CDN_URL__: 'readonly',
 };
 
 export default tseslint.config([
