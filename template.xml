@@ -48,6 +48,10 @@
     </style>
 
     <script>
+      window.__static_url = 'https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static';
+    </script>
+
+    <script>
       /*<![CDATA[*/
       (function () {
       const { search, hash, pathname } = window.location;
