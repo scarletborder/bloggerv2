@@ -29,17 +29,18 @@
       }
 
       /* 暗色模式样式 */
-      html[data-theme="dark"],
-      html[data-theme="dark"] body,
-      html[data-theme="dark"] #root {
-      background-color: #101013 !important;
-      color: #ffffff !important;
+      html[theme-mode="dark"],
+      html[theme-mode="dark"] body,
+      html[theme-mode="dark"] #root {
+      background-color: #1a1a1e !important;
+      color: rgba(255, 255, 255, 0.85) !important;
       }
 
       /* 浅色模式样式 */
-      html[data-theme="light"],
-      html[data-theme="light"] body,
-      html[data-theme="light"] #root {
+      html:not([theme-mode]),
+      html[theme-mode="light"],
+      html[theme-mode="light"] body,
+      html[theme-mode="light"] #root {
       background-color: #f5f5f9 !important;
       color: #212529 !important;
       }
@@ -80,7 +81,12 @@
       }
 
       // 立即设置主题属性，让CSS立即生效
-      document.documentElement.setAttribute('data-theme', theme);
+      // TDesign 推荐使用 theme-mode 属性
+      if (theme === 'dark') {
+      document.documentElement.setAttribute('theme-mode', 'dark');
+      } else {
+      document.documentElement.removeAttribute('theme-mode');
+      }
 
       // 在页面加载完成后移除阻塞样式，让正常的CSS接管
       function enableTransitions() {
@@ -100,7 +106,7 @@
 
       } catch (e) {
       // 出现错误时，设置默认浅色主题
-      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.removeAttribute('theme-mode');
       }
       })();
 /*]]>*/

@@ -9,80 +9,51 @@ export interface ThemeColors {
   shadow: string;
 }
 
-// 从 CSS 变量读取颜色值的函数
-// @ts-ignore
-const getCSSVariable = (variable: string): string => {
-  if (typeof document !== 'undefined') {
-    return getComputedStyle(document.documentElement)
-      .getPropertyValue(variable)
-      .trim();
-  }
-  return '';
-};
+/**
+ * 从 theme.css 中定义的自定义颜色系统获取当前主题颜色
+ * theme.css 基于 TDesign 设计系统，并使用自定义颜色变量以保持原有的视觉效果
+ */
+export const getCurrentTheme = (): ThemeColors =>
+  // 使用自定义的 CSS 变量，这些变量在 src/styles/theme.css 中定义
+  // 这些变量是为了保持原有的视觉效果并与 TDesign 兼容
+  ({
+    background: 'var(--bg-color)',
+    surface: 'var(--surface-color)',
+    text: 'var(--text-color)',
+    textSecondary: 'var(--text-secondary-color)',
+    border: 'var(--border-color)',
+    primary: 'var(--primary-color)',
+    primaryHover: 'var(--primary-hover-color)',
+    shadow: 'var(--shadow-color)',
+  })
+;
 
-// 创建主题对象，从 CSS 变量中获取值
-export const createThemeFromCSS = (): {
-  light: ThemeColors;
-  dark: ThemeColors;
-} => {
-  // 亮色模式主题（直接从 CSS 变量读取）
-  const lightTheme: ThemeColors = {
-    background: 'var(--light-background)',
-    surface: 'var(--light-surface)',
-    text: 'var(--light-text)',
-    textSecondary: 'var(--light-text-secondary)',
-    border: 'var(--light-border)',
-    primary: 'var(--light-primary)',
-    primaryHover: 'var(--light-primary-hover)',
-    shadow: 'var(--light-shadow)',
-  };
-
-  // 暗色模式主题（直接从 CSS 变量读取）
-  const darkTheme: ThemeColors = {
-    background: 'var(--dark-background)',
-    surface: 'var(--dark-surface)',
-    text: 'var(--dark-text)',
-    textSecondary: 'var(--dark-text-secondary)',
-    border: 'var(--dark-border)',
-    primary: 'var(--dark-primary)',
-    primaryHover: 'var(--dark-primary-hover)',
-    shadow: 'var(--dark-shadow)',
-  };
-
-  return { light: lightTheme, dark: darkTheme };
-};
-
-// 获取当前激活的主题（从当前 CSS 变量值）
-export const getCurrentTheme = (): ThemeColors => ({
-  background: 'var(--bg-color)',
-  surface: 'var(--surface-color)',
-  text: 'var(--text-color)',
-  textSecondary: 'var(--text-secondary-color)',
-  border: 'var(--border-color)',
-  primary: 'var(--primary-color)',
-  primaryHover: 'var(--primary-hover-color)',
-  shadow: 'var(--shadow-color)',
-});
-
-// 向后兼容的静态主题定义（用于需要具体颜色值的场景）
+/**
+ * 向后兼容的浅色主题定义
+ * 这些值来自 theme.css 中的浅色模式变量
+ */
 export const lightTheme: ThemeColors = {
-  background: '#ffffff',
-  surface: '#f8f9fa',
-  text: '#212529',
-  textSecondary: '#6c757d',
-  border: '#dee2e6',
-  primary: '#007bff',
-  primaryHover: '#0056b3',
-  shadow: 'rgba(0, 0, 0, 0.1)',
+  background: '#f3f3f3',
+  surface: '#ffffff',
+  text: 'rgba(0, 0, 0, 0.9)',
+  textSecondary: 'rgba(0, 0, 0, 0.6)',
+  border: '#dcdcdc',
+  primary: '#81959e',
+  primaryHover: '#9db1ba',
+  shadow: '0 1px 10px rgba(0, 0, 0, 5%), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%)',
 };
 
+/**
+ * 向后兼容的深色主题定义
+ * 这些值来自 theme.css 中的深色模式变量
+ */
 export const darkTheme: ThemeColors = {
-  background: '#121212',
-  surface: '#1e1e1e',
-  text: '#ffffff',
-  textSecondary: '#b0b0b0',
-  border: '#333333',
-  primary: '#4fc3f7',
-  primaryHover: '#29b6f6',
-  shadow: 'rgba(0, 0, 0, 0.3)',
+  background: '#181818',
+  surface: '#242424',
+  text: 'rgba(255, 255, 255, 0.9)',
+  textSecondary: 'rgba(255, 255, 255, 0.55)',
+  border: '#4b4b4e',
+  primary: '#8f8fb0',
+  primaryHover: '#747595',
+  shadow: '0 4px 6px rgba(0, 0, 0, 0.06), 0 1px 10px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.12)',
 };

@@ -9,8 +9,8 @@ import tencentEslintConfig from 'eslint-config-tencent/flat';
 export default tseslint.config([
   globalIgnores(['dist']),
   ...tencentEslintConfig({
-    tsconfigRootDir: process.cwd(),
-    project: './tsconfig.json',
+    tsconfigRootDir: process.cwd(), // eslint-disable-line no-undef
+    project: './tsconfig.app.json',
   }),
   {
     files: ['**/*.{ts,tsx}'],

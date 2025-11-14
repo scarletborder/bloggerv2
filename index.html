@@ -1,124 +1,121 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link
-      href="https://s2.loli.net/2025/04/14/LnsCqG8ZVcrJN4l.png"
-      rel="shortcut icon"
-      type="image/vnd.microsoft.icon"
-    />
-    <link rel="preconnect" href="https://fonts.lug.ustc.edu.cn" />
-    <link
-      rel="preconnect"
-      href="https://fonts-gstatic.lug.ustc.edu.cn"
-      crossorigin
-    />
-    <link
-      href="https://fonts.lug.ustc.edu.cn/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.lug.ustc.edu.cn/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap"
-      rel="stylesheet"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>绯境之外~Outside of Scarlet</title>
-    <style id="theme-blocking-styles">
-      /* 阻塞样式，确保页面在加载时立即有正确的背景色 */
-      html,
-      body,
-      #root {
-        background-color: #f5f5f9 !important;
-        color: #212529 !important;
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        transition: none !important;
-        /* 禁用过渡动画，避免闪烁 */
+
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://s2.loli.net/2025/04/14/LnsCqG8ZVcrJN4l.png" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+  <link rel="preconnect" href="https://fonts.lug.ustc.edu.cn" />
+  <link rel="preconnect" href="https://fonts-gstatic.lug.ustc.edu.cn" crossorigin />
+  <link
+    href="https://fonts.lug.ustc.edu.cn/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.lug.ustc.edu.cn/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap"
+    rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>绯境之外~Outside of Scarlet</title>
+  <style id="theme-blocking-styles">
+    /* 阻塞样式，确保页面在加载时立即有正确的背景色 */
+    html,
+    body,
+    #root {
+      background-color: #f5f5f9 !important;
+      color: #212529 !important;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      transition: none !important;
+      /* 禁用过渡动画，避免闪烁 */
+    }
+
+    /* 暗色模式样式 */
+    html[theme-mode='dark'],
+    html[theme-mode='dark'] body,
+    html[theme-mode='dark'] #root {
+      background-color: #1a1a1e !important;
+      color: rgba(255, 255, 255, 0.85) !important;
+    }
+
+    /* 浅色模式样式 */
+    html:not([theme-mode]),
+    html[theme-mode='light'],
+    html[theme-mode='light'] body,
+    html[theme-mode='light'] #root {
+      background-color: #f5f5f9 !important;
+      color: #212529 !important;
+    }
+  </style>
+  <script>
+    window.__static_url =
+      'https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static';
+  </script>
+  <script>
+    (function () {
+      const { search, hash, pathname } = window.location;
+
+      // 条件1: URL 中包含 ?sc=... 查询参数
+      const hasSuccessParam = search.includes('sc=');
+
+      // 条件2: URL 中包含 #c... 哈希
+      const hasCommentHash = hash.startsWith('#c');
+
+      // 条件3 (备用): 检查旧的 window.name 方式，作为补充
+      const hasSuccessName = pathname.startsWith('new-comment-');
+
+      // 如果满足URL条件，或者满足备用的 window.name 条件，就认为是成功弹窗
+      const isCommentSuccessPopup =
+        (hasSuccessParam && hasCommentHash) || hasSuccessName;
+      if (isCommentSuccessPopup) {
+        window.close();
       }
 
-      /* 暗色模式样式 */
-      html[data-theme='dark'],
-      html[data-theme='dark'] body,
-      html[data-theme='dark'] #root {
-        background-color: #101013 !important;
-        color: #ffffff !important;
-      }
+      try {
+        // 从 localStorage 获取主题
+        let theme = localStorage.getItem('theme');
 
-      /* 浅色模式样式 */
-      html[data-theme='light'],
-      html[data-theme='light'] body,
-      html[data-theme='light'] #root {
-        background-color: #f5f5f9 !important;
-        color: #212529 !important;
-      }
-    </style>
-    <script>
-      window.__static_url =
-        'https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static';
-    </script>
-    <script>
-      (function () {
-        const { search, hash, pathname } = window.location;
-
-        // 条件1: URL 中包含 ?sc=... 查询参数
-        const hasSuccessParam = search.includes('sc=');
-
-        // 条件2: URL 中包含 #c... 哈希
-        const hasCommentHash = hash.startsWith('#c');
-
-        // 条件3 (备用): 检查旧的 window.name 方式，作为补充
-        const hasSuccessName = pathname.startsWith('new-comment-');
-
-        // 如果满足URL条件，或者满足备用的 window.name 条件，就认为是成功弹窗
-        const isCommentSuccessPopup =
-          (hasSuccessParam && hasCommentHash) || hasSuccessName;
-        if (isCommentSuccessPopup) {
-          window.close();
+        // 如果没有手动设置主题，才使用系统偏好
+        if (theme === null || theme === undefined) {
+          const prefersDark =
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+          theme = prefersDark ? 'dark' : 'light';
         }
 
-        try {
-          // 从 localStorage 获取主题
-          let theme = localStorage.getItem('theme');
-
-          // 如果没有手动设置主题，才使用系统偏好
-          if (theme === null || theme === undefined) {
-            const prefersDark =
-              window.matchMedia &&
-              window.matchMedia('(prefers-color-scheme: dark)').matches;
-            theme = prefersDark ? 'dark' : 'light';
-          }
-
-          // 立即设置主题属性，让CSS立即生效
-          document.documentElement.setAttribute('data-theme', theme);
-
-          // 在页面加载完成后移除阻塞样式，让正常的CSS接管
-          function enableTransitions() {
-            const blockingStyles = document.getElementById(
-              'theme-blocking-styles',
-            );
-            if (blockingStyles) {
-              blockingStyles.remove();
-            }
-          }
-
-          // 在DOMContentLoaded和load事件后都尝试移除，确保React应用启动后
-          if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', enableTransitions);
-            window.addEventListener('load', enableTransitions);
-          } else {
-            enableTransitions();
-          }
-        } catch (e) {
-          // 出现错误时，设置默认浅色主题
-          document.documentElement.setAttribute('data-theme', 'light');
+        // 立即设置主题属性，让CSS立即生效
+        // TDesign 推荐使用 theme-mode 属性
+        if (theme === 'dark') {
+          document.documentElement.setAttribute('theme-mode', 'dark');
+        } else {
+          document.documentElement.removeAttribute('theme-mode');
         }
-      })();
-    </script>
-  </head>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+        // 在页面加载完成后移除阻塞样式，让正常的CSS接管
+        function enableTransitions() {
+          const blockingStyles = document.getElementById(
+            'theme-blocking-styles',
+          );
+          if (blockingStyles) {
+            blockingStyles.remove();
+          }
+        }
+
+        // 在DOMContentLoaded和load事件后都尝试移除，确保React应用启动后
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', enableTransitions);
+          window.addEventListener('load', enableTransitions);
+        } else {
+          enableTransitions();
+        }
+      } catch (e) {
+        // 出现错误时，设置默认浅色主题
+        document.documentElement.removeAttribute('theme-mode');
+      }
+    })();
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
