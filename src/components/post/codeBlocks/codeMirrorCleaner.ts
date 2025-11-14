@@ -23,11 +23,10 @@ export const cleanCodeMirrorContent = (htmlContent: string): string => {
 
     if (innerPre && codeElement) {
       // 获取语言信息，优先从外层 pre 获取 lang 属性，然后从 code 元素的类名中提取
-      let langAttr =
-        outerPre.getAttribute('lang') ||
-        outerPre.getAttribute('data-lang') ||
-        codeElement.className.match(/language-(\w+)/)?.[1] ||
-        '';
+      const langAttr =        outerPre.getAttribute('lang')
+        || outerPre.getAttribute('data-lang')
+        || codeElement.className.match(/language-(\w+)/)?.[1]
+        || '';
 
       // 清理代码内容 - 替换 &nbsp; 为普通空格
       let codeContent = codeElement.textContent || '';
@@ -78,13 +77,12 @@ export const cleanCodeMirrorContent = (htmlContent: string): string => {
 
       // 更全面地获取语言信息
       const parentPre = block.closest('pre.md-fences');
-      let langAttr =
-        block.getAttribute('lang') ||
-        block.getAttribute('data-lang') ||
-        parentPre?.getAttribute('lang') ||
-        parentPre?.getAttribute('data-lang') ||
-        block.className.match(/cm-s-(\w+)/)?.[1] || // CodeMirror 主题可能包含语言信息
-        '';
+      const langAttr =        block.getAttribute('lang')
+        || block.getAttribute('data-lang')
+        || parentPre?.getAttribute('lang')
+        || parentPre?.getAttribute('data-lang')
+        || block.className.match(/cm-s-(\w+)/)?.[1] // CodeMirror 主题可能包含语言信息
+        || '';
 
       if (langAttr) {
         codeElement.className = `language-${langAttr}`;
@@ -127,14 +125,13 @@ export const cleanCodeMirrorContent = (htmlContent: string): string => {
 
       if (codeContent.length > 0) {
         // 更全面地获取语言信息
-        let langAttr =
-          preTag.getAttribute('lang') ||
-          preTag.getAttribute('data-lang') ||
-          codeMirrorDiv.getAttribute('lang') ||
-          codeMirrorDiv.getAttribute('data-lang') ||
-          preTag.className.match(/language-(\w+)/)?.[1] ||
-          codeMirrorDiv.className.match(/cm-s-(\w+)/)?.[1] ||
-          '';
+        const langAttr =          preTag.getAttribute('lang')
+          || preTag.getAttribute('data-lang')
+          || codeMirrorDiv.getAttribute('lang')
+          || codeMirrorDiv.getAttribute('data-lang')
+          || preTag.className.match(/language-(\w+)/)?.[1]
+          || codeMirrorDiv.className.match(/cm-s-(\w+)/)?.[1]
+          || '';
 
         // 创建简化的代码块
         const simpleCodeBlock = document.createElement('pre');

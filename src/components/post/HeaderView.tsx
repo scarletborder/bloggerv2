@@ -32,7 +32,7 @@ const HeaderView: React.FC<HeaderViewProps> = ({
   const headerStyles: React.CSSProperties = {
     marginBottom: isMobile ? '20px' : '32px',
     paddingBottom: isMobile ? '16px' : '24px',
-    borderBottom: `2px solid var(--border-color)`,
+    borderBottom: '2px solid var(--border-color)',
   };
 
   const titleStyles: React.CSSProperties = {

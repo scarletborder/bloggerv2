@@ -20,12 +20,10 @@ export function usePaginationUrl({
   const navigate = useNavigate();
 
   // 从URL参数中读取分页信息
-  const startIndex =
-    parseInt(searchParams.get('startIndex') || String(defaultStartIndex)) ||
-    defaultStartIndex;
-  const pageSize =
-    parseInt(searchParams.get('pageSize') || String(defaultPageSize)) ||
-    defaultPageSize;
+  const startIndex =    parseInt(searchParams.get('startIndex') || String(defaultStartIndex))
+    || defaultStartIndex;
+  const pageSize =    parseInt(searchParams.get('pageSize') || String(defaultPageSize))
+    || defaultPageSize;
 
   // 更新URL参数
   const updateUrl = useCallback(

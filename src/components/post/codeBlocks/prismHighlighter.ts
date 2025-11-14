@@ -38,55 +38,47 @@ export const markBlocksAsHighlighted = (): void => {
  * @returns Promise<void>
  */
 export const highlightWithRetry = (
-  maxAttempts: number = 3,
-  baseDelay: number = 100,
-): Promise<void> => {
-  return new Promise((resolve) => {
-    const retryHighlight = (attempts = 0) => {
-      setTimeout(
-        () => {
-          try {
-            // 使用 Prism.highlightAll() 重新高亮所有代码块
-            Prism.highlightAll();
+  maxAttempts = 3,
+  baseDelay = 100,
+): Promise<void> => new Promise((resolve) => {
+  const retryHighlight = (attempts = 0) => {
+    setTimeout(
+      () => {
+        try {
+          // 使用 Prism.highlightAll() 重新高亮所有代码块
+          Prism.highlightAll();
 
-            // 检查是否还有未高亮的代码块，如果有且重试次数未达到上限，则继续重试
-            const unhighlightedBlocks = document.querySelectorAll(
-              'pre code[class*="language-"]:not(.highlighted)',
-            );
-            if (unhighlightedBlocks.length > 0 && attempts < maxAttempts) {
-              console.log(
-                `Retrying highlight, attempt ${attempts + 1}, remaining blocks: ${
-                  unhighlightedBlocks.length
-                }`,
-              );
-              retryHighlight(attempts + 1);
-            } else {
-              // 标记所有代码块为已高亮，避免重复处理
-              markBlocksAsHighlighted();
-              // 增强代码块（添加语言标签和复制按钮）
-              enhanceCodeBlocks();
-              resolve();
-            }
-          } catch (error) {
-            console.warn('Failed to highlight code blocks:', error);
+          // 检查是否还有未高亮的代码块，如果有且重试次数未达到上限，则继续重试
+          const unhighlightedBlocks = document.querySelectorAll('pre code[class*="language-"]:not(.highlighted)');
+          if (unhighlightedBlocks.length > 0 && attempts < maxAttempts) {
+            console.log(`Retrying highlight, attempt ${attempts + 1}, remaining blocks: ${
+              unhighlightedBlocks.length
+            }`);
+            retryHighlight(attempts + 1);
+          } else {
+            // 标记所有代码块为已高亮，避免重复处理
+            markBlocksAsHighlighted();
+            // 增强代码块（添加语言标签和复制按钮）
+            enhanceCodeBlocks();
             resolve();
           }
-        },
-        baseDelay + attempts * baseDelay,
-      ); // 递增延迟时间
-    };
+        } catch (error) {
+          console.warn('Failed to highlight code blocks:', error);
+          resolve();
+        }
+      },
+      baseDelay + attempts * baseDelay,
+    ); // 递增延迟时间
+  };
 
-    retryHighlight();
-  });
-};
+  retryHighlight();
+});
 
 /**
  * 高亮特定的代码块元素
  * @param codeBlocks 代码块元素列表
  */
-export const highlightSpecificBlocks = (
-  codeBlocks: NodeListOf<Element>,
-): void => {
+export const highlightSpecificBlocks = (codeBlocks: NodeListOf<Element>): void => {
   codeBlocks.forEach((block) => {
     try {
       Prism.highlightElement(block as HTMLElement);
@@ -101,9 +93,7 @@ export const highlightSpecificBlocks = (
  * @param content HTML 内容字符串
  * @returns Promise<void>
  */
-export const performCompleteHighlight = async (
-  content: string,
-): Promise<void> => {
+export const performCompleteHighlight = async (content: string): Promise<void> => {
   try {
     // 清除之前的高亮标记，确保可以重新高亮
     clearHighlightMarks();
@@ -142,9 +132,7 @@ export const highlightAfterCSSLoad = async (content: string): Promise<void> => {
       await loadMultiplePrismLanguages(requiredLanguages);
     }
 
-    const codeBlocks = document.querySelectorAll(
-      'pre code[class*="language-"]',
-    );
+    const codeBlocks = document.querySelectorAll('pre code[class*="language-"]');
     highlightSpecificBlocks(codeBlocks);
 
     // 增强代码块
@@ -161,9 +149,7 @@ export const highlightAfterCSSLoad = async (content: string): Promise<void> => {
  * @param content HTML 内容字符串
  * @returns 清理函数
  */
-export const highlightOnMount = async (
-  content: string,
-): Promise<() => void> => {
+export const highlightOnMount = async (content: string): Promise<() => void> => {
   try {
     // 清除之前的高亮标记，确保可以重新高亮
     clearHighlightMarks();
@@ -177,36 +163,28 @@ export const highlightOnMount = async (
     }
 
     // 延迟执行高亮，带重试机制
-    const retryHighlightOnMount = (
-      attempts = 0,
-    ): ReturnType<typeof setTimeout> => {
-      return setTimeout(
-        () => {
-          try {
-            Prism.highlightAll();
+    const retryHighlightOnMount = (attempts = 0): ReturnType<typeof setTimeout> => setTimeout(
+      () => {
+        try {
+          Prism.highlightAll();
 
-            // 检查是否还有未高亮的代码块，如果有且重试次数未达到上限，则继续重试
-            const unhighlightedBlocks = document.querySelectorAll(
-              'pre code[class*="language-"]:not(.highlighted)',
-            );
-            if (unhighlightedBlocks.length > 0 && attempts < 2) {
-              console.log(
-                `Retrying highlight on mount, attempt ${attempts + 1}`,
-              );
-              retryHighlightOnMount(attempts + 1);
-            } else {
-              // 标记所有代码块为已高亮
-              markBlocksAsHighlighted();
-              // 增强代码块
-              enhanceCodeBlocks();
-            }
-          } catch (error) {
-            console.warn('Failed to highlight code blocks on mount:', error);
+          // 检查是否还有未高亮的代码块，如果有且重试次数未达到上限，则继续重试
+          const unhighlightedBlocks = document.querySelectorAll('pre code[class*="language-"]:not(.highlighted)');
+          if (unhighlightedBlocks.length > 0 && attempts < 2) {
+            console.log(`Retrying highlight on mount, attempt ${attempts + 1}`);
+            retryHighlightOnMount(attempts + 1);
+          } else {
+            // 标记所有代码块为已高亮
+            markBlocksAsHighlighted();
+            // 增强代码块
+            enhanceCodeBlocks();
           }
-        },
-        200 + attempts * 150,
-      );
-    };
+        } catch (error) {
+          console.warn('Failed to highlight code blocks on mount:', error);
+        }
+      },
+      200 + attempts * 150,
+    );
 
     const timer = retryHighlightOnMount();
     return () => clearTimeout(timer);

@@ -2,12 +2,12 @@ import React from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { getCurrentTheme } from '../../constants/colors';
 import type { BlogRollItem } from '../../constants/blogroll';
-
+import type { JSX } from 'react/jsx-runtime';
 interface BlogrollProps {
   isMobile?: boolean;
 }
 
-export default function Blogroll({ isMobile = false }: BlogrollProps) {
+export default function Blogroll({ isMobile = false }: BlogrollProps): JSX.Element {
   const colors = getCurrentTheme();
   const [blogroll, setBlogroll] = React.useState<BlogRollItem[]>([]);
 
@@ -15,7 +15,7 @@ export default function Blogroll({ isMobile = false }: BlogrollProps) {
     let isMounted = true;
     const staticUrl = (window as any).__static_url;
     fetch(`${staticUrl}/blogroll.json`)
-      .then((res) => res.json())
+      .then(res => res.json())
       .then((data) => {
         if (!isMounted) return;
         setBlogroll((data ?? []) as BlogRollItem[]);
@@ -181,12 +181,10 @@ export default function Blogroll({ isMobile = false }: BlogrollProps) {
           <animated.div
             style={{
               ...listStyles,
-              transform: y.to((val) => `translateY(${val}px)`),
+              transform: y.to(val => `translateY(${val}px)`),
             }}
           >
-            {[...blogroll, ...blogroll].map((item, index) =>
-              renderBlogrollItem(item, index),
-            )}
+            {[...blogroll, ...blogroll].map((item, index) => renderBlogrollItem(item, index))}
           </animated.div>
         ) : (
           <div style={listStyles}>{blogroll.map(renderBlogrollItem)}</div>

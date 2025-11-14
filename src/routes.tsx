@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-
+import type { JSX } from 'react/jsx-runtime';
 import * as Pages from './pages';
 import PageView from './layout/PageView';
 import WithNav from './layout/WithNav';
@@ -15,7 +15,7 @@ function HtmlRedirect() {
   return null;
 }
 
-export default function AppRoutes() {
+export default function AppRoutes(): JSX.Element {
   return (
     <Routes>
       {/* .html 结尾重定向 */}

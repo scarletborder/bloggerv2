@@ -29,9 +29,7 @@ function transformComment(comments: any): CommentItem {
   };
 }
 
-export async function GetPostLegacyComments(
-  req: LegacyCommentRequest,
-): Promise<LegacyCommentResponse> {
+export async function GetPostLegacyComments(req: LegacyCommentRequest): Promise<LegacyCommentResponse> {
   const feed = new BloggerFeed(BLOG_BASE, {
     jsonp: true,
   });
@@ -57,9 +55,7 @@ export async function GetPostLegacyComments(
 
   // 4. 使用 Promise.all 并行获取所有缺失的父评论，以提高效率
   if (parentCommentIdsToFetch.size > 0) {
-    const parentCommentPromises = Array.from(parentCommentIdsToFetch).map(
-      (id) => feed.comments.get(req.postId, id).then(transformComment),
-    );
+    const parentCommentPromises = Array.from(parentCommentIdsToFetch).map(id => feed.comments.get(req.postId, id).then(transformComment));
     const fetchedParentComments = await Promise.all(parentCommentPromises);
 
     // 5. 将新获取的父评论也加入到查找映射中，以便后续引用
@@ -122,10 +118,8 @@ export async function GetNewestComments({
       publishedMin: minPublishedTime,
     });
     const newComments: CommentItem[] = Object.values(entries)
-      .map((entry) => {
-        return transformComment(entry);
-      })
-      .filter((c) => c.timeStamp > minTimestamp); // 再次精确过滤，防止API返回等于边界值的评论
+      .map(entry => transformComment(entry))
+      .filter(c => c.timeStamp > minTimestamp); // 再次精确过滤，防止API返回等于边界值的评论
 
     return newComments;
   } catch (error) {

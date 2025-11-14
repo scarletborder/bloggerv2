@@ -81,7 +81,7 @@ describe('Blogger API Service - Structural Tests', () => {
 
       // Assert on the parsed result from our function.
       expect(result.feed).toBeDefined();
-      expect(typeof result.feed['openSearch$totalResults']).toBe('number');
+      expect(typeof result.feed.openSearch$totalResults).toBe('number');
       expect(Array.isArray(result.feed.entry)).toBe(true);
       expect(result.feed.entry.length).toBeGreaterThanOrEqual(0);
       expect(result.feed.entry[0]?.title.$t).toBe('Test Post');
@@ -124,9 +124,7 @@ describe('Blogger API Service - Structural Tests', () => {
       const expectedUrl = `${BLOG_URL}/feeds/posts/default?alt=json&path=%2Ftest-post.html`;
       expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, expect.anything());
 
-      expect(PostContentResponseSchema.safeParse(mockResponse).success).toBe(
-        true,
-      );
+      expect(PostContentResponseSchema.safeParse(mockResponse).success).toBe(true);
 
       expect(result.feed).toBeDefined();
       expect(result.feed.entry).toHaveLength(1);
@@ -192,8 +190,7 @@ describe('Blogger API Service - Structural Tests', () => {
       await getPostListByCategories(['Tag One', 'Tag Two']);
 
       // Assert
-      const expectedPath =
-        encodeURIComponent('Tag One') + '/' + encodeURIComponent('Tag Two');
+      const expectedPath =        `${encodeURIComponent('Tag One')}/${encodeURIComponent('Tag Two')}`;
       const expectedUrl = `${BLOG_URL}/feeds/posts/summary/-/${expectedPath}?alt=json&`;
       expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, expect.anything());
     });

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useInfiniteScroll, useLatest, useMemoizedFn, useTitle } from 'ahooks';
 import useUrlState from '@ahooksjs/use-url-state';
@@ -9,15 +9,15 @@ import {
 import { getCurrentTheme } from '../constants/colors';
 import TagsFilter from '../components/archives/TagsFilter';
 import DateFilter, {
-  saveCacheForDate,
   type DateFilterRef,
 } from '../components/archives/DateFilter';
-import PostCacheManager from '../utils/postCache';
+import PostCacheManager, { SaveCacheForDate } from '../utils/postCache';
 import ResultsDisplay from '../components/archives/ResultsDisplay';
+import type { JSX } from 'react/jsx-runtime';
 
 type SearchMode = 'none' | 'tag' | 'date';
 
-export default function ArchivesPage() {
+export default function ArchivesPage(): JSX.Element {
   const colors = getCurrentTheme();
 
   // 使用 useUrlState 管理 URL 查询参数
@@ -27,10 +27,16 @@ export default function ArchivesPage() {
     month: '',
   });
 
-  const [searchMode, setSearchMode] = useState<SearchMode>('none');
-  const [selectedTag, setSelectedTag] = useState<string>('');
-  const [searchYear, setSearchYear] = useState<number>(0);
-  const [searchMonth, setSearchMonth] = useState<number>(0);
+  const selectedTag = urlState.tag || '';
+  const searchYear = urlState.year ? parseInt(urlState.year, 10) : 0;
+  const searchMonth = urlState.month ? parseInt(urlState.month, 10) : 0;
+
+  let searchMode: SearchMode = 'none';
+  if (selectedTag) {
+    searchMode = 'tag';
+  } else if (searchYear && searchMonth) {
+    searchMode = 'date';
+  }
 
   // 用于自动滚动加载的 ref
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -54,8 +60,7 @@ export default function ArchivesPage() {
     reload: tagReload,
   } = useInfiniteScroll(
     async (d) => {
-      if (latestSearchMode.current !== 'tag' || !latestSelectedTag.current)
-        return { list: [] };
+      if (latestSearchMode.current !== 'tag' || !latestSelectedTag.current) return { list: [] };
 
       const startIndex = d?.list ? d.list.length : 0;
       const result = await GetPostListByCategories({
@@ -72,7 +77,7 @@ export default function ArchivesPage() {
     },
     {
       target: scrollContainerRef,
-      isNoMore: (d) => d?.noMore === true,
+      isNoMore: d => d?.noMore === true,
       manual: true,
       threshold: 100, // 距离底部100px时开始加载
     },
@@ -89,11 +94,10 @@ export default function ArchivesPage() {
   } = useInfiniteScroll(
     async (d) => {
       if (
-        latestSearchMode.current !== 'date' ||
-        !latestSearchYear.current ||
-        !latestSearchMonth.current
-      )
-        return { list: [] };
+        latestSearchMode.current !== 'date'
+        || !latestSearchYear.current
+        || !latestSearchMonth.current
+      ) return { list: [] };
 
       const startIndex = d?.list ? d.list.length : 0;
       const currentYear = latestSearchYear.current;
@@ -144,7 +148,7 @@ export default function ArchivesPage() {
             'Posts:',
             result.list.length,
           );
-          await saveCacheForDate(currentYear, currentMonth, result.list);
+          await SaveCacheForDate(currentYear, currentMonth, result.list);
           // 更新缓存显示
           dateFilterRef.current?.updateCacheDisplay();
         } catch (error) {
@@ -160,97 +164,48 @@ export default function ArchivesPage() {
     },
     {
       target: scrollContainerRef,
-      isNoMore: (d) => d?.noMore === true,
+      isNoMore: d => d?.noMore === true,
       manual: true,
       threshold: 100, // 距离底部100px时开始加载
     },
   );
 
-  // 初始化时从URL参数中恢复状态
   useEffect(() => {
-    const { tag, year, month } = urlState;
-
-    if (tag && tag !== selectedTag) {
-      setSelectedTag(tag);
-      setSearchMode('tag');
-      // 延迟触发搜索，确保状态已更新
-      setTimeout(() => {
-        tagReload();
-      }, 100);
-    } else if (year && month) {
-      const yearNum = parseInt(year, 10);
-      const monthNum = parseInt(month, 10);
-      if (
-        !isNaN(yearNum) &&
-        !isNaN(monthNum) &&
-        monthNum >= 1 &&
-        monthNum <= 12
-      ) {
-        if (yearNum !== searchYear || monthNum !== searchMonth) {
-          setSearchYear(yearNum);
-          setSearchMonth(monthNum);
-          setSearchMode('date');
-          // 延迟触发搜索，确保状态已更新
-          setTimeout(() => {
-            dateReload();
-          }, 100);
-        }
-      }
+    if (searchMode === 'tag' && selectedTag) {
+      tagReload();
+    } else if (searchMode === 'date' && searchYear && searchMonth) {
+      dateReload();
     }
-  }, [urlState, selectedTag, searchYear, searchMonth, tagReload, dateReload]);
+  }, [selectedTag, searchYear, searchMonth, searchMode, tagReload, dateReload]); // 依赖项现在是派生值
 
   const handleTagSelect = useMemoizedFn((tag: string) => {
-    console.log('Selected tag:', tag); // 添加调试信息
-    setSelectedTag(tag);
-    setSearchMode('tag');
-    // 更新URL参数
+    // onTagSelect 仅更新URL，让UI从URL派生
     setUrlState({
-      tag: tag,
+      tag,
       year: undefined,
       month: undefined,
     });
   });
 
   const handleTagSearch = useMemoizedFn((tag: string) => {
-    console.log('Search tag:', tag); // 添加调试信息
-    setSelectedTag(tag);
-    setSearchMode('tag');
-    // 更新URL参数
     setUrlState({
-      tag: tag,
+      tag,
       year: undefined,
       month: undefined,
     });
-    // 使用setTimeout确保状态更新后再触发重新加载
-    setTimeout(() => {
-      tagReload();
-    }, 0);
   });
 
   const handleDateSearch = useMemoizedFn((year: number, month: number) => {
-    console.log('Selected date:', year, month); // 添加调试信息
-    setSearchYear(year);
-    setSearchMonth(month);
-    setSearchMode('date');
-    // 更新URL参数
     setUrlState({
       tag: undefined,
       year: year.toString(),
       month: month.toString(),
     });
-    // 使用setTimeout确保状态更新后再触发重新加载
-    setTimeout(() => {
-      dateReload();
-    }, 0);
   });
 
-  // 处理刷新请求
   const handleRefreshRequest = useMemoizedFn(() => {
     console.log('Refresh requested for:', searchYear, searchMonth);
-    // 重新加载数据
-    setTimeout(() => {
-      dateReload();
-    }, 0);
+    dateReload(); // 直接调用 reload
   });
 
   // 获取当前显示的数据

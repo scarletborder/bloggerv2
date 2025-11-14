@@ -53,15 +53,12 @@ type PostListResponse = {
   list: SinglePost[];
 };
 
-export default async function GetPostList(
-  req: PostListRequest,
-): Promise<PostListResponse> {
+export default async function GetPostList(req: PostListRequest): Promise<PostListResponse> {
   // 如果提供了startIndex就使用它，否则根据页码计算
   // Blogger API 的 start-index 是从 1 开始的
-  const startIndex =
-    req.startIndex !== undefined
-      ? req.startIndex + 1
-      : (req.current - 1) * req.pageSize + 1;
+  const startIndex =    req.startIndex !== undefined
+    ? req.startIndex + 1
+    : (req.current - 1) * req.pageSize + 1;
 
   const params: GetPostListParams = {
     'start-index': startIndex,
@@ -72,15 +69,15 @@ export default async function GetPostList(
 
   return {
     list: entrys.map((entry) => {
-      const tags = entry.category?.map((cat) => cat.term) || [];
-      let linkPath =
-        entry.link.find((link) => link.rel === 'alternate')?.href || '';
-      linkPath = linkPath.split('//')[1].split('/').slice(1).join('/');
+      const tags = entry.category?.map(cat => cat.term) || [];
+      let linkPath =        entry.link.find(link => link.rel === 'alternate')?.href || '';
+      linkPath = linkPath.split('//')[1].split('/').slice(1)
+        .join('/');
       return {
         _id: entry.id.$t,
         path: linkPath,
         title: entry.title.$t,
-        tags: tags,
+        tags,
         summary: entry.summary.$t,
         // thumbnail: entry.media$thumbnail.url,
         published: new Date(entry.published).getTime(),
@@ -90,9 +87,7 @@ export default async function GetPostList(
   };
 }
 
-export async function GetPostListByCategories(
-  req: PostListByCategoryRequest,
-): Promise<PostListResponse> {
+export async function GetPostListByCategories(req: PostListByCategoryRequest): Promise<PostListResponse> {
   const startIndex = req.startIndex !== undefined ? req.startIndex + 1 : 1;
 
   const options = {
@@ -105,15 +100,15 @@ export async function GetPostListByCategories(
 
   return {
     list: entrys.map((entry) => {
-      const tags = entry.category?.map((cat) => cat.term) || [];
-      let linkPath =
-        entry.link.find((link) => link.rel === 'alternate')?.href || '';
-      linkPath = linkPath.split('//')[1].split('/').slice(1).join('/');
+      const tags = entry.category?.map(cat => cat.term) || [];
+      let linkPath =        entry.link.find(link => link.rel === 'alternate')?.href || '';
+      linkPath = linkPath.split('//')[1].split('/').slice(1)
+        .join('/');
       return {
         _id: entry.id.$t,
         path: linkPath,
         title: entry.title.$t,
-        tags: tags,
+        tags,
         summary: entry.summary.$t,
         // thumbnail: entry.media$thumbnail.url,
         published: new Date(entry.published).getTime(),
@@ -123,9 +118,7 @@ export async function GetPostListByCategories(
   };
 }
 
-export async function GetPostListByDate(
-  req: PostListByDateRequest,
-): Promise<PostListResponse> {
+export async function GetPostListByDate(req: PostListByDateRequest): Promise<PostListResponse> {
   const startIndex = req.startIndex !== undefined ? req.startIndex + 1 : 1;
 
   const params: GetPostListParams = {
@@ -155,15 +148,15 @@ export async function GetPostListByDate(
 
   return {
     list: entrys.map((entry) => {
-      const tags = entry.category?.map((cat) => cat.term) || [];
-      let linkPath =
-        entry.link.find((link) => link.rel === 'alternate')?.href || '';
-      linkPath = linkPath.split('//')[1].split('/').slice(1).join('/');
+      const tags = entry.category?.map(cat => cat.term) || [];
+      let linkPath =        entry.link.find(link => link.rel === 'alternate')?.href || '';
+      linkPath = linkPath.split('//')[1].split('/').slice(1)
+        .join('/');
       return {
         _id: entry.id.$t,
         path: linkPath,
         title: entry.title.$t,
-        tags: tags,
+        tags,
         summary: entry.summary.$t,
         // thumbnail: entry.media$thumbnail.url,
         published: new Date(entry.published).getTime(),

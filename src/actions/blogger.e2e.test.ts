@@ -10,7 +10,7 @@ import {
 const E2E_TEST_TIMEOUT = 15000; // 15 seconds
 
 // A simple separator for cleaner console output between tests
-const logSeparator = () => console.log('\n' + '='.repeat(50) + '\n');
+const logSeparator = () => console.log(`\n${'='.repeat(50)}\n`);
 
 describe('Blogger API Service - E2E Live Tests with Output', () => {
   // This hook will run once after all tests in this file have completed.
@@ -25,9 +25,7 @@ describe('Blogger API Service - E2E Live Tests with Output', () => {
       { timeout: E2E_TEST_TIMEOUT },
       async () => {
         logSeparator();
-        console.log(
-          "🚀 Testing: getPostList({ 'start-index': 1, 'max-results': 2 })",
-        );
+        console.log('🚀 Testing: getPostList({ \'start-index\': 1, \'max-results\': 2 })');
 
         const params = { 'start-index': 1, 'max-results': 2 };
         const result = await getPostList(params);
@@ -38,11 +36,9 @@ describe('Blogger API Service - E2E Live Tests with Output', () => {
 
         // Assertions to ensure the test is still valid
         expect(result.feed).toBeDefined();
-        expect(typeof result.feed['openSearch$totalResults']).toBe('number');
+        expect(typeof result.feed.openSearch$totalResults).toBe('number');
         expect(result.feed.entry).toBeInstanceOf(Array);
-        expect(result.feed.entry.length).toBeLessThanOrEqual(
-          params['max-results'],
-        );
+        expect(result.feed.entry.length).toBeLessThanOrEqual(params['max-results']);
       },
     );
 
@@ -57,7 +53,7 @@ describe('Blogger API Service - E2E Live Tests with Output', () => {
           'published-min': '2024-03-16T00:00:00',
           'published-max': '2024-09-24T23:59:59',
         };
-        console.log(`🚀 Testing: getPostList with date range`, params);
+        console.log('🚀 Testing: getPostList with date range', params);
 
         const result = await getPostList(params);
 
@@ -66,12 +62,8 @@ describe('Blogger API Service - E2E Live Tests with Output', () => {
 
         expect(result.feed.entry.length).toBeGreaterThan(0);
         result.feed.entry.forEach((post) => {
-          expect(post.published.getTime()).toBeGreaterThanOrEqual(
-            new Date(params['published-min']).getTime(),
-          );
-          expect(post.published.getTime()).toBeLessThanOrEqual(
-            new Date(params['published-max']).getTime(),
-          );
+          expect(post.published.getTime()).toBeGreaterThanOrEqual(new Date(params['published-min']).getTime());
+          expect(post.published.getTime()).toBeLessThanOrEqual(new Date(params['published-max']).getTime());
         });
       },
     );
@@ -113,9 +105,7 @@ describe('Blogger API Service - E2E Live Tests with Output', () => {
         console.log(JSON.stringify(result, null, 2));
 
         expect(result.feed).toBeDefined();
-        expect(result.feed.entry.length).toBeLessThanOrEqual(
-          params['max-results'],
-        );
+        expect(result.feed.entry.length).toBeLessThanOrEqual(params['max-results']);
       },
     );
   });
@@ -135,9 +125,7 @@ describe('Blogger API Service - E2E Live Tests with Output', () => {
         console.log(JSON.stringify(result, null, 2));
 
         expect(result.feed.entry.length).toBeGreaterThan(0);
-        const hasCategory = result.feed.entry.some((post) =>
-          post.category?.some((cat) => cat.term === category),
-        );
+        const hasCategory = result.feed.entry.some(post => post.category?.some(cat => cat.term === category));
         expect(hasCategory).toBe(true);
       },
     );
@@ -149,18 +137,16 @@ describe('Blogger API Service - E2E Live Tests with Output', () => {
       { timeout: E2E_TEST_TIMEOUT },
       async () => {
         logSeparator();
-        console.log(`🚀 Testing: getAllTags()`);
+        console.log('🚀 Testing: getAllTags()');
 
         const result = await getAllTags();
 
-        console.log(
-          '✅ Response received and parsed successfully (tags array):',
-        );
+        console.log('✅ Response received and parsed successfully (tags array):');
         console.log(JSON.stringify(result, null, 2));
 
         expect(result).toBeInstanceOf(Array);
         expect(result.length).toBeGreaterThan(10);
-        const terms = result.map((cat) => cat.term);
+        const terms = result.map(cat => cat.term);
         expect(terms).toContain('杂谈');
       },
     );

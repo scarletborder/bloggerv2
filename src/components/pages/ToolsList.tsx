@@ -7,10 +7,9 @@ interface ToolsListProps {
   onItemClick: (path: string) => void;
 }
 
-const ToolsList: React.FC<ToolsListProps> = ({ list, onItemClick }) => {
-  return (
+const ToolsList: React.FC<ToolsListProps> = ({ list, onItemClick }) => (
     <div className="tools-list">
-      {list.map((item) => (
+      {list.map(item => (
         <div
           key={item._id}
           className="tool-item"
@@ -21,7 +20,6 @@ const ToolsList: React.FC<ToolsListProps> = ({ list, onItemClick }) => {
         </div>
       ))}
     </div>
-  );
-};
+);
 
 export default ToolsList;

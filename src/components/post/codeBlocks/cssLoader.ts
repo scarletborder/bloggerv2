@@ -9,25 +9,23 @@
  * @param id CSS 元素的唯一标识符
  * @returns Promise<void>
  */
-export const loadCSS = (href: string, id: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    // 如果已存在相同 id 的样式表，先移除
-    const existing = document.getElementById(id);
-    if (existing) {
-      existing.remove();
-    }
+export const loadCSS = (href: string, id: string): Promise<void> => new Promise((resolve, reject) => {
+  // 如果已存在相同 id 的样式表，先移除
+  const existing = document.getElementById(id);
+  if (existing) {
+    existing.remove();
+  }
 
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    link.id = id;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  link.id = id;
 
-    link.onload = () => resolve();
-    link.onerror = () => reject(new Error(`Failed to load CSS: ${href}`));
+  link.onload = () => resolve();
+  link.onerror = () => reject(new Error(`Failed to load CSS: ${href}`));
 
-    document.head.appendChild(link);
-  });
-};
+  document.head.appendChild(link);
+});
 
 /**
  * 根据主题加载相应的样式文件

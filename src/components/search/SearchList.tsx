@@ -170,8 +170,7 @@ export default function SearchList({
           onMouseEnter={(e) => {
             if (!isMobile) {
               e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow =
-                '0 6px 12px rgba(0, 0, 0, 0.15)';
+              e.currentTarget.style.boxShadow =                '0 6px 12px rgba(0, 0, 0, 0.15)';
             }
           }}
           onMouseLeave={(e) => {

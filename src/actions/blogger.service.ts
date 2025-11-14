@@ -37,9 +37,7 @@ async function fetchBloggerApi(url: string): Promise<unknown> {
     return response.json();
   } catch (error) {
     if (error instanceof Error && error.name === 'AbortError') {
-      throw new Error(
-        `Request timed out after ${API_TIMEOUT}ms for URL: ${url}`,
-      );
+      throw new Error(`Request timed out after ${API_TIMEOUT}ms for URL: ${url}`);
     }
     throw error;
   } finally {
@@ -88,9 +86,7 @@ function createFeedApiMethod<
         `Zod validation failed for path: ${requestPath}`,
         validationResult.error.issues,
       );
-      throw new Error(
-        `API response validation failed for path: ${requestPath}`,
-      );
+      throw new Error(`API response validation failed for path: ${requestPath}`);
     }
 
     return validationResult.data;
@@ -131,7 +127,7 @@ export interface GetPostListParams {
  * The response is validated against `PostListResponseSchema`.
  */
 export const getPostList = createFeedApiMethod<
-  GetPostListParams,
+GetPostListParams,
   typeof PostListResponseSchema
 >('/feeds/posts/summary', PostListResponseSchema);
 
@@ -175,7 +171,7 @@ export interface GetPageListParams {
  * The response is validated against `PageListResponseSchema`.
  */
 export const getPageList = createFeedApiMethod<
-  GetPageListParams,
+GetPageListParams,
   typeof PageListResponseSchema
 >('/feeds/pages/summary', PageListResponseSchema);
 
@@ -191,7 +187,7 @@ export interface GetContentByPathParams {
  * The response is validated against `PostContentResponseSchema`.
  */
 export const getPostContent = createFeedApiMethod<
-  GetContentByPathParams,
+GetContentByPathParams,
   typeof PostContentResponseSchema
 >('/feeds/posts/default', PostContentResponseSchema);
 
@@ -200,7 +196,7 @@ export const getPostContent = createFeedApiMethod<
  * The response is validated against `PageContentResponseSchema`.
  */
 export const getPageContent = createFeedApiMethod<
-  GetContentByPathParams,
+GetContentByPathParams,
   typeof PageContentResponseSchema
 >('/feeds/pages/default', PageContentResponseSchema);
 

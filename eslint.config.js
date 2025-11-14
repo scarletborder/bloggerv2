@@ -7,13 +7,13 @@ import { globalIgnores } from 'eslint/config';
 import tencentEslintConfig from 'eslint-config-tencent/flat';
 
 export default tseslint.config([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'vite.config.ts']),
   ...tencentEslintConfig({
     tsconfigRootDir: process.cwd(), // eslint-disable-line no-undef
     project: './tsconfig.app.json',
   }),
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,

@@ -57,11 +57,10 @@ const processLanguageData = () => {
 
     // 2. 建立依赖映射 (合并 'require' 和 'modify')
     const deps = new Set<string>();
-    const toArray = (val?: string | string[]) =>
-      val ? (Array.isArray(val) ? val : [val]) : [];
+    const toArray = (val?: string | string[]) => (val ? (Array.isArray(val) ? val : [val]) : []);
 
-    toArray(langInfo.require).forEach((dep) => deps.add(dep));
-    toArray(langInfo.modify).forEach((dep) => deps.add(dep));
+    toArray(langInfo.require).forEach(dep => deps.add(dep));
+    toArray(langInfo.modify).forEach(dep => deps.add(dep));
 
     if (deps.size > 0) {
       languageDependencies.set(langId, Array.from(deps));
@@ -168,9 +167,7 @@ export const loadPrismLanguage = async (language: string): Promise<void> => {
   const dependencies = languageDependencies.get(canonicalLanguage) || [];
 
   if (dependencies.length > 0) {
-    const dependencyPromises = dependencies.map((dep) =>
-      loadPrismLanguage(dep),
-    );
+    const dependencyPromises = dependencies.map(dep => loadPrismLanguage(dep));
     await Promise.all(dependencyPromises);
   }
 
@@ -210,10 +207,8 @@ export const extractLanguagesFromHTML = (htmlContent: string): string[] => {
  * 批量加载多个语言包
  * @param languages 语言包数组
  */
-export const loadMultiplePrismLanguages = async (
-  languages: string[],
-): Promise<void> => {
-  const loadPromises = languages.map((lang) => loadPrismLanguage(lang));
+export const loadMultiplePrismLanguages = async (languages: string[]): Promise<void> => {
+  const loadPromises = languages.map(lang => loadPrismLanguage(lang));
   await Promise.allSettled(loadPromises);
 };
 
@@ -272,7 +267,7 @@ if (typeof window !== 'undefined') {
       return (window as any).debugPrismLanguageLoader.testExtraction(testHTML);
     },
     testSQLHTML: () => {
-      const testHTML = `<pre><code class="language-sql">SELECT * FROM users WHERE id = 1;</code></pre>`;
+      const testHTML = '<pre><code class="language-sql">SELECT * FROM users WHERE id = 1;</code></pre>';
       return (window as any).debugPrismLanguageLoader.testExtraction(testHTML);
     },
     checkAliases: () => {

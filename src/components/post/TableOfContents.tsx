@@ -30,9 +30,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
 
   React.useEffect(() => {
     const generateToc = () => {
-      const headings = document.querySelectorAll(
-        '.blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4, .blog-content h5, .blog-content h6',
-      );
+      const headings = document.querySelectorAll('.blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4, .blog-content h5, .blog-content h6');
       const items: TocItem[] = [];
 
       headings.forEach((heading, index) => {
@@ -243,7 +241,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
               <span>📋 目录</span>
             </div>
             <ul style={listStyles}>
-              {tocItems.map((item) => (
+              {tocItems.map(item => (
                 <li key={item.id} style={itemStyles(item.level)}>
                   <a
                     className="toc-link"
@@ -288,7 +286,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
 
           {isOpen && (
             <ul style={listStyles}>
-              {tocItems.map((item) => (
+              {tocItems.map(item => (
                 <li key={item.id} style={itemStyles(item.level)}>
                   <a
                     className="toc-link"

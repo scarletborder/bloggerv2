@@ -2,17 +2,17 @@ import React, { useRef } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useMemoizedFn } from 'ahooks';
 import { getCurrentTheme } from '../../constants/colors';
-
+import type { JSX } from 'react/jsx-runtime';
 import { type PostItem } from '../../models/PostItem';
 import { useNavigate } from 'react-router-dom';
 
 interface ResultsDisplayProps {
   data:
-    | {
-        list: PostItem[];
-        nextId?: string;
-      }
-    | undefined;
+  | {
+    list: PostItem[];
+    nextId?: string;
+  }
+  | undefined;
   loading: boolean;
   loadingMore: boolean;
   noMore: boolean;
@@ -27,7 +27,7 @@ export default function ResultsDisplay({
   noMore,
   emptyMessage = '暂无文章',
   scrollContainerRef,
-}: ResultsDisplayProps) {
+}: ResultsDisplayProps): JSX.Element {
   const colors = getCurrentTheme();
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -224,7 +224,7 @@ export default function ResultsDisplay({
       <h3 style={titleStyles}>📄 搜索结果</h3>
 
       <div ref={scrollContainerRef || ref} style={scrollContainerStyles}>
-        {!data || !data.list || data.list.length === 0 ? (
+        {!data?.list || data.list.length === 0 ? (
           <div style={emptyStyles}>{emptyMessage}</div>
         ) : (
           <>
@@ -235,8 +235,7 @@ export default function ResultsDisplay({
                 onMouseEnter={(e) => {
                   if (!isMobile) {
                     e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow =
-                      '0 6px 12px rgba(0, 0, 0, 0.15)';
+                    e.currentTarget.style.boxShadow =                      '0 6px 12px rgba(0, 0, 0, 0.15)';
                   }
                 }}
                 onMouseLeave={(e) => {

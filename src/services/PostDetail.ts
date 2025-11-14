@@ -37,22 +37,22 @@ export async function getPostDetail(path: string): Promise<PostDetail> {
     }
 
     // 提取标签
-    const tags = entry.category?.map((cat) => cat.term) || [];
+    const tags = entry.category?.map(cat => cat.term) || [];
 
     // 提取内容
     const content = entry.content.$t;
     const { postId, blogId } = getStringAfterPost(entry.id.$t, '');
 
     return {
-      postId: postId,
-      blogId: blogId,
+      postId,
+      blogId,
       title: entry.title.$t,
       content,
       published: entry.published.toISOString(),
       updated: entry.updated.toISOString(),
       tags,
       path,
-      url: entry.link.find((link) => link.rel === 'alternate')?.href || '',
+      url: entry.link.find(link => link.rel === 'alternate')?.href || '',
     };
   } catch (error) {
     console.error('Failed to fetch post detail:', error);
@@ -64,9 +64,9 @@ function getStringAfterPost(
   inputString: string,
   defaultValue: string,
 ): {
-  postId: string;
-  blogId: string;
-} {
+    postId: string;
+    blogId: string;
+  } {
   const blogIdKeyword = 'blog-';
   const postKeyword = 'post-';
 
@@ -98,7 +98,6 @@ function getStringAfterPost(
 
   if (blogId || postId) {
     return { blogId, postId };
-  } else {
-    return { blogId: defaultValue, postId: defaultValue };
   }
+  return { blogId: defaultValue, postId: defaultValue };
 }

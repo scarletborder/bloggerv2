@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { getPageDetail, type PageDetail } from '../services/PageDetail';
 import { useLocation } from 'react-router-dom';
-import { useAsyncEffect } from 'ahooks';
+import { useAsyncEffect, useTitle } from 'ahooks';
 import { isMobile } from 'react-device-detect';
-import { useTitle } from 'ahooks';
+
 
 const PagePage: React.FC = () => {
   const location = useLocation();
-  const pathname = location.pathname;
+  const { pathname } = location;
   const [pageDetail, setPageDetail] = useState<PageDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -107,8 +107,7 @@ const PagePage: React.FC = () => {
             href="/"
             style={backButtonStyles}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor =
-                'var(--primary-hover-color)';
+              e.currentTarget.style.backgroundColor = 'var(--primary-hover-color)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = 'var(--primary-color)';

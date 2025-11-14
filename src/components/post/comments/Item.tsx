@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, type JSX } from 'react';
 import { isMobile } from 'react-device-detect';
 import type { CommentItem, MetaBlogger } from '../../../models/CommentItem';
 import { getCurrentTheme } from '../../../constants/colors';
@@ -16,7 +16,7 @@ export function CommentItemComponent({
   comment,
   setCtx,
   ClickReplyButton,
-}: CommentItemComponentProps) {
+}: CommentItemComponentProps): JSX.Element {
   const colors = getCurrentTheme();
   const [showTooltip, setShowTooltip] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -34,8 +34,8 @@ export function CommentItemComponent({
     if (!isMobile || !showTooltip) return;
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        linkIconRef.current &&
-        !linkIconRef.current.contains(event.target as Node)
+        linkIconRef.current
+        && !linkIconRef.current.contains(event.target as Node)
       ) {
         setShowTooltip(false);
         setTooltipText('');
@@ -293,7 +293,11 @@ export function CommentItemComponent({
                 style={linkIconStyles}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                onClick={handleLinkIconClick}
+                onClick={(event) => {
+                  handleLinkIconClick(event).catch((err) => {
+                    console.error('Submit handler failed:', err);
+                  });
+                }}
               >
                 🔗
               </span>
@@ -310,11 +314,13 @@ export function CommentItemComponent({
       </div>
 
       {/* ==================== 新增：条件渲染引用块 ==================== */}
-      {comment.inReplyTo && (
-        <div style={quoteBlockStyles}>
-          {`> ${comment.inReplyTo.author.name}: ${createBrief(comment.inReplyTo.content)}`}
-        </div>
-      )}
+      {
+        comment.inReplyTo && (
+          <div style={quoteBlockStyles}>
+            {`> ${comment.inReplyTo.author.name}: ${createBrief(comment.inReplyTo.content)}`}
+          </div>
+        )
+      }
       {/* ==================== 修改结束 ==================== */}
 
       <div
@@ -327,11 +333,9 @@ export function CommentItemComponent({
           <button
             style={replyButtonStyles}
             onClick={handleReplyClick}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.backgroundColor = colors.border)
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = colors.border)
             }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.backgroundColor = 'transparent')
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')
             }
           >
             回复
@@ -340,6 +344,6 @@ export function CommentItemComponent({
       </div>
 
       {showToast && <div style={toastStyles}>复制成功！</div>}
-    </div>
+    </div >
   );
 }

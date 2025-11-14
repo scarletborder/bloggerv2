@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import _ from 'lodash';
 import { useBoolean } from 'ahooks';
 // 不再需要 Timeout 类型
 // import type { Timeout } from 'ahooks/lib/useRequest/src/types';
@@ -19,10 +18,6 @@ export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx }) => {
 
   // 使用一个 Ref 来确保 focus 事件处理函数只被有效执行一次
   const isWaitingForPopupClose = useRef(false);
-
-  useEffect(() => {
-    setCommentText('');
-  }, [replyToId]);
 
   // 新增 Effect 来处理 focus 事件的监听和清理
   useEffect(() => {
@@ -95,7 +90,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx }) => {
         placeholder="在此输入您的评论..."
         rows={6}
         value={commentText}
-        onChange={(e) => setCommentText(e.target.value)}
+        onChange={e => setCommentText(e.target.value)}
         style={{
           width: '100%',
           padding: '10px',
@@ -104,7 +99,11 @@ export const CommentForm: React.FC<CommentFormProps> = ({ Ctx, setCtx }) => {
         }}
       />
       <div className="form-actions" style={{ marginTop: '10px' }}>
-        <button type="button" onClick={handleSubmit} disabled={isSubmitting}>
+        <button type="button" onClick={(event) => {
+          handleSubmit(event).catch((err) => {
+            console.error('Submit handler failed:', err);
+          });
+        }} disabled={isSubmitting}>
           {isSubmitting ? '等待窗口关闭...' : '发布评论 (内容已复制)'}
         </button>
         {replyToId && (

@@ -3,7 +3,7 @@ import { isMobile } from 'react-device-detect';
 import { useRequest, useMemoizedFn } from 'ahooks';
 import { getAllTags } from '../../actions/blogger.service';
 import { getCurrentTheme } from '../../constants/colors';
-
+import type { JSX } from 'react/jsx-runtime';
 interface TagsFilterProps {
   onTagSelect: (tag: string) => void;
   onTagSearch: (tag: string) => void;
@@ -16,7 +16,7 @@ export default function TagsFilter({
   onTagSearch,
   selectedTag,
   initialTag,
-}: TagsFilterProps) {
+}: TagsFilterProps): JSX.Element {
   const colors = getCurrentTheme();
 
   const { data: tags = [], loading } = useRequest(getAllTags, {
@@ -29,7 +29,7 @@ export default function TagsFilter({
   useEffect(() => {
     if (initialTag && tags.length > 0 && !selectedTag) {
       // 检查初始标签是否在标签列表中存在
-      const tagExists = tags.some((tag) => tag.term === initialTag);
+      const tagExists = tags.some(tag => tag.term === initialTag);
       if (tagExists) {
         onTagSelect(initialTag);
       }
@@ -196,15 +196,13 @@ export default function TagsFilter({
                 onMouseEnter={(e) => {
                   if (!isMobile && !isSelected) {
                     e.currentTarget.style.backgroundColor = `${getTagColor(index)}50`;
-                    e.currentTarget.style.boxShadow =
-                      '0 4px 8px rgba(0, 0, 0, 0.15)';
+                    e.currentTarget.style.boxShadow =                      '0 4px 8px rgba(0, 0, 0, 0.15)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isMobile && !isSelected) {
                     e.currentTarget.style.backgroundColor = `${getTagColor(index)}30`;
-                    e.currentTarget.style.boxShadow =
-                      '0 2px 6px rgba(0, 0, 0, 0.1)';
+                    e.currentTarget.style.boxShadow =                      '0 2px 6px rgba(0, 0, 0, 0.1)';
                   }
                 }}
               >

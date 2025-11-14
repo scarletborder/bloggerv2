@@ -1,5 +1,6 @@
 import React from 'react';
 import { getCurrentTheme } from '../../constants/colors';
+import type { JSX } from 'react/jsx-runtime';
 
 interface WelcomeSectionProps {
   isMobile?: boolean;
@@ -7,7 +8,7 @@ interface WelcomeSectionProps {
 
 export default function WelcomeSection({
   isMobile = false,
-}: WelcomeSectionProps) {
+}: WelcomeSectionProps): JSX.Element {
   const colors = getCurrentTheme();
 
   const containerStyles: React.CSSProperties = {

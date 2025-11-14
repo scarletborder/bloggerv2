@@ -27,26 +27,6 @@ const db = new PostCacheDB();
 
 // 缓存管理类
 export class PostCacheManager {
-  // 生成缓存key
-  private static generateKey(year: number, month: number): string {
-    return `${year}/${month.toString().padStart(2, '0')}`;
-  }
-
-  // 计算过期时间
-  private static calculateExpireTime(year: number, month: number): number {
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth() + 1;
-
-    // 如果是当前年月，缓存30分钟
-    if (year === currentYear && month === currentMonth) {
-      return Date.now() + 30 * 60 * 1000; // 30分钟
-    } else {
-      // 其他情况缓存7天
-      return Date.now() + 7 * 24 * 60 * 60 * 1000; // 7天
-    }
-  }
-
   // 保存缓存
   static async saveCache(
     year: number,
@@ -65,9 +45,7 @@ export class PostCacheManager {
       };
 
       await db.cacheEntries.put(cacheEntry);
-      console.log(
-        `缓存已保存: ${key}, 过期时间: ${new Date(expire).toLocaleString()}`,
-      );
+      console.log(`缓存已保存: ${key}, 过期时间: ${new Date(expire).toLocaleString()}`);
     } catch (error) {
       console.error('保存缓存失败:', error);
     }
@@ -157,7 +135,7 @@ export class PostCacheManager {
 
   // 获取所有缓存的年月统计
   static async getCachedDateCounts(): Promise<
-    Record<string, Record<string, number>>
+  Record<string, Record<string, number>>
   > {
     try {
       const allEntries = await db.cacheEntries.toArray();
@@ -192,7 +170,36 @@ export class PostCacheManager {
       console.error('初始化缓存管理器失败:', error);
     }
   }
+
+  // 生成缓存key
+  private static generateKey(year: number, month: number): string {
+    return `${year}/${month.toString().padStart(2, '0')}`;
+  }
+
+  // 计算过期时间
+  private static calculateExpireTime(year: number, month: number): number {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth() + 1;
+
+    // 如果是当前年月，缓存30分钟
+    if (year === currentYear && month === currentMonth) {
+      return Date.now() + 30 * 60 * 1000; // 30分钟
+    }
+    // 其他情况缓存7天
+    return Date.now() + 7 * 24 * 60 * 60 * 1000; // 7天
+  }
 }
 
 // 默认导出
 export default PostCacheManager;
+
+
+// 暴露给外部的缓存操作方法
+export const SaveCacheForDate = async (
+  year: number,
+  month: number,
+  posts: PostItem[],
+) => {
+  await PostCacheManager.saveCache(year, month, posts);
+};

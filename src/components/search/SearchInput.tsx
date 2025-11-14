@@ -167,7 +167,7 @@ export default function SearchInput({
             style={inputStyles}
             placeholder={compact ? 'Search...' : '输入关键词...'}
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={e => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={loading}
           />

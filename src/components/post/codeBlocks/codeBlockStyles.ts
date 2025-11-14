@@ -8,10 +8,7 @@
  * @param theme 当前主题 ('dark' | 'light')
  * @returns CSS 样式字符串
  */
-export const generateCodeBlockEnhancementStyles = (
-  theme: 'dark' | 'light',
-): string => {
-  return `
+export const generateCodeBlockEnhancementStyles = (theme: 'dark' | 'light'): string => `
     /* 代码块容器整体样式 */
     .enhanced-code-block {
       position: relative; /* 改为非 important，避免不必要的覆盖 */
@@ -19,30 +16,30 @@ export const generateCodeBlockEnhancementStyles = (
       overflow: hidden;
       margin: 16px 0;
       border: 1px solid ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
-      };
+  theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+};
     }
 
     /* 代码块头部，用于容纳工具栏 */
     .code-header {
       background: ${
-        theme === 'dark'
-          ? 'linear-gradient(135deg, #1e1e2e 0%, #24243e 100%)'
-          : 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)'
-      };
+  theme === 'dark'
+    ? 'linear-gradient(135deg, #1e1e2e 0%, #24243e 100%)'
+    : 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)'
+};
       border-bottom: 1px solid ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
-      };
+  theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+};
       padding: 8px 12px;
       display: flex;
       justify-content: flex-end; /* 修改为 flex-end 使工具栏靠右 */
       align-items: center;
       min-height: 36px;
       box-shadow: ${
-        theme === 'dark'
-          ? '0 1px 3px rgba(0, 0, 0, 0.3)'
-          : '0 1px 3px rgba(0, 0, 0, 0.1)'
-      };
+  theme === 'dark'
+    ? '0 1px 3px rgba(0, 0, 0, 0.3)'
+    : '0 1px 3px rgba(0, 0, 0, 0.1)'
+};
     }
 
     /* 工具栏，包含语言和复制按钮 */
@@ -54,11 +51,11 @@ export const generateCodeBlockEnhancementStyles = (
     /* 语言标签样式 */
     .code-language-label {
       background-color: ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.15)'
-      };
+  theme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.15)'
+};
       color: ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)'
-      };
+  theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)'
+};
       padding: 4px 8px;
       border-radius: 4px;
       font-size: 11px;
@@ -67,22 +64,22 @@ export const generateCodeBlockEnhancementStyles = (
       letter-spacing: 0.5px;
       font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
       border: 1px solid ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'
-      };
+  theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'
+};
       user-select: none;
     }
 
     /* 复制按钮样式 */
     .code-copy-button {
       background-color: ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
-      };
+  theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+};
       color: ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)'
-      };
+  theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)'
+};
       border: 1px solid ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'
-      };
+  theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'
+};
       border-radius: 4px;
       padding: 4px 8px;
       display: flex;
@@ -98,20 +95,20 @@ export const generateCodeBlockEnhancementStyles = (
 
     .code-copy-button:hover {
       background-color: ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'
-      };
+  theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'
+};
       color: ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.9)'
-      };
+  theme === 'dark' ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.9)'
+};
       border-color: ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'
-      };
+  theme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'
+};
       transform: translateY(-1px);
       box-shadow: ${
-        theme === 'dark'
-          ? '0 2px 8px rgba(0, 0, 0, 0.3)'
-          : '0 2px 8px rgba(0, 0, 0, 0.1)'
-      };
+  theme === 'dark'
+    ? '0 2px 8px rgba(0, 0, 0, 0.3)'
+    : '0 2px 8px rgba(0, 0, 0, 0.1)'
+};
     }
 
     .code-copy-button:active {
@@ -121,8 +118,8 @@ export const generateCodeBlockEnhancementStyles = (
 
     .code-copy-button:focus-visible {
       box-shadow: 0 0 0 2px ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'
-      };
+  theme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'
+};
     }
 
     /* 代码内容区域样式，应用于 <pre> 元素 */
@@ -136,23 +133,23 @@ export const generateCodeBlockEnhancementStyles = (
     /* 复制成功状态 */
     .code-copy-button.copied {
       background-color: ${
-        theme === 'dark' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(34, 197, 94, 0.1)'
-      };
+  theme === 'dark' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(34, 197, 94, 0.1)'
+};
       color: ${theme === 'dark' ? '#22c55e' : '#16a34a'};
       border-color: ${
-        theme === 'dark' ? 'rgba(34, 197, 94, 0.3)' : 'rgba(34, 197, 94, 0.2)'
-      };
+  theme === 'dark' ? 'rgba(34, 197, 94, 0.3)' : 'rgba(34, 197, 94, 0.2)'
+};
     }
 
     /* 复制失败状态 */
     .code-copy-button.error {
       background-color: ${
-        theme === 'dark' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(239, 68, 68, 0.1)'
-      };
+  theme === 'dark' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(239, 68, 68, 0.1)'
+};
       color: ${theme === 'dark' ? '#ef4444' : '#dc2626'};
       border-color: ${
-        theme === 'dark' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(239, 68, 68, 0.2)'
-      };
+  theme === 'dark' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(239, 68, 68, 0.2)'
+};
     }
 
     .copy-icon {
@@ -195,4 +192,3 @@ export const generateCodeBlockEnhancementStyles = (
       .code-header { display: none; }
     }
   `;
-};

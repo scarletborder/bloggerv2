@@ -33,7 +33,7 @@ export async function getPageDetail(path: string): Promise<PageDetail> {
     published: entry.published.toISOString(),
     updated: entry.updated.toISOString(),
     path,
-    url: entry.link.find((link) => link.rel === 'alternate')?.href || '',
+    url: entry.link.find(link => link.rel === 'alternate')?.href || '',
   };
 }
 
@@ -41,9 +41,9 @@ function getStringAfterPage(
   inputString: string,
   defaultValue: string,
 ): {
-  pageId: string;
-  blogId: string;
-} {
+    pageId: string;
+    blogId: string;
+  } {
   const blogIdKeyword = 'blog-';
   const pageKeyword = 'page-';
 
@@ -74,8 +74,7 @@ function getStringAfterPage(
   }
 
   if (blogId || pageId) {
-    return { blogId, pageId: pageId };
-  } else {
-    return { blogId: defaultValue, pageId: defaultValue };
+    return { blogId, pageId };
   }
+  return { blogId: defaultValue, pageId: defaultValue };
 }

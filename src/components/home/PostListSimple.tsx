@@ -5,14 +5,14 @@ import PostListItem from './PostListItem';
 import PostListPageToggle from './PostListPageToggle';
 import { getCurrentTheme } from '../../constants/colors';
 import { usePaginationUrl } from '../../hooks';
-
+import type { JSX } from 'react/jsx-runtime';
 interface PostListSimpleProps {
   isMobile?: boolean;
 }
 
 export default function PostListSimple({
   isMobile = false,
-}: PostListSimpleProps) {
+}: PostListSimpleProps): JSX.Element {
   const colors = getCurrentTheme();
   const postListRef = useRef<HTMLDivElement>(null);
 
@@ -32,8 +32,7 @@ export default function PostListSimple({
   const { data, loading, pagination } = usePagination(
     ({ current, pageSize }) => {
       // 使用URL中的startIndex或根据当前页计算
-      const startIndex =
-        current === initialCurrent ? urlStartIndex : (current - 1) * pageSize;
+      const startIndex =        current === initialCurrent ? urlStartIndex : (current - 1) * pageSize;
 
       return GetPostList({
         current,
@@ -115,7 +114,7 @@ export default function PostListSimple({
     );
   }
 
-  if (!data || !data.list || data.list.length === 0) {
+  if (!data?.list || data.list.length === 0) {
     return (
       <div ref={postListRef} style={containerStyles}>
         <h2 style={titleStyles}>最新文章</h2>
@@ -146,11 +145,9 @@ export default function PostListSimple({
         total={data.total}
         pageSize={pagination.pageSize}
         displayedItemsCount={data.list.length}
-        onPrevious={() =>
-          handlePageChange(pagination.current - 1, pagination.pageSize)
+        onPrevious={() => handlePageChange(pagination.current - 1, pagination.pageSize)
         }
-        onNext={() =>
-          handlePageChange(pagination.current + 1, pagination.pageSize)
+        onNext={() => handlePageChange(pagination.current + 1, pagination.pageSize)
         }
       />
     </div>

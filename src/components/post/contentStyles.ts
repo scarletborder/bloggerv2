@@ -4,14 +4,13 @@
  */
 
 import { generateCodeBlockEnhancementStyles } from './codeBlocks/codeBlockStyles';
-
+import React from 'react';
 /**
  * 生成内容样式的 CSS 字符串
  * @param theme 当前主题 ('dark' | 'light')
  * @returns CSS 样式字符串
  */
-export const generateContentStyles = (theme: 'dark' | 'light'): string => {
-  return `
+export const generateContentStyles = (theme: 'dark' | 'light'): string => `
     .blog-content {
       line-height: 1.6;
       color: var(--text-color);
@@ -84,9 +83,8 @@ export const generateContentStyles = (theme: 'dark' | 'light'): string => {
     }
 
     .blog-content code {
-      background-color: ${
-        theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
-      };
+      background-color: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+};
       padding: 2px 6px;
       padding: 0.125rem 0.375rem;
       border-radius: 4px;
@@ -384,7 +382,6 @@ export const generateContentStyles = (theme: 'dark' | 'light'): string => {
      /* 代码块增强功能样式 */
      ${generateCodeBlockEnhancementStyles(theme)}
    `;
-};
 
 /**
  * 生成内联样式对象
@@ -393,8 +390,6 @@ export const generateContentStyles = (theme: 'dark' | 'light'): string => {
 export const generateInlineStyles = (): React.CSSProperties => ({
   lineHeight: 1.7,
   color: 'var(--text-color)',
-  // 提供 px 作为 rem 的后备
-  fontSize: '18px',
   // @ts-ignore - 允许 rem 单位
   fontSize: '1.125rem', // 18px / 16px = 1.125rem
   maxWidth: '100%',

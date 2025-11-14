@@ -4,14 +4,14 @@ import { isMobile } from 'react-device-detect';
 import { getCurrentTheme } from '../../../constants/colors';
 import CommentList from './List';
 import { CommentForm } from './Form';
-import React, { useRef } from 'react'; // 1. 引入 useRef
+import React, { useRef, type JSX } from 'react'; // 1. 引入 useRef
 
 interface CommentAreaProps {
   postId: string;
   blogId: string;
 }
 
-export default function CommentArea({ postId, blogId }: CommentAreaProps) {
+export default function CommentArea({ postId, blogId }: CommentAreaProps): JSX.Element {
   const colors = getCurrentTheme();
   // 为评论表单创建一个 ref
   const formRef = useRef<HTMLDivElement>(null);
@@ -39,7 +39,7 @@ export default function CommentArea({ postId, blogId }: CommentAreaProps) {
     />
   );
   // 对 CommentFormComp 的引用保持不变
-  const CommentFormComp = <CommentForm Ctx={state} setCtx={setState} />;
+  const CommentFormComp = <CommentForm Ctx={state} setCtx={setState} key={state.replyToId ?? 'new-comment'} />;
 
   const containerStyles: React.CSSProperties = {
     marginTop: '32px',

@@ -5,8 +5,9 @@ import GetPostList from '../../services/PostList';
 import { getCurrentTheme } from '../../constants/colors';
 import { usePaginationUrl } from '../../hooks';
 import { type PostItem as MobilePostItemProps } from '../../models/PostItem';
+import type { JSX } from 'react/jsx-runtime';
 
-interface PostListMobileProps {}
+// interface PostListMobileProps { }
 
 function MobilePostItem({
   path,
@@ -240,7 +241,7 @@ function MobilePageToggle({
   );
 }
 
-export default function PostListMobile({}: PostListMobileProps) {
+export default function PostListMobile(): JSX.Element {
   const colors = getCurrentTheme();
   const postListRef = useRef<HTMLDivElement>(null);
 
@@ -260,8 +261,7 @@ export default function PostListMobile({}: PostListMobileProps) {
   const { data, loading, pagination } = usePagination(
     ({ current, pageSize }) => {
       // 使用URL中的startIndex或根据当前页计算
-      const startIndex =
-        current === initialCurrent ? urlStartIndex : (current - 1) * pageSize;
+      const startIndex =        current === initialCurrent ? urlStartIndex : (current - 1) * pageSize;
 
       return GetPostList({
         current,
@@ -305,8 +305,8 @@ export default function PostListMobile({}: PostListMobileProps) {
     const prevDate = new Date(prevPost.published);
 
     return (
-      currentDate.getFullYear() !== prevDate.getFullYear() ||
-      currentDate.getMonth() !== prevDate.getMonth()
+      currentDate.getFullYear() !== prevDate.getFullYear()
+      || currentDate.getMonth() !== prevDate.getMonth()
     );
   };
 
@@ -377,7 +377,7 @@ export default function PostListMobile({}: PostListMobileProps) {
     );
   }
 
-  if (!data || !data.list || data.list.length === 0) {
+  if (!data?.list || data.list.length === 0) {
     return (
       <div ref={postListRef} style={containerStyles}>
         <h2 style={titleStyles}>最新文章</h2>
@@ -415,11 +415,9 @@ export default function PostListMobile({}: PostListMobileProps) {
         total={data.total}
         pageSize={pagination.pageSize}
         displayedItemsCount={data.list.length}
-        onPrevious={() =>
-          handlePageChange(pagination.current - 1, pagination.pageSize)
+        onPrevious={() => handlePageChange(pagination.current - 1, pagination.pageSize)
         }
-        onNext={() =>
-          handlePageChange(pagination.current + 1, pagination.pageSize)
+        onNext={() => handlePageChange(pagination.current + 1, pagination.pageSize)
         }
       />
     </div>

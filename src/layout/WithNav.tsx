@@ -72,7 +72,7 @@ const MobileNavSelect: React.FC<{
       <option value="" disabled>
         导航菜单
       </option>
-      {navItems.map((item) => (
+      {navItems.map(item => (
         <option key={item.title} value={item.to}>
           {item.title}
         </option>
@@ -181,7 +181,7 @@ const WithNav: React.FC<WithNavProps> = ({ children }) => {
           {isMobile ? (
             <MobileNavSelect navItems={navItems} />
           ) : (
-            navItems.map((item) => (
+            navItems.map(item => (
               <NavButton key={item.title} title={item.title} to={item.to} />
             ))
           )}

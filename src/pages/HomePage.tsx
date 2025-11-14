@@ -6,8 +6,9 @@ import PostListMobile from '../components/home/PostList-M';
 import Blogroll from '../components/home/Blogroll';
 import SiteTitle from '../components/home/SiteTitle';
 import { useTitle } from 'ahooks';
+import type { JSX } from 'react/jsx-runtime';
 
-function HomePage() {
+function HomePage(): JSX.Element {
   useTitle('Home-绯境之外');
   if (isMobile) {
     // Mobile Layout

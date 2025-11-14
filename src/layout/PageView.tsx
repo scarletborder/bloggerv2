@@ -1,4 +1,4 @@
-import type { JSX } from 'react';
+import React, { type JSX } from 'react';
 import WithNav from './WithNav';
 import WithRights from './WithRights';
 

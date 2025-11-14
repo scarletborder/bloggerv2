@@ -68,9 +68,7 @@ const LANGUAGE_DISPLAY_MAP: Record<string, string> = {
  * @param language 语言标识符
  * @returns 友好的显示名称
  */
-const getLanguageDisplayName = (language: string): string => {
-  return LANGUAGE_DISPLAY_MAP[language.toLowerCase()] || language.toUpperCase();
-};
+const getLanguageDisplayName = (language: string): string => LANGUAGE_DISPLAY_MAP[language.toLowerCase()] || language.toUpperCase();
 
 /**
  * 复制文本到剪贴板
@@ -82,19 +80,18 @@ const copyToClipboard = async (text: string): Promise<boolean> => {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
       return true;
-    } else {
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      textArea.style.position = 'fixed';
-      textArea.style.left = '-999999px';
-      textArea.style.top = '-999999px';
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      const success = document.execCommand('copy');
-      document.body.removeChild(textArea);
-      return success;
     }
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    const success = document.execCommand('copy');
+    document.body.removeChild(textArea);
+    return success;
   } catch (error) {
     console.warn('Failed to copy to clipboard:', error);
     return false;
@@ -132,28 +129,30 @@ const createCopyButton = (codeText: string): HTMLElement => {
   button.setAttribute('title', 'Copy code');
   button.setAttribute('aria-label', 'Copy code to clipboard');
 
-  button.addEventListener('click', async (e) => {
+  button.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const success = await copyToClipboard(codeText);
-    const textSpan = button.querySelector('.copy-text');
-    if (textSpan) {
-      if (success) {
-        textSpan.textContent = 'Copied!';
-        button.classList.add('copied');
-        setTimeout(() => {
-          textSpan.textContent = 'Copy';
-          button.classList.remove('copied');
-        }, 2000);
-      } else {
-        textSpan.textContent = 'Failed';
-        button.classList.add('error');
-        setTimeout(() => {
-          textSpan.textContent = 'Copy';
-          button.classList.remove('error');
-        }, 2000);
+    (async () => {
+      const success = await copyToClipboard(codeText);
+      const textSpan = button.querySelector('.copy-text');
+      if (textSpan) {
+        if (success) {
+          textSpan.textContent = 'Copied!';
+          button.classList.add('copied');
+          setTimeout(() => {
+            textSpan.textContent = 'Copy';
+            button.classList.remove('copied');
+          }, 2000);
+        } else {
+          textSpan.textContent = 'Failed';
+          button.classList.add('error');
+          setTimeout(() => {
+            textSpan.textContent = 'Copy';
+            button.classList.remove('error');
+          }, 2000);
+        }
       }
-    }
+    })();
   });
 
   return button;
@@ -238,9 +237,7 @@ const shouldEnhanceCodeBlock = (preElement: HTMLElement): boolean => {
  * 增强页面中的所有代码块
  */
 export const enhanceCodeBlocks = (): void => {
-  const codeBlocks = document.querySelectorAll(
-    'pre:has(code[class*="language-"])',
-  );
+  const codeBlocks = document.querySelectorAll('pre:has(code[class*="language-"])');
   codeBlocks.forEach((block) => {
     if (shouldEnhanceCodeBlock(block as HTMLElement)) {
       enhanceSingleCodeBlock(block as HTMLElement);

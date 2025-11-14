@@ -36,4 +36,4 @@ export interface MetaBlogger {
   replyToId: string | null;
 }
 
-export interface MetaDisqus {}
+// export interface MetaDisqus {}

@@ -73,7 +73,7 @@ const PostListPageToggle: React.FC<PostListPageToggleProps> = ({
   };
 
   const [hoveredButton, setHoveredButton] = React.useState<
-    'prev' | 'next' | null
+  'prev' | 'next' | null
   >(null);
 
   const getButtonStyles = (

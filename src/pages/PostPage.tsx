@@ -57,8 +57,7 @@ const PostPage: React.FC = () => {
     if (!isMobile) return;
 
     const handleScroll = () => {
-      const scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop =        window.pageYOffset || document.documentElement.scrollTop;
       setShowScrollTop(scrollTop > 300); // 滚动超过300px时显示按钮
     };
 
@@ -182,8 +181,7 @@ const PostPage: React.FC = () => {
             href="/"
             style={backButtonStyles}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor =
-                'var(--primary-hover-color)';
+              e.currentTarget.style.backgroundColor =                'var(--primary-hover-color)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = 'var(--primary-color)';

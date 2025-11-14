@@ -8,8 +8,8 @@ const FOOTER_SECTIONS = [
     items: [
       '绯境之外',
       `© 2022 - ${new Date().getFullYear()} Copyright 绯境之外`,
-      `Theme by scarletborder`,
-      `Powered by Blogger and React`,
+      'Theme by scarletborder',
+      'Powered by Blogger and React',
     ],
   },
   {

@@ -46,14 +46,14 @@ export default function CommentList({
     }
     setLoading(true);
     // 更新上层 context 的 loading 状态
-    setCtx((prev) => ({ ...prev, loading: true }));
+    setCtx(prev => ({ ...prev, loading: true }));
 
     try {
       const result = await GetPostLegacyComments({
         postId: latestPostId.current,
       });
       setAllComments(result.items);
-      setCtx((prev) => ({
+      setCtx(prev => ({
         ...prev,
         totalComments: result.total,
         loading: false,
@@ -61,7 +61,7 @@ export default function CommentList({
     } catch (error) {
       console.error('Failed to fetch comments:', error);
       setAllComments([]);
-      setCtx((prev) => ({ ...prev, totalComments: 0, loading: false }));
+      setCtx(prev => ({ ...prev, totalComments: 0, loading: false }));
     } finally {
       setLoading(false);
     }
@@ -95,12 +95,12 @@ export default function CommentList({
     <>
       {allComments.length === 0 ? (
         <div style={emptyStyles}>暂无评论，快来抢沙发吧！</div>
-      ) : // 根据是否为移动端进行条件渲染
-      isMobile ? (
+      ) // 根据是否为移动端进行条件渲染
+        : isMobile ? (
         // --- 移动端：渲染完整列表 ---
         // 不需要 ref，也不需要固定的高度和滚动样式
         <div>
-          {allComments.map((comment) => (
+          {allComments.map(comment => (
             <CommentItemComponent
               key={comment.timeStamp}
               comment={comment}
@@ -109,11 +109,11 @@ export default function CommentList({
             />
           ))}
         </div>
-      ) : (
+        ) : (
         // --- 桌面端：使用虚拟列表 ---
         <div ref={containerRef} style={scrollAreaStyles}>
           <div ref={wrapperRef}>
-            {virtualList.map((ele) => (
+            {virtualList.map(ele => (
               <div key={ele.data.timeStamp}>
                 <CommentItemComponent
                   comment={ele.data}
@@ -124,7 +124,7 @@ export default function CommentList({
             ))}
           </div>
         </div>
-      )}
+        )}
     </>
   );
   // ==================== 修改结束 (JSX 渲染逻辑) ====================
