@@ -3,15 +3,14 @@
  * 根据主题生成博客内容的 CSS 样式
  */
 
-import { generateCodeBlockEnhancementStyles } from "./codeBlocks/codeBlockStyles";
-
+import { generateCodeBlockEnhancementStyles } from './codeBlocks/codeBlockStyles';
+import React from 'react';
 /**
  * 生成内容样式的 CSS 字符串
  * @param theme 当前主题 ('dark' | 'light')
  * @returns CSS 样式字符串
  */
-export const generateContentStyles = (theme: 'dark' | 'light'): string => {
-  return `
+export const generateContentStyles = (theme: 'dark' | 'light'): string => `
     .blog-content {
       line-height: 1.6;
       color: var(--text-color);
@@ -66,7 +65,7 @@ export const generateContentStyles = (theme: 'dark' | 'light'): string => {
     }
 
     .blog-content pre {
-      background-color: ${theme === "dark" ? "#282a36" : "#f8f9fa"};
+      background-color: ${theme === 'dark' ? '#282a36' : '#f8f9fa'};
       padding: 16px;
       padding: 1rem;
       border-radius: 8px;
@@ -84,8 +83,8 @@ export const generateContentStyles = (theme: 'dark' | 'light'): string => {
     }
 
     .blog-content code {
-      background-color: ${theme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"
-    };
+      background-color: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+};
       padding: 2px 6px;
       padding: 0.125rem 0.375rem;
       border-radius: 4px;
@@ -171,12 +170,12 @@ export const generateContentStyles = (theme: 'dark' | 'light'): string => {
 
     /* CodeMirror 样式 - 原始复杂结构的样式 */
     .blog-content .CodeMirror-scroll {
-      background-color: ${theme === "dark" ? "#282a36" : "#f8f9fa"};
+      background-color: ${theme === 'dark' ? '#282a36' : '#f8f9fa'};
       padding: 16px;
       padding: 1rem;
       border-radius: 8px;
       border-radius: 0.5rem;
-      color: ${theme === "dark" ? "#f8f8f2" : "#333"};
+      color: ${theme === 'dark' ? '#f8f8f2' : '#333'};
       overflow-x: auto;
       font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
       font-variant-numeric: tabular-nums;
@@ -185,8 +184,8 @@ export const generateContentStyles = (theme: 'dark' | 'light'): string => {
 
     /* 清理后的 CodeMirror 块样式 */
     .blog-content .cleaned-codemirror-block {
-      background-color: ${theme === "dark" ? "#282a36" : "#f8f9fa"};
-      color: ${theme === "dark" ? "#f8f8f2" : "#333"};
+      background-color: ${theme === 'dark' ? '#282a36' : '#f8f9fa'};
+      color: ${theme === 'dark' ? '#f8f8f2' : '#333'};
       padding: 16px;
       padding: 1rem;
       border-radius: 8px;
@@ -383,7 +382,6 @@ export const generateContentStyles = (theme: 'dark' | 'light'): string => {
      /* 代码块增强功能样式 */
      ${generateCodeBlockEnhancementStyles(theme)}
    `;
-};
 
 /**
  * 生成内联样式对象
@@ -391,11 +389,9 @@ export const generateContentStyles = (theme: 'dark' | 'light'): string => {
  */
 export const generateInlineStyles = (): React.CSSProperties => ({
   lineHeight: 1.7,
-  color: "var(--text-color)",
-  // 提供 px 作为 rem 的后备
-  fontSize: "18px",
+  color: 'var(--text-color)',
   // @ts-ignore - 允许 rem 单位
-  fontSize: "1.125rem", // 18px / 16px = 1.125rem
-  maxWidth: "100%",
-  wordBreak: "break-word",
+  fontSize: '1.125rem', // 18px / 16px = 1.125rem
+  maxWidth: '100%',
+  wordBreak: 'break-word',
 });

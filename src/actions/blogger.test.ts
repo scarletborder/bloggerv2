@@ -12,7 +12,7 @@ import {
   PostContentResponseSchema,
   PageListResponseSchema,
 } from './blogger.types';
-import { BLOG_URL } from '../constants/feedapi';
+import { BLOG_BASE } from '../constants/feedapi';
 
 // We still mock the global `fetch` function.
 const fetchSpy = vi.spyOn(globalThis, 'fetch');
@@ -34,7 +34,6 @@ const createMockApiResponse = (data: any): Response => {
   });
 };
 
-
 describe('Blogger API Service - Structural Tests', () => {
   beforeEach(() => {
     // Reset mocks before each test to ensure isolation.
@@ -46,7 +45,7 @@ describe('Blogger API Service - Structural Tests', () => {
       // Setup: Create a minimal mock structure that satisfies the schema.
       const mockResponse = {
         feed: {
-          'openSearch$totalResults': { $t: '123' },
+          openSearch$totalResults: { $t: '123' },
           entry: [
             {
               id: { $t: 'post-id-1' },
@@ -54,7 +53,13 @@ describe('Blogger API Service - Structural Tests', () => {
               updated: { $t: new Date().toISOString() },
               title: { $t: 'Test Post' },
               summary: { $t: 'This is a summary.' },
-              link: [{ rel: 'alternate', type: 'text/html', href: 'http://example.com/post' }],
+              link: [
+                {
+                  rel: 'alternate',
+                  type: 'text/html',
+                  href: 'http://example.com/post',
+                },
+              ],
               author: [{ name: { $t: 'Test Author' } }],
               category: [{ term: 'Test Tag' }],
             },
@@ -68,7 +73,7 @@ describe('Blogger API Service - Structural Tests', () => {
       const result = await getPostList({ 'start-index': 1, 'max-results': 1 });
 
       // Assert: Verify the fetch call and the structure of the result.
-      const expectedUrl = `${BLOG_URL}/feeds/posts/summary?alt=json&start-index=1&max-results=1`;
+      const expectedUrl = `${BLOG_BASE}/feeds/posts/summary?alt=json&start-index=1&max-results=1`;
       expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, expect.anything());
 
       // Use Zod's `safeParse` to verify the structure. `success` should be true.
@@ -76,7 +81,7 @@ describe('Blogger API Service - Structural Tests', () => {
 
       // Assert on the parsed result from our function.
       expect(result.feed).toBeDefined();
-      expect(typeof result.feed['openSearch$totalResults']).toBe('number');
+      expect(typeof result.feed.openSearch$totalResults).toBe('number');
       expect(Array.isArray(result.feed.entry)).toBe(true);
       expect(result.feed.entry.length).toBeGreaterThanOrEqual(0);
       expect(result.feed.entry[0]?.title.$t).toBe('Test Post');
@@ -97,7 +102,13 @@ describe('Blogger API Service - Structural Tests', () => {
               updated: { $t: new Date().toISOString() },
               title: { $t: 'Test Post Full Content' },
               content: { $t: '<p>This is the full content.</p>' },
-              link: [{ rel: 'alternate', type: 'text/html', href: 'http://example.com/post' }],
+              link: [
+                {
+                  rel: 'alternate',
+                  type: 'text/html',
+                  href: 'http://example.com/post',
+                },
+              ],
               author: [{ name: { $t: 'Test Author' } }],
               category: [{ term: 'Test Tag' }],
             },
@@ -110,7 +121,7 @@ describe('Blogger API Service - Structural Tests', () => {
       const result = await getPostContent({ path: '/test-post.html' });
 
       // Assert
-      const expectedUrl = `${BLOG_URL}/feeds/posts/default?alt=json&path=%2Ftest-post.html`;
+      const expectedUrl = `${BLOG_BASE}/feeds/posts/default?alt=json&path=%2Ftest-post.html`;
       expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, expect.anything());
 
       expect(PostContentResponseSchema.safeParse(mockResponse).success).toBe(true);
@@ -128,7 +139,7 @@ describe('Blogger API Service - Structural Tests', () => {
       // Setup
       const mockResponse = {
         feed: {
-          'openSearch$totalResults': { $t: '5' },
+          openSearch$totalResults: { $t: '5' },
           entry: [
             {
               id: { $t: 'page-id-1' },
@@ -136,7 +147,13 @@ describe('Blogger API Service - Structural Tests', () => {
               updated: { $t: new Date().toISOString() },
               title: { $t: 'Test Page' },
               summary: { $t: 'This is a page summary.' },
-              link: [{ rel: 'alternate', type: 'text/html', href: 'http://example.com/page' }],
+              link: [
+                {
+                  rel: 'alternate',
+                  type: 'text/html',
+                  href: 'http://example.com/page',
+                },
+              ],
               author: [{ name: { $t: 'Test Author' } }],
             },
           ],
@@ -149,7 +166,7 @@ describe('Blogger API Service - Structural Tests', () => {
       const result = await getPageList({ 'start-index': 1, 'max-results': 5 });
 
       // Assert
-      const expectedUrl = `${BLOG_URL}/feeds/pages/summary?alt=json&start-index=1&max-results=5`;
+      const expectedUrl = `${BLOG_BASE}/feeds/pages/summary?alt=json&start-index=1&max-results=5`;
       expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, expect.anything());
 
       expect(PageListResponseSchema.safeParse(mockResponse).success).toBe(true);
@@ -164,15 +181,17 @@ describe('Blogger API Service - Structural Tests', () => {
   describe('getPostListByCategories', () => {
     it('should call fetch with a correctly formatted category path', async () => {
       // Setup: The response structure is the same as getPostList.
-      const mockResponse = { feed: { 'openSearch$totalResults': { $t: '1' }, entry: [], category: [] } };
+      const mockResponse = {
+        feed: { openSearch$totalResults: { $t: '1' }, entry: [], category: [] },
+      };
       fetchSpy.mockResolvedValue(createMockApiResponse(mockResponse));
 
       // Act
       await getPostListByCategories(['Tag One', 'Tag Two']);
 
       // Assert
-      const expectedPath = encodeURIComponent('Tag One') + '/' + encodeURIComponent('Tag Two');
-      const expectedUrl = `${BLOG_URL}/feeds/posts/summary/-/${expectedPath}?alt=json&`;
+      const expectedPath = `${encodeURIComponent('Tag One')}/${encodeURIComponent('Tag Two')}`;
+      const expectedUrl = `${BLOG_BASE}/feeds/posts/summary/-/${expectedPath}?alt=json&`;
       expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, expect.anything());
     });
   });
@@ -182,7 +201,7 @@ describe('Blogger API Service - Structural Tests', () => {
       // Setup
       const mockResponse = {
         feed: {
-          'openSearch$totalResults': { $t: '123' },
+          openSearch$totalResults: { $t: '123' },
           entry: [], // The important part: entry is empty.
           category: [{ term: 'Global Tag 1' }, { term: 'Global Tag 2' }],
         },
@@ -193,7 +212,7 @@ describe('Blogger API Service - Structural Tests', () => {
       const result = await getAllTags();
 
       // Assert
-      const expectedUrl = `${BLOG_URL}/feeds/posts/summary?alt=json&start-index=1&max-results=0`;
+      const expectedUrl = `${BLOG_BASE}/feeds/posts/summary?alt=json&start-index=1&max-results=0`;
       expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, expect.anything());
 
       // The result should be the category array itself, not the whole response.

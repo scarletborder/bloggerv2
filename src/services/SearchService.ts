@@ -1,8 +1,8 @@
 import {
   getPostList,
   type GetPostListParams,
-} from "../actions/blogger.service";
-import type { PostItem } from "../models/PostItem";
+} from '../actions/blogger.service';
+import type { PostItem } from '../models/PostItem';
 
 type SearchRequest = {
   query: string;
@@ -20,9 +20,7 @@ type SearchResponse = {
  * @param req 搜索请求参数
  * @returns Promise<SearchResponse>
  */
-export const SearchPostsByQuery = async (
-  req: SearchRequest
-): Promise<SearchResponse> => {
+export const SearchPostsByQuery = async (req: SearchRequest): Promise<SearchResponse> => {
   const { query } = req;
 
   if (!query) {
@@ -30,8 +28,8 @@ export const SearchPostsByQuery = async (
   }
 
   const params: GetPostListParams = {
-    "start-index": 1,
-    "max-results": 1000,
+    'start-index': 1,
+    'max-results': 1000,
     q: req.query,
   };
 
@@ -40,15 +38,15 @@ export const SearchPostsByQuery = async (
 
   return {
     list: entrys.map((entry) => {
-      const tags = entry.category?.map((cat) => cat.term) || [];
-      let linkPath =
-        entry.link.find((link) => link.rel === "alternate")?.href || "";
-      linkPath = linkPath.split("//")[1].split("/").slice(1).join("/");
+      const tags = entry.category?.map(cat => cat.term) || [];
+      let linkPath =        entry.link.find(link => link.rel === 'alternate')?.href || '';
+      linkPath = linkPath.split('//')[1].split('/').slice(1)
+        .join('/');
       return {
         _id: entry.id.$t,
         path: linkPath,
         title: entry.title.$t,
-        tags: tags,
+        tags,
         summary: entry.summary.$t,
         // thumbnail: entry.media$thumbnail.url,
         published: new Date(entry.published).getTime(),

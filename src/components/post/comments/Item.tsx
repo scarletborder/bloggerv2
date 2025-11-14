@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, type JSX } from 'react';
 import { isMobile } from 'react-device-detect';
 import type { CommentItem, MetaBlogger } from '../../../models/CommentItem';
 import { getCurrentTheme } from '../../../constants/colors';
@@ -12,7 +12,11 @@ interface CommentItemComponentProps {
   ClickReplyButton: () => void;
 }
 
-export function CommentItemComponent({ comment, setCtx, ClickReplyButton }: CommentItemComponentProps) {
+export function CommentItemComponent({
+  comment,
+  setCtx,
+  ClickReplyButton,
+}: CommentItemComponentProps): JSX.Element {
   const colors = getCurrentTheme();
   const [showTooltip, setShowTooltip] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -29,7 +33,10 @@ export function CommentItemComponent({ comment, setCtx, ClickReplyButton }: Comm
   useEffect(() => {
     if (!isMobile || !showTooltip) return;
     const handleClickOutside = (event: MouseEvent) => {
-      if (linkIconRef.current && !linkIconRef.current.contains(event.target as Node)) {
+      if (
+        linkIconRef.current
+        && !linkIconRef.current.contains(event.target as Node)
+      ) {
         setShowTooltip(false);
         setTooltipText('');
       }
@@ -89,7 +96,7 @@ export function CommentItemComponent({ comment, setCtx, ClickReplyButton }: Comm
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
@@ -243,7 +250,7 @@ export function CommentItemComponent({ comment, setCtx, ClickReplyButton }: Comm
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = htmlContent;
     // 获取纯文本，并截断
-    const text = tempDiv.textContent || tempDiv.innerText || "";
+    const text = tempDiv.textContent || tempDiv.innerText || '';
     return text.length > 50 ? `${text.substring(0, 50)}...` : text;
   };
 
@@ -255,7 +262,12 @@ export function CommentItemComponent({ comment, setCtx, ClickReplyButton }: Comm
             <img
               src={comment.author.image}
               alt={comment.author.name}
-              style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                objectFit: 'cover',
+              }}
             />
           ) : (
             comment.author.name.charAt(0).toUpperCase()
@@ -281,7 +293,11 @@ export function CommentItemComponent({ comment, setCtx, ClickReplyButton }: Comm
                 style={linkIconStyles}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                onClick={handleLinkIconClick}
+                onClick={(event) => {
+                  handleLinkIconClick(event).catch((err) => {
+                    console.error('Submit handler failed:', err);
+                  });
+                }}
               >
                 🔗
               </span>
@@ -298,11 +314,13 @@ export function CommentItemComponent({ comment, setCtx, ClickReplyButton }: Comm
       </div>
 
       {/* ==================== 新增：条件渲染引用块 ==================== */}
-      {comment.inReplyTo && (
-        <div style={quoteBlockStyles}>
-          {`> ${comment.inReplyTo.author.name}: ${createBrief(comment.inReplyTo.content)}`}
-        </div>
-      )}
+      {
+        comment.inReplyTo && (
+          <div style={quoteBlockStyles}>
+            {`> ${comment.inReplyTo.author.name}: ${createBrief(comment.inReplyTo.content)}`}
+          </div>
+        )
+      }
       {/* ==================== 修改结束 ==================== */}
 
       <div
@@ -315,8 +333,10 @@ export function CommentItemComponent({ comment, setCtx, ClickReplyButton }: Comm
           <button
             style={replyButtonStyles}
             onClick={handleReplyClick}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = colors.border)}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = colors.border)
+            }
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')
+            }
           >
             回复
           </button>
@@ -324,6 +344,6 @@ export function CommentItemComponent({ comment, setCtx, ClickReplyButton }: Comm
       </div>
 
       {showToast && <div style={toastStyles}>复制成功！</div>}
-    </div>
+    </div >
   );
 }

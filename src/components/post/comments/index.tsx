@@ -1,17 +1,17 @@
-import { useSetState } from "ahooks";
-import type { CommentsState } from "./types";
-import { isMobile } from "react-device-detect";
-import { getCurrentTheme } from "../../../constants/colors";
-import CommentList from "./List";
-import { CommentForm } from "./Form";
-import React, { useRef } from 'react'; // 1. 引入 useRef
+import { useSetState } from 'ahooks';
+import type { CommentsState } from './types';
+import { isMobile } from 'react-device-detect';
+import { getCurrentTheme } from '../../../constants/colors';
+import CommentList from './List';
+import { CommentForm } from './Form';
+import React, { useRef, type JSX } from 'react'; // 1. 引入 useRef
 
 interface CommentAreaProps {
   postId: string;
   blogId: string;
 }
 
-export default function CommentArea({ postId, blogId }: CommentAreaProps) {
+export default function CommentArea({ postId, blogId }: CommentAreaProps): JSX.Element {
   const colors = getCurrentTheme();
   // 为评论表单创建一个 ref
   const formRef = useRef<HTMLDivElement>(null);
@@ -31,10 +31,15 @@ export default function CommentArea({ postId, blogId }: CommentAreaProps) {
     formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
-
-  const CommentsListComp = <CommentList Ctx={state} setCtx={setState} ClickReplyButton={handlePostCommentClick} />;
+  const CommentsListComp = (
+    <CommentList
+      Ctx={state}
+      setCtx={setState}
+      ClickReplyButton={handlePostCommentClick}
+    />
+  );
   // 对 CommentFormComp 的引用保持不变
-  const CommentFormComp = <CommentForm Ctx={state} setCtx={setState} />;
+  const CommentFormComp = <CommentForm Ctx={state} setCtx={setState} key={state.replyToId ?? 'new-comment'} />;
 
   const containerStyles: React.CSSProperties = {
     marginTop: '32px',
@@ -44,13 +49,11 @@ export default function CommentArea({ postId, blogId }: CommentAreaProps) {
     border: isMobile ? 'none' : `1px solid ${colors.border}`,
   };
 
-
   const countStyles: React.CSSProperties = {
     fontSize: '16px',
     fontWeight: 'normal',
     color: colors.textSecondary,
   };
-
 
   const titleStyles: React.CSSProperties = {
     fontSize: isMobile ? '20px' : '24px',
@@ -82,17 +85,15 @@ export default function CommentArea({ postId, blogId }: CommentAreaProps) {
     transition: 'opacity 0.2s',
   };
 
-
   return (
     <div style={containerStyles}>
-      {state.loading ?
-        <div style={loadingStyles}>正在加载评论...</div> :
+      {state.loading ? (
+        <div style={loadingStyles}>正在加载评论...</div>
+      ) : (
         <div style={titleStyles}>
           {/* 标题和评论数组合在一起 */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <h3 style={{ margin: 0, padding: 0 }}>
-              💬 评论区
-            </h3>
+            <h3 style={{ margin: 0, padding: 0 }}>💬 评论区</h3>
             {state.totalComments > 0 && (
               <span style={countStyles}>({state.totalComments} 条评论)</span>
             )}
@@ -101,14 +102,13 @@ export default function CommentArea({ postId, blogId }: CommentAreaProps) {
           <button style={postButtonStyle} onClick={handlePostCommentClick}>
             发表评论
           </button>
-        </div>}
+        </div>
+      )}
 
       {CommentsListComp}
 
       {/* 4. 将 CommentFormComp 包裹在带 ref 的 div 中 */}
-      <div ref={formRef}>
-        {CommentFormComp}
-      </div>
+      <div ref={formRef}>{CommentFormComp}</div>
     </div>
   );
 }

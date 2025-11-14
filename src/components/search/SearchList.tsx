@@ -1,10 +1,10 @@
 // src/components/search/SearchList.tsx
-import React from "react";
-import { isMobile } from "react-device-detect";
-import { useMemoizedFn } from "ahooks";
-import { useNavigate } from "react-router-dom";
-import { getCurrentTheme } from "../../constants/colors";
-import { type PostItem } from "../../models/PostItem";
+import React from 'react';
+import { isMobile } from 'react-device-detect';
+import { useMemoizedFn } from 'ahooks';
+import { useNavigate } from 'react-router-dom';
+import { getCurrentTheme } from '../../constants/colors';
+import { type PostItem } from '../../models/PostItem';
 
 interface SearchListProps {
   data: { list: PostItem[] } | undefined;
@@ -30,31 +30,31 @@ export default function SearchList({
     const d = new Date(timestamp);
     return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(
       2,
-      "0"
-    )}/${String(d.getDate()).padStart(2, "0")}`;
+      '0',
+    )}/${String(d.getDate()).padStart(2, '0')}`;
   };
 
   const tagStyles = (index: number): React.CSSProperties => {
     const tagColors = [
-      "#007bff",
-      "#28a745",
-      "#dc3545",
-      "#ffc107",
-      "#17a2b8",
-      "#6f42c1",
-      "#e83e8c",
-      "#fd7e14",
-      "#20c997",
-      "#6c757d",
+      '#007bff',
+      '#28a745',
+      '#dc3545',
+      '#ffc107',
+      '#17a2b8',
+      '#6f42c1',
+      '#e83e8c',
+      '#fd7e14',
+      '#20c997',
+      '#6c757d',
     ];
     return {
-      fontSize: isMobile ? "10px" : "11px",
-      padding: isMobile ? "2px 6px" : "3px 8px",
+      fontSize: isMobile ? '10px' : '11px',
+      padding: isMobile ? '2px 6px' : '3px 8px',
       backgroundColor: tagColors[index % tagColors.length],
-      color: "#ffffff",
-      borderRadius: "10px",
-      fontWeight: "500",
-      whiteSpace: "nowrap",
+      color: '#ffffff',
+      borderRadius: '10px',
+      fontWeight: '500',
+      whiteSpace: 'nowrap',
     };
   };
 
@@ -76,89 +76,89 @@ export default function SearchList({
   };
 
   const scrollContainerStyles: React.CSSProperties = {
-    height: "100%",
-    overflowY: "auto",
-    overflowX: "hidden",
-    padding: isMobile ? "0" : "0 16px 0 0", // PC端增加padding避免滚动条遮挡
+    height: '100%',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    padding: isMobile ? '0' : '0 16px 0 0', // PC端增加padding避免滚动条遮挡
   };
 
   const moreTagsStyles: React.CSSProperties = {
-    fontSize: isMobile ? "10px" : "11px",
-    padding: isMobile ? "2px 6px" : "3px 8px",
+    fontSize: isMobile ? '10px' : '11px',
+    padding: isMobile ? '2px 6px' : '3px 8px',
     backgroundColor: colors.textSecondary,
-    color: "#ffffff",
-    borderRadius: "10px",
-    fontWeight: "500",
+    color: '#ffffff',
+    borderRadius: '10px',
+    fontWeight: '500',
   };
 
   const postItemStyles: React.CSSProperties = {
     backgroundColor: colors.background,
-    borderRadius: isMobile ? "10px" : "12px",
-    margin: isMobile ? "0 0 12px" : "0 0 16px",
-    padding: isMobile ? "14px" : "16px",
+    borderRadius: isMobile ? '10px' : '12px',
+    margin: isMobile ? '0 0 12px' : '0 0 16px',
+    padding: isMobile ? '14px' : '16px',
     border: `1px solid ${colors.border}`,
-    transition: "transform 0.2s ease, box-shadow 0.2s ease",
-    cursor: "pointer",
+    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+    cursor: 'pointer',
   };
 
   const postTitleStyles: React.CSSProperties = {
-    fontSize: isMobile ? "16px" : "18px",
-    fontWeight: "600",
+    fontSize: isMobile ? '16px' : '18px',
+    fontWeight: '600',
     color: colors.text,
-    marginBottom: "8px",
-    lineHeight: "1.4",
-    display: "-webkit-box",
+    marginBottom: '8px',
+    lineHeight: '1.4',
+    display: '-webkit-box',
     WebkitLineClamp: 2,
-    WebkitBoxOrient: "vertical",
-    overflow: "hidden",
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
   };
 
   const postSummaryStyles: React.CSSProperties = {
     color: colors.textSecondary,
-    fontSize: isMobile ? "13px" : "14px",
-    lineHeight: "1.5",
-    marginBottom: "10px",
-    display: "-webkit-box",
+    fontSize: isMobile ? '13px' : '14px',
+    lineHeight: '1.5',
+    marginBottom: '10px',
+    display: '-webkit-box',
     WebkitLineClamp: 3,
-    WebkitBoxOrient: "vertical",
-    overflow: "hidden",
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
   };
 
   const postMetaStyles: React.CSSProperties = {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
-    gap: "8px",
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: '8px',
   };
 
   const postDateStyles: React.CSSProperties = {
     color: colors.textSecondary,
-    fontSize: isMobile ? "11px" : "12px",
-    fontWeight: "500",
+    fontSize: isMobile ? '11px' : '12px',
+    fontWeight: '500',
   };
 
   const tagsContainerStyles: React.CSSProperties = {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "4px",
-    alignItems: "center",
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '4px',
+    alignItems: 'center',
   };
 
   const loadingMoreStyles: React.CSSProperties = {
-    textAlign: "center",
-    padding: "16px",
+    textAlign: 'center',
+    padding: '16px',
     color: colors.textSecondary,
-    fontSize: "14px",
-    marginTop: "8px",
+    fontSize: '14px',
+    marginTop: '8px',
   };
 
   const noMoreStyles: React.CSSProperties = {
-    textAlign: "center",
-    padding: "16px",
+    textAlign: 'center',
+    padding: '16px',
     color: colors.textSecondary,
-    fontSize: "14px",
-    marginTop: "8px",
+    fontSize: '14px',
+    marginTop: '8px',
   };
 
   return (
@@ -169,15 +169,14 @@ export default function SearchList({
           style={postItemStyles}
           onMouseEnter={(e) => {
             if (!isMobile) {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow =
-                "0 6px 12px rgba(0, 0, 0, 0.15)";
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow =                '0 6px 12px rgba(0, 0, 0, 0.15)';
             }
           }}
           onMouseLeave={(e) => {
             if (!isMobile) {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "none";
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
             }
           }}
           onClick={() => handlePostClick(post.path)}

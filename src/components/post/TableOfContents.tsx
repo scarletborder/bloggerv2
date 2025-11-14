@@ -195,8 +195,10 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
     position: 'fixed',
     left: isOpen ? `${tocWidth}px` : '0px',
     top: '50%',
-    transform: isOpen ? 'translateY(-50%) translateX(-100%)' : 'translateY(-50%)',
-    width: '1%',  // 变更: 宽度变窄
+    transform: isOpen
+      ? 'translateY(-50%) translateX(-100%)'
+      : 'translateY(-50%)',
+    width: '1%', // 变更: 宽度变窄
     height: '100px', // 变更: 高度变高
     backgroundColor: 'var(--surface-color)',
     border: '1px solid var(--border-color)',
@@ -212,8 +214,8 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
     zIndex: 101,
     transition: 'all 0.3s ease-in-out',
     // 变更: 调整 clip-path 使斜边更陡峭
-    clipPath: isOpen 
-      ? 'polygon(100% 0, 0 10%, 0 90%, 100% 100%)' 
+    clipPath: isOpen
+      ? 'polygon(100% 0, 0 10%, 0 90%, 100% 100%)'
       : 'polygon(0 0, 100% 10%, 100% 90%, 0 100%)',
   };
 
@@ -227,11 +229,11 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
       color: var(--surface-color) !important;
     }
   `;
-  
+
   return (
     <>
       <style>{hoverStyles}</style>
-      
+
       {!isMobile && (
         <>
           <nav style={pcContainerStyles}>
@@ -239,7 +241,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
               <span>📋 目录</span>
             </div>
             <ul style={listStyles}>
-              {tocItems.map((item) => (
+              {tocItems.map(item => (
                 <li key={item.id} style={itemStyles(item.level)}>
                   <a
                     className="toc-link"
@@ -255,7 +257,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
               ))}
             </ul>
           </nav>
-          
+
           <button
             className="floating-toggle"
             style={floatingToggleStyles}
@@ -284,7 +286,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
 
           {isOpen && (
             <ul style={listStyles}>
-              {tocItems.map((item) => (
+              {tocItems.map(item => (
                 <li key={item.id} style={itemStyles(item.level)}>
                   <a
                     className="toc-link"

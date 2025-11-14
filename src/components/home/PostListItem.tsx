@@ -16,7 +16,7 @@ const PostListItem: React.FC<PostListItemProps> = ({
   title,
   tags,
   summary,
-  published
+  published,
 }) => {
   const colors = getCurrentTheme();
 
@@ -113,9 +113,7 @@ const PostListItem: React.FC<PostListItemProps> = ({
 
       <p style={summaryStyles}>{summary}</p>
 
-      <div style={dateStyles}>
-        发布于 {formatDate(published)}
-      </div>
+      <div style={dateStyles}>发布于 {formatDate(published)}</div>
     </Link>
   );
 };

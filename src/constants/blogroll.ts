@@ -6,7 +6,7 @@ export type BlogRollItem = {
 
 export default [
   {
-    alt: "vast_joy",
-    url: "https://www.cnblogs.com/vastjoy",
+    alt: 'vast_joy',
+    url: 'https://www.cnblogs.com/vastjoy',
   },
 ] as BlogRollItem[];

@@ -12,7 +12,12 @@ interface HeaderViewProps {
 /**
  * 文章头部组件 - 显示标题、发布时间、更新时间和标签
  */
-const HeaderView: React.FC<HeaderViewProps> = ({ title, published, updated, tags }) => {
+const HeaderView: React.FC<HeaderViewProps> = ({
+  title,
+  published,
+  updated,
+  tags,
+}) => {
   const navigate = useNavigate();
 
   const formatDate = (dateString: string) => {
@@ -27,7 +32,7 @@ const HeaderView: React.FC<HeaderViewProps> = ({ title, published, updated, tags
   const headerStyles: React.CSSProperties = {
     marginBottom: isMobile ? '20px' : '32px',
     paddingBottom: isMobile ? '16px' : '24px',
-    borderBottom: `2px solid var(--border-color)`,
+    borderBottom: '2px solid var(--border-color)',
   };
 
   const titleStyles: React.CSSProperties = {

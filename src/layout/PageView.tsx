@@ -1,6 +1,6 @@
-import type { JSX } from "react";
-import WithNav from "./WithNav";
-import WithRights from "./WithRights";
+import React, { type JSX } from 'react';
+import WithNav from './WithNav';
+import WithRights from './WithRights';
 
 interface WithPageProps {
   children: React.ReactNode;
@@ -9,9 +9,7 @@ interface WithPageProps {
 export default function PageView({ children }: WithPageProps): JSX.Element {
   return (
     <WithRights>
-      <WithNav>
-        {children}
-      </WithNav>
+      <WithNav>{children}</WithNav>
     </WithRights>
   );
 }

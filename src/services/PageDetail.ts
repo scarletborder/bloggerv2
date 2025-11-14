@@ -1,4 +1,4 @@
-import { getPageContent } from "../actions/blogger.service";
+import { getPageContent } from '../actions/blogger.service';
 
 // 文章详情页面所需的数据结构
 export type PageDetail = {
@@ -37,10 +37,13 @@ export async function getPageDetail(path: string): Promise<PageDetail> {
   };
 }
 
-function getStringAfterPage(inputString: string, defaultValue: string): {
-  pageId: string;
-  blogId: string;
-} {
+function getStringAfterPage(
+  inputString: string,
+  defaultValue: string,
+): {
+    pageId: string;
+    blogId: string;
+  } {
   const blogIdKeyword = 'blog-';
   const pageKeyword = 'page-';
 
@@ -53,18 +56,25 @@ function getStringAfterPage(inputString: string, defaultValue: string): {
   if (blogIdIndex !== -1) {
     const blogIdStart = blogIdIndex + blogIdKeyword.length;
     const blogIdEnd = inputString.indexOf('.', blogIdStart);
-    blogId = (blogIdEnd !== -1 ? inputString.substring(blogIdStart, blogIdEnd) : inputString.substring(blogIdStart)).trim();
+    blogId = (
+      blogIdEnd !== -1
+        ? inputString.substring(blogIdStart, blogIdEnd)
+        : inputString.substring(blogIdStart)
+    ).trim();
   }
 
   if (pageIndex !== -1) {
     const pageStart = pageIndex + pageKeyword.length;
     const pageEnd = inputString.indexOf('.', pageStart);
-    pageId = (pageEnd !== -1 ? inputString.substring(pageStart, pageEnd) : inputString.substring(pageStart)).trim();
+    pageId = (
+      pageEnd !== -1
+        ? inputString.substring(pageStart, pageEnd)
+        : inputString.substring(pageStart)
+    ).trim();
   }
 
   if (blogId || pageId) {
-    return { blogId, pageId: pageId };
-  } else {
-    return { blogId: defaultValue, pageId: defaultValue };
+    return { blogId, pageId };
   }
+  return { blogId: defaultValue, pageId: defaultValue };
 }

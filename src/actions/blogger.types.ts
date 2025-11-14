@@ -38,7 +38,6 @@ const CategorySchema = z.object({
   term: z.string(),
 });
 
-
 // =================================================================================
 // 2. ENTRY SCHEMAS (Schemas for individual posts or pages)
 // =================================================================================
@@ -49,8 +48,8 @@ const CategorySchema = z.object({
  */
 const BaseEntrySchema = z.object({
   id: TValueSchema,
-  published: TValueSchema.transform((val) => new Date(val.$t)),
-  updated: TValueSchema.transform((val) => new Date(val.$t)),
+  published: TValueSchema.transform(val => new Date(val.$t)),
+  updated: TValueSchema.transform(val => new Date(val.$t)),
   title: TValueSchema,
   link: z.array(LinkSchema),
   author: z.array(AuthorSchema),
@@ -90,7 +89,6 @@ export const PageContentEntrySchema = BaseEntrySchema.extend({
   content: TValueSchema,
 });
 
-
 // =================================================================================
 // 3. TOP-LEVEL RESPONSE SCHEMAS (Schemas for the entire API response object)
 // =================================================================================
@@ -100,25 +98,26 @@ export const PageContentEntrySchema = BaseEntrySchema.extend({
  * It expects a `feed` object containing an array of entries and total result count.
  * @param entrySchema The Zod schema for the individual entries in the list.
  */
-const createListFeedSchema = <T extends z.ZodTypeAny>(entrySchema: T) =>
-  z.object({
-    feed: z.object({
-      entry: z.array(entrySchema).optional().default([]), // Use .default([]) to handle cases with 0 entries gracefully
-      'openSearch$totalResults': TValueSchema.transform((val) => parseInt(val.$t, 10)),
-    }),
-  });
+const createListFeedSchema = <T extends z.ZodTypeAny>(entrySchema: T) => z.object({
+  feed: z.object({
+    entry: z.array(entrySchema).optional()
+      .default([]), // Use .default([]) to handle cases with 0 entries gracefully
+    openSearch$totalResults: TValueSchema.transform(val => parseInt(val.$t, 10)),
+  }),
+});
 
 /**
  * A generic factory function to create a Zod schema for detail-based API responses (e.g., single post/page content).
  * It expects the `entry` array to contain exactly one item.
  * @param entrySchema The Zod schema for the single entry.
  */
-const createDetailFeedSchema = <T extends z.ZodTypeAny>(entrySchema: T) =>
-  z.object({
-    feed: z.object({
-      entry: z.array(entrySchema).length(1, { message: "Expected exactly one entry in the feed." }),
-    }),
-  });
+const createDetailFeedSchema = <T extends z.ZodTypeAny>(entrySchema: T) => z.object({
+  feed: z.object({
+    entry: z
+      .array(entrySchema)
+      .length(1, { message: 'Expected exactly one entry in the feed.' }),
+  }),
+});
 
 /**
  * Zod schema for the response of the "get post list" API endpoint.
@@ -127,10 +126,12 @@ const createDetailFeedSchema = <T extends z.ZodTypeAny>(entrySchema: T) =>
  */
 export const PostListResponseSchema = z.object({
   feed: z.object({
-    entry: z.array(PostSummaryEntrySchema).optional().default([]),
-    'openSearch$totalResults': TValueSchema.transform((val) => parseInt(val.$t, 10)),
+    entry: z.array(PostSummaryEntrySchema).optional()
+      .default([]),
+    openSearch$totalResults: TValueSchema.transform(val => parseInt(val.$t, 10)),
     // Add the blog-wide category list here
-    category: z.array(CategorySchema).optional().default([]),
+    category: z.array(CategorySchema).optional()
+      .default([]),
   }),
 });
 
@@ -155,10 +156,10 @@ export const PageContentResponseSchema = createDetailFeedSchema(PageContentEntry
  */
 export const AllTagsResponseSchema = z.object({
   feed: z.object({
-    category: z.array(CategorySchema).optional().default([]),
+    category: z.array(CategorySchema).optional()
+      .default([]),
   }),
 });
-
 
 // =================================================================================
 // 4. INFERRED TYPESCRIPT TYPES

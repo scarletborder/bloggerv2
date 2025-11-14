@@ -1,9 +1,9 @@
 // src/components/search/SearchInput.tsx
-import React, { useState } from "react";
-import { isMobile } from "react-device-detect";
-import { useMemoizedFn, useKeyPress } from "ahooks";
-import { useNavigate } from "react-router-dom";
-import { getCurrentTheme } from "../../constants/colors";
+import React, { useState } from 'react';
+import { isMobile } from 'react-device-detect';
+import { useMemoizedFn, useKeyPress } from 'ahooks';
+import { useNavigate } from 'react-router-dom';
+import { getCurrentTheme } from '../../constants/colors';
 
 interface SearchInputProps {
   onSearch?: (query: string) => void;
@@ -17,7 +17,7 @@ interface SearchInputProps {
 
 export default function SearchInput({
   onSearch,
-  initialQuery = "",
+  initialQuery = '',
   loading = false,
   disableNavigation = false,
   compact = false,
@@ -38,105 +38,105 @@ export default function SearchInput({
     }
   });
 
-  useKeyPress("Enter", handleSearch);
+  useKeyPress('Enter', handleSearch);
 
   const handleKeyDown = useMemoizedFn((e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault();
       handleSearch();
     }
   });
 
   const containerStyles: React.CSSProperties = {
-    position: "relative",
-    width: "100%",
+    position: 'relative',
+    width: '100%',
     maxWidth: compact
       ? isMobile
-        ? "180px"
-        : "240px"
+        ? '180px'
+        : '240px'
       : isMobile
-        ? "100%"
-        : "600px",
-    margin: compact ? "0" : "0 auto",
+        ? '100%'
+        : '600px',
+    margin: compact ? '0' : '0 auto',
   };
 
   const searchWrapperStyles: React.CSSProperties = {
-    position: "relative",
-    display: "flex",
-    alignItems: "center",
-    gap: isMobile ? "0" : "0",
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    gap: isMobile ? '0' : '0',
   };
 
   const labelStyles: React.CSSProperties = {
-    position: "absolute",
-    top: compact ? "0" : "-12px",
-    left: compact ? "0" : "12px",
-    transform: compact ? "none" : "translateY(-100%)",
-    display: compact ? "none" : "flex",
-    alignItems: "center",
-    gap: "6px",
+    position: 'absolute',
+    top: compact ? '0' : '-12px',
+    left: compact ? '0' : '12px',
+    transform: compact ? 'none' : 'translateY(-100%)',
+    display: compact ? 'none' : 'flex',
+    alignItems: 'center',
+    gap: '6px',
     color: colors.textSecondary,
-    fontSize: "14px",
-    fontWeight: "500",
+    fontSize: '14px',
+    fontWeight: '500',
     background: colors.background,
-    padding: "0 8px",
-    cursor: "pointer",
-    userSelect: "none",
+    padding: '0 8px',
+    cursor: 'pointer',
+    userSelect: 'none',
   };
 
   const inputStyles: React.CSSProperties = {
-    flex: isMobile ? "1" : "1",
+    flex: isMobile ? '1' : '1',
     padding: compact
-      ? "8px 36px 8px 12px"
+      ? '8px 36px 8px 12px'
       : isMobile
-        ? "14px 16px"
-        : "16px 20px",
-    fontSize: compact ? "14px" : isMobile ? "16px" : "18px",
-    borderRadius: compact ? "20px" : isMobile ? "12px" : "12px 0 0 12px",
+        ? '14px 16px'
+        : '16px 20px',
+    fontSize: compact ? '14px' : isMobile ? '16px' : '18px',
+    borderRadius: compact ? '20px' : isMobile ? '12px' : '12px 0 0 12px',
     border: compact
-      ? "1px solid var(--border-color)"
+      ? '1px solid var(--border-color)'
       : `2px solid ${colors.primary}`,
-    backgroundColor: compact ? "var(--surface-color)" : colors.surface,
-    color: compact ? "var(--text-color)" : colors.text,
-    outline: "none",
-    boxSizing: "border-box",
-    transition: "all 0.3s ease",
+    backgroundColor: compact ? 'var(--surface-color)' : colors.surface,
+    color: compact ? 'var(--text-color)' : colors.text,
+    outline: 'none',
+    boxSizing: 'border-box',
+    transition: 'all 0.3s ease',
     borderRight: compact
-      ? "1px solid var(--border-color)"
+      ? '1px solid var(--border-color)'
       : isMobile
         ? `2px solid ${colors.primary}`
-        : "none",
+        : 'none',
     minWidth: 0,
   };
 
   const compactIconStyles: React.CSSProperties = {
-    position: "absolute",
-    right: "12px",
-    color: "var(--text-secondary-color)",
-    width: "16px",
-    height: "16px",
-    display: "flex",
-    alignItems: "center",
-    pointerEvents: "none",
+    position: 'absolute',
+    right: '12px',
+    color: 'var(--text-secondary-color)',
+    width: '16px',
+    height: '16px',
+    display: 'flex',
+    alignItems: 'center',
+    pointerEvents: 'none',
   };
 
   const buttonStyles: React.CSSProperties = {
-    display: isMobile || compact ? "none" : "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "16px 24px",
-    fontSize: "16px",
-    fontWeight: "bold",
-    color: "#fff",
+    display: isMobile || compact ? 'none' : 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '16px 24px',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    color: '#fff',
     background: `linear-gradient(45deg, ${colors.primary}, ${colors.primaryHover})`,
     border: `2px solid ${colors.primary}`,
-    borderLeft: "none",
-    borderRadius: "0 12px 12px 0",
-    cursor: "pointer",
-    transition: "all 0.3s ease",
+    borderLeft: 'none',
+    borderRadius: '0 12px 12px 0',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
     boxShadow: `0 4px 12px ${colors.primary}40`,
-    minWidth: "80px",
-    whiteSpace: "nowrap",
+    minWidth: '80px',
+    whiteSpace: 'nowrap',
   };
 
   return (
@@ -165,9 +165,9 @@ export default function SearchInput({
           <input
             type="text"
             style={inputStyles}
-            placeholder={compact ? "Search..." : "输入关键词..."}
+            placeholder={compact ? 'Search...' : '输入关键词...'}
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={e => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={loading}
           />
@@ -192,22 +192,22 @@ export default function SearchInput({
           >
             {loading ? (
               <div
-                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
               >
                 <div
                   style={{
-                    width: "16px",
-                    height: "16px",
-                    border: "2px solid transparent",
-                    borderTop: "2px solid #fff",
-                    borderRadius: "50%",
-                    animation: "spin 1s linear infinite",
+                    width: '16px',
+                    height: '16px',
+                    border: '2px solid transparent',
+                    borderTop: '2px solid #fff',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite',
                   }}
                 />
                 搜索中
               </div>
             ) : (
-              "搜索"
+              '搜索'
             )}
           </button>
         </div>

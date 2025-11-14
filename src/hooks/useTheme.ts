@@ -1,5 +1,5 @@
-import { useEffect, useCallback, useState } from "react";
-import { themeManager, type ThemeMode } from "../utils/themeManager";
+import { useEffect, useCallback, useState } from 'react';
+import { themeManager, type ThemeMode } from '../utils/themeManager';
 
 interface UseThemeOptions {
   localStorageKey?: string; // 保持向后兼容，但实际不使用

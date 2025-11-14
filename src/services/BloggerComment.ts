@@ -1,28 +1,28 @@
-import { BloggerFeed } from "@deox/blogger-feed";
+import { BloggerFeed } from '@deox/blogger-feed';
 import { keyBy, forEach } from 'lodash';
-import { BLOG_BASE } from "../constants/feedapi";
-import type { CommentItem } from "../models/CommentItem";
-
+import {
+  API_URL_PREFIX } from '../constants/feedapi';
+import type { CommentItem } from '../models/CommentItem';
 
 export type LegacyCommentRequest = {
   postId: string;
-}
+};
 
 export type LegacyCommentResponse = {
   items: CommentItem[];
   total: number;
-}
+};
 
 function transformComment(comments: any): CommentItem {
   return {
     author: {
-      name: comments.author.name || "Anonymous",
+      name: comments.author.name || 'Anonymous',
       url: comments.author.url ?? undefined,
-      image: comments.author.image ?? undefined
+      image: comments.author.image ?? undefined,
     },
-    content: comments.content || "",
+    content: comments.content || '',
     timeStamp: Date.parse(comments.updated),
-    source: "blogger",
+    source: 'blogger',
     meta: {
       id: comments.id,
       replyToId: comments.inReplyTo,
@@ -31,8 +31,8 @@ function transformComment(comments: any): CommentItem {
 }
 
 export async function GetPostLegacyComments(req: LegacyCommentRequest): Promise<LegacyCommentResponse> {
-  const feed = new BloggerFeed(BLOG_BASE, {
-    jsonp: true
+  const feed = new BloggerFeed(API_URL_PREFIX, {
+    jsonp: true,
   });
 
   // 1. 获取主评论列表
@@ -46,7 +46,7 @@ export async function GetPostLegacyComments(req: LegacyCommentRequest): Promise<
 
   // 3. 识别出所有在当前列表中不存在的父评论ID
   const parentCommentIdsToFetch = new Set<string>();
-  forEach(initialComments, commentItem => {
+  forEach(initialComments, (commentItem) => {
     const replyToId = commentItem.meta?.replyToId;
     // 如果一个评论是回复，并且它的父评论不在当前列表中，则记录其ID以便后续获取
     if (replyToId && !idToCommentItem[replyToId]) {
@@ -56,13 +56,11 @@ export async function GetPostLegacyComments(req: LegacyCommentRequest): Promise<
 
   // 4. 使用 Promise.all 并行获取所有缺失的父评论，以提高效率
   if (parentCommentIdsToFetch.size > 0) {
-    const parentCommentPromises = Array.from(parentCommentIdsToFetch).map(id =>
-      feed.comments.get(req.postId, id).then(transformComment)
-    );
+    const parentCommentPromises = Array.from(parentCommentIdsToFetch).map(id => feed.comments.get(req.postId, id).then(transformComment));
     const fetchedParentComments = await Promise.all(parentCommentPromises);
 
     // 5. 将新获取的父评论也加入到查找映射中，以便后续引用
-    forEach(fetchedParentComments, parentComment => {
+    forEach(fetchedParentComments, (parentComment) => {
       if (parentComment.meta?.id) {
         idToCommentItem[parentComment.meta.id] = parentComment;
       }
@@ -71,7 +69,7 @@ export async function GetPostLegacyComments(req: LegacyCommentRequest): Promise<
 
   // 6. 最后一次遍历，为每个子评论添加对父评论的引用
   // 此时 idToCommentItem 包含了所有需要的评论（无论是初始加载的还是补充获取的）
-  forEach(initialComments, commentItem => {
+  forEach(initialComments, (commentItem) => {
     const replyToId = commentItem.meta?.replyToId;
     if (replyToId) {
       const parentComment = idToCommentItem[replyToId];
@@ -94,7 +92,6 @@ export async function GetPostLegacyComments(req: LegacyCommentRequest): Promise<
   };
 }
 
-
 /**
  * 获取比指定时间戳更新的评论。
  * @param postId - 文章ID。
@@ -108,8 +105,8 @@ export async function GetNewestComments({
   postId: string;
   minTimestamp: number;
 }): Promise<CommentItem[]> {
-  const feed = new BloggerFeed(BLOG_BASE, {
-    jsonp: true
+  const feed = new BloggerFeed(API_URL_PREFIX, {
+    jsonp: true,
   });
 
   // Blogger API 需要 ISO 格式的时间字符串
@@ -119,16 +116,15 @@ export async function GetNewestComments({
     const entries = feed.comments.list({
       postId,
       maxResults: 500,
-      publishedMin: minPublishedTime
+      publishedMin: minPublishedTime,
     });
-    const newComments: CommentItem[] = Object.values(entries).map(entry => {
-      return transformComment(entry);
-    }).filter(c => c.timeStamp > minTimestamp); // 再次精确过滤，防止API返回等于边界值的评论
+    const newComments: CommentItem[] = Object.values(entries)
+      .map(entry => transformComment(entry))
+      .filter(c => c.timeStamp > minTimestamp); // 再次精确过滤，防止API返回等于边界值的评论
 
     return newComments;
-
   } catch (error) {
-    console.error("Failed to fetch newest comments:", error);
+    console.error('Failed to fetch newest comments:', error);
     return [];
   }
 }

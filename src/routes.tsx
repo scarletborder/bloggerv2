@@ -1,21 +1,21 @@
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-
-import * as Pages from "./pages";
-import PageView from "./layout/PageView";
-import WithNav from "./layout/WithNav";
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import type { JSX } from 'react/jsx-runtime';
+import * as Pages from './pages';
+import PageView from './layout/PageView';
+import WithNav from './layout/WithNav';
 
 function HtmlRedirect() {
   const location = useLocation();
   const { pathname, search, hash } = location;
   // 匹配 .html 结尾
   if (/\.html$/.test(pathname)) {
-    const newPath = pathname.replace(/\.html$/, "");
+    const newPath = pathname.replace(/\.html$/, '');
     return <Navigate to={newPath + search + hash} replace />;
   }
   return null;
 }
 
-export default function AppRoutes() {
+export default function AppRoutes(): JSX.Element {
   return (
     <Routes>
       {/* .html 结尾重定向 */}

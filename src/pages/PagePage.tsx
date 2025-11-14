@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { getPageDetail, type PageDetail } from "../services/PageDetail";
-import { useLocation } from "react-router-dom";
-import { useAsyncEffect } from "ahooks";
-import { isMobile } from "react-device-detect";
-import { useTitle } from "ahooks";
+import React, { useState } from 'react';
+import { getPageDetail, type PageDetail } from '../services/PageDetail';
+import { useLocation } from 'react-router-dom';
+import { useAsyncEffect, useTitle } from 'ahooks';
+import { isMobile } from 'react-device-detect';
+
 
 const PagePage: React.FC = () => {
   const location = useLocation();
-  const pathname = location.pathname;
+  const { pathname } = location;
   const [pageDetail, setPageDetail] = useState<PageDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useTitle(`${pageDetail?.title ?? "Loading"} - 绯境之外`);
+  useTitle(`${pageDetail?.title ?? 'Loading'} - 绯境之外`);
 
   useAsyncEffect(async () => {
     if (!pathname) return;
@@ -102,9 +102,7 @@ const PagePage: React.FC = () => {
       <div style={pageStyles}>
         <div style={errorStyles}>
           <h1 style={errorTitleStyles}>😔 页面加载失败</h1>
-          <p style={errorMessageStyles}>
-            {error || '找不到指定的页面'}
-          </p>
+          <p style={errorMessageStyles}>{error || '找不到指定的页面'}</p>
           <a
             href="/"
             style={backButtonStyles}

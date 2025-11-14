@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { BLOG_URL, API_TIMEOUT } from '../constants/feedapi';
+import { BLOG_BASE, API_TIMEOUT } from '../constants/feedapi';
 import {
   PostListResponseSchema,
   PageListResponseSchema,
@@ -59,7 +59,7 @@ async function fetchBloggerApi(url: string): Promise<unknown> {
  */
 function createFeedApiMethod<
   TParams extends object, // <-- BUG FIX: Changed constraint to `object`
-  TSchema extends z.ZodTypeAny
+  TSchema extends z.ZodTypeAny,
 >(requestPath: string, schema: TSchema) {
   /**
    * The generated async function.
@@ -75,14 +75,17 @@ function createFeedApiMethod<
       }
     }
 
-    const url = `${BLOG_URL}${requestPath}?alt=json&${searchParams.toString()}`;
+    const url = `${BLOG_BASE}${requestPath}?alt=json&${searchParams.toString()}`;
 
     const rawJson = await fetchBloggerApi(url);
 
     const validationResult = schema.safeParse(rawJson);
 
     if (!validationResult.success) {
-      console.error(`Zod validation failed for path: ${requestPath}`, validationResult.error.issues);
+      console.error(
+        `Zod validation failed for path: ${requestPath}`,
+        validationResult.error.issues,
+      );
       throw new Error(`API response validation failed for path: ${requestPath}`);
     }
 
@@ -94,7 +97,6 @@ function createFeedApiMethod<
 // SECTION 3: PUBLIC API METHODS AND THEIR PARAMETER TYPES
 // The implementation now works without lint errors.
 // =================================================================================
-
 
 /**
  * Parameter interface for the `getPostList` function.
@@ -124,10 +126,10 @@ export interface GetPostListParams {
  * Fetches a paginated list of post summaries.
  * The response is validated against `PostListResponseSchema`.
  */
-export const getPostList = createFeedApiMethod<GetPostListParams, typeof PostListResponseSchema>(
-  '/feeds/posts/summary',
-  PostListResponseSchema
-);
+export const getPostList = createFeedApiMethod<
+GetPostListParams,
+  typeof PostListResponseSchema
+>('/feeds/posts/summary', PostListResponseSchema);
 
 /**
  * Fetches a list of post summaries filtered by one or more categories (tags).
@@ -137,10 +139,10 @@ export const getPostList = createFeedApiMethod<GetPostListParams, typeof PostLis
  */
 export async function getPostListByCategories(
   categories: string[],
-  options: { 'start-index'?: number; 'max-results'?: number } = {}
+  options: { 'start-index'?: number; 'max-results'?: number } = {},
 ): Promise<PostListResponse> {
   if (categories.length === 0) {
-    throw new Error("getPostListByCategories requires at least one category.");
+    throw new Error('getPostListByCategories requires at least one category.');
   }
 
   // Blogger API uses slash-separated values in the path for category filtering.
@@ -148,10 +150,10 @@ export async function getPostListByCategories(
   const requestPath = `/feeds/posts/summary/-/${categoryPath}`;
 
   // Use the existing factory to create a one-off request function.
-  const fetcher = createFeedApiMethod<typeof options, typeof PostListResponseSchema>(
-    requestPath,
-    PostListResponseSchema
-  );
+  const fetcher = createFeedApiMethod<
+    typeof options,
+    typeof PostListResponseSchema
+  >(requestPath, PostListResponseSchema);
 
   return fetcher(options);
 }
@@ -168,10 +170,10 @@ export interface GetPageListParams {
  * Fetches a paginated list of page summaries.
  * The response is validated against `PageListResponseSchema`.
  */
-export const getPageList = createFeedApiMethod<GetPageListParams, typeof PageListResponseSchema>(
-  '/feeds/pages/summary',
-  PageListResponseSchema
-);
+export const getPageList = createFeedApiMethod<
+GetPageListParams,
+  typeof PageListResponseSchema
+>('/feeds/pages/summary', PageListResponseSchema);
 
 /**
  * Parameter interface for content-fetching functions.
@@ -184,20 +186,19 @@ export interface GetContentByPathParams {
  * Fetches the full content of a single blog post by its URL path.
  * The response is validated against `PostContentResponseSchema`.
  */
-export const getPostContent = createFeedApiMethod<GetContentByPathParams, typeof PostContentResponseSchema>(
-  '/feeds/posts/default',
-  PostContentResponseSchema
-);
+export const getPostContent = createFeedApiMethod<
+GetContentByPathParams,
+  typeof PostContentResponseSchema
+>('/feeds/posts/default', PostContentResponseSchema);
 
 /**
  * Fetches the full content of a single page by its URL path.
  * The response is validated against `PageContentResponseSchema`.
  */
-export const getPageContent = createFeedApiMethod<GetContentByPathParams, typeof PageContentResponseSchema>(
-  '/feeds/pages/default',
-  PageContentResponseSchema
-);
-
+export const getPageContent = createFeedApiMethod<
+GetContentByPathParams,
+  typeof PageContentResponseSchema
+>('/feeds/pages/default', PageContentResponseSchema);
 
 /**
  * Fetches all unique tags/labels used in the blog.

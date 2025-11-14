@@ -1,0 +1,413 @@
+/**
+ * 全局样式 - 基于 TDesign 设计系统
+ * 所有字体、排版和全局样式定义都在此文件中
+ */
+
+/* 基础重置和 box-sizing */
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--td-font-family);
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font: var(--td-font-body-medium);
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+/* 段落样式 */
+p {
+  font-size: var(--td-font-size-body-large);
+  font-weight: 400;
+  margin: 16px 0;
+  color: var(--text-color);
+  line-height: var(--td-line-height-body-large);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  p {
+    margin: 12px 0;
+  }
+}
+
+/* Div 元素 */
+div {
+  font-size: var(--td-font-size-body-large);
+  color: var(--text-color);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Span 元素 - 使用 :where() 降低特异性 */
+:where(span) {
+  font-size: var(--td-font-size-body-large);
+  color: var(--text-color);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* 链接样式 */
+a {
+  font-size: var(--td-font-size-link-large);
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  line-height: var(--td-line-height-link-large);
+}
+
+a:hover {
+  color: var(--primary-hover-color);
+  text-decoration: underline;
+}
+
+/* 标题样式 */
+h1 {
+  font-size: var(--td-font-size-display-large);
+  font-weight: 600;
+  margin: 32px 0 24px;
+  color: var(--text-color);
+  line-height: var(--td-line-height-display-large);
+}
+
+h2 {
+  font-size: var(--td-font-size-headline-large);
+  font-weight: 500;
+  margin: 28px 0 20px;
+  color: var(--text-color);
+  line-height: var(--td-line-height-headline-large);
+}
+
+h3 {
+  font-size: var(--td-font-size-headline-medium);
+  font-weight: 500;
+  margin: 24px 0 16px;
+  color: var(--text-color);
+  line-height: var(--td-line-height-headline-medium);
+}
+
+h4 {
+  font-size: var(--td-font-size-title-large);
+  font-weight: 500;
+  margin: 20px 0 12px;
+  color: var(--text-color);
+  line-height: var(--td-line-height-title-large);
+}
+
+h5 {
+  font-size: var(--td-font-size-title-medium);
+  font-weight: 600;
+  margin: 18px 0 10px;
+  color: var(--text-color);
+  line-height: var(--td-line-height-title-medium);
+}
+
+h6 {
+  font-size: var(--td-font-size-body-large);
+  font-weight: 600;
+  margin: 16px 0 8px;
+  color: var(--text-color);
+  line-height: var(--td-line-height-body-large);
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: var(--td-font-size-headline-medium);
+    margin: 16px 0 12px;
+  }
+
+  h2 {
+    font-size: var(--td-font-size-headline-small);
+    margin: 14px 0 10px;
+  }
+
+  h3 {
+    font-size: var(--td-font-size-title-large);
+    margin: 12px 0 8px;
+  }
+
+  h4 {
+    font-size: var(--td-font-size-title-medium);
+    margin: 10px 0 6px;
+  }
+
+  h5 {
+    font-size: var(--td-font-size-title-small);
+    margin: 8px 0 4px;
+  }
+
+  h6 {
+    font-size: var(--td-font-size-body-large);
+    margin: 6px 0 2px;
+  }
+}
+
+/* 代码块样式 */
+pre {
+  font-size: var(--td-font-size-body-small);
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 16px;
+  margin: 16px 0;
+  overflow-x: auto;
+  color: var(--text-color);
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+@media (max-width: 768px) {
+  pre {
+    padding: 12px;
+    margin: 12px 0;
+  }
+}
+
+/* 内联代码样式 */
+code {
+  font-size: var(--td-font-size-body-small);
+  background-color: var(--surface-color);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--text-color);
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+@media (max-width: 768px) {
+  code {
+    padding: 2px 4px;
+  }
+}
+
+/* 小文本样式 */
+small {
+  font-size: var(--td-font-size-body-small);
+  color: var(--text-secondary-color);
+}
+
+/* 标签样式 */
+label {
+  font-size: var(--td-font-size-body-large);
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+/* 输入框和文本域样式 */
+input,
+textarea {
+  font-size: var(--td-font-size-body-large);
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 12px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+
+  input,
+  textarea {
+    padding: 8px;
+  }
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--primary-color);
+}
+
+/* 按钮样式 */
+button {
+  font-size: var(--td-font-size-body-large);
+  color: var(--bg-color);
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  button {
+    padding: 8px 16px;
+  }
+}
+
+button:hover {
+  background-color: var(--primary-hover-color);
+}
+
+/* 列表项样式 */
+li {
+  font-size: var(--td-font-size-body-large);
+  color: var(--text-color);
+  margin: 8px 0;
+  line-height: var(--td-line-height-body-large);
+}
+
+@media (max-width: 768px) {
+  li {
+    margin: 6px 0;
+  }
+}
+
+/* 引用样式 */
+blockquote {
+  font-size: var(--td-font-size-body-large);
+  color: var(--text-secondary-color);
+  border-left: 3px solid var(--primary-color);
+  padding-left: 16px;
+  margin: 16px 0;
+  font-style: normal;
+  font-weight: 400;
+  opacity: 0.95;
+  line-height: var(--td-line-height-body-large);
+}
+
+@media (max-width: 768px) {
+  blockquote {
+    padding-left: 12px;
+    margin: 12px 0;
+  }
+}
+
+/* 标题和图片标题样式 */
+caption,
+figcaption {
+  font-size: var(--td-font-size-body-small);
+  color: var(--text-secondary-color);
+  text-align: center;
+  margin: 8px 0;
+}
+
+@media (max-width: 768px) {
+
+  caption,
+  figcaption {
+    margin: 6px 0;
+  }
+}
+
+/* 表格样式 */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+  max-width: 100%;
+  overflow-x: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  table {
+    margin: 12px 0;
+    white-space: nowrap;
+  }
+}
+
+th,
+td {
+  font-size: var(--td-font-size-body-large);
+  border: 1px solid var(--border-color);
+  padding: 12px;
+  text-align: left;
+  line-height: var(--td-line-height-body-large);
+}
+
+@media (max-width: 768px) {
+
+  th,
+  td {
+    padding: 8px;
+  }
+}
+
+th {
+  background-color: var(--surface-color);
+  font-weight: 600;
+}
+
+/* 分割线样式 */
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 32px 0;
+}
+
+@media (max-width: 768px) {
+  hr {
+    margin: 20px 0;
+  }
+}
+
+/* 滚动条样式 - Webkit 浏览器 */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color);
+  border-radius: 6px;
+  border: 2px solid var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-color);
+  opacity: 0.8;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--scrollbar-track-color);
+}
+
+/* 滚动条样式 - Firefox */
+* {
+  scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+}
+
+/* 移动端基础样式 */
+@media (max-width: 768px) {
+
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
+    touch-action: pan-y;
+  }
+
+  * {
+    max-width: 100%;
+    hyphens: auto;
+  }
+}

@@ -7,17 +7,19 @@ interface ToolsListProps {
   onItemClick: (path: string) => void;
 }
 
-const ToolsList: React.FC<ToolsListProps> = ({ list, onItemClick }) => {
-  return (
+const ToolsList: React.FC<ToolsListProps> = ({ list, onItemClick }) => (
     <div className="tools-list">
-      {list.map((item) => (
-        <div key={item._id} className="tool-item" onClick={() => onItemClick(item.path)}>
+      {list.map(item => (
+        <div
+          key={item._id}
+          className="tool-item"
+          onClick={() => onItemClick(item.path)}
+        >
           <h3>{item.title}</h3>
           <p>{item.summary}</p>
         </div>
       ))}
     </div>
-  );
-};
+);
 
 export default ToolsList;

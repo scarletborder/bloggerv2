@@ -3,7 +3,6 @@ import { isMobile } from 'react-device-detect';
 import { useSetState, useMemoizedFn } from 'ahooks';
 import { getCurrentTheme } from '../../constants/colors';
 import PostCacheManager from '../../utils/postCache';
-import type { PostItem } from '../../models/PostItem';
 
 interface DateFilterProps {
   onDateSearch: (year: number, month: number) => void;
@@ -17,24 +16,25 @@ export interface DateFilterRef {
   updateCacheDisplay: () => Promise<void>;
 }
 
-// 暴露给外部的缓存操作方法
-export const saveCacheForDate = async (year: number, month: number, posts: PostItem[]) => {
-  await PostCacheManager.saveCache(year, month, posts);
-};
 
-const DateFilter = forwardRef<DateFilterRef, DateFilterProps>(({ 
-  onDateSearch, 
-  onRefreshRequest, 
-  showRefreshButton = false,
-  initialYear,
-  initialMonth
-}, ref) => {
+const DateFilter = forwardRef<DateFilterRef, DateFilterProps>((
+  {
+    onDateSearch,
+    onRefreshRequest,
+    showRefreshButton = false,
+    initialYear,
+    initialMonth,
+  },
+  ref,
+) => {
   const colors = getCurrentTheme();
   const [dateState, setDateState] = useSetState({
     selectedYear: initialYear || new Date().getFullYear(),
-    selectedMonth: initialMonth || new Date().getMonth() + 1
+    selectedMonth: initialMonth || new Date().getMonth() + 1,
   });
-  const [cachedCounts, setCachedCounts] = useSetState<Record<string, Record<string, number>>>({});
+  const [cachedCounts, setCachedCounts] = useSetState<
+  Record<string, Record<string, number>>
+  >({});
 
   // 初始化缓存管理器和加载缓存统计
   useEffect(() => {
@@ -61,12 +61,16 @@ const DateFilter = forwardRef<DateFilterRef, DateFilterProps>(({
   }, [initialYear, initialMonth, dateState, onDateSearch]);
 
   // 暴露方法给父组件
-  useImperativeHandle(ref, () => ({
-    updateCacheDisplay: async () => {
-      const counts = await PostCacheManager.getCachedDateCounts();
-      setCachedCounts(counts);
-    }
-  }), []);
+  useImperativeHandle(
+    ref,
+    () => ({
+      updateCacheDisplay: async () => {
+        const counts = await PostCacheManager.getCachedDateCounts();
+        setCachedCounts(counts);
+      },
+    }),
+    [],
+  );
 
   const handleSearch = useMemoizedFn(() => {
     const { selectedYear, selectedMonth } = dateState;
@@ -102,7 +106,10 @@ const DateFilter = forwardRef<DateFilterRef, DateFilterProps>(({
 
     return {
       value: month,
-      label: cachedCount !== undefined ? `${month}月 (${cachedCount})` : `${month}月`
+      label:
+        cachedCount !== undefined
+          ? `${month}月 (${cachedCount})`
+          : `${month}月`,
     };
   });
 
@@ -234,11 +241,11 @@ const DateFilter = forwardRef<DateFilterRef, DateFilterProps>(({
         {showRefreshButton && (
           <button
             style={refreshButtonStyles}
-            onClick={handleRefresh}
+            onClick={() => void handleRefresh()}
             title="刷新缓存"
             onMouseEnter={(e) => {
               if (!isMobile) {
-                e.currentTarget.style.backgroundColor = colors.primaryHover + '20';
+                e.currentTarget.style.backgroundColor = `${colors.primaryHover}20`;
               }
             }}
             onMouseLeave={(e) => {
@@ -256,20 +263,26 @@ const DateFilter = forwardRef<DateFilterRef, DateFilterProps>(({
           <select
             style={isMobile ? mobileSelectStyles : pcSelectStyles}
             value={dateState.selectedYear}
-            onChange={(e) => setDateState({ selectedYear: Number(e.target.value) })}
+            onChange={e => setDateState({ selectedYear: Number(e.target.value) })
+            }
           >
             {yearOptions.map(year => (
-              <option key={year} value={year}>{year}年</option>
+              <option key={year} value={year}>
+                {year}年
+              </option>
             ))}
           </select>
 
           <select
             style={isMobile ? mobileSelectStyles : pcSelectStyles}
             value={dateState.selectedMonth}
-            onChange={(e) => setDateState({ selectedMonth: Number(e.target.value) })}
+            onChange={e => setDateState({ selectedMonth: Number(e.target.value) })
+            }
           >
             {monthOptions.map(option => (
-              <option key={option.value} value={option.value}>{option.label}</option>
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
             ))}
           </select>
         </div>

@@ -2,20 +2,26 @@ import React, { useRef, useCallback } from 'react';
 import { usePagination, useUpdateEffect } from 'ahooks';
 import GetPostList from '../../services/PostList';
 import PostListItem from './PostListItem';
-import PostListPageToggle from './PostListPageToggle';
+import { Pagination } from 'tdesign-react';
 import { getCurrentTheme } from '../../constants/colors';
 import { usePaginationUrl } from '../../hooks';
-
+import type { JSX } from 'react/jsx-runtime';
 interface PostListSimpleProps {
   isMobile?: boolean;
 }
 
-export default function PostListSimple({ isMobile = false }: PostListSimpleProps) {
+export default function PostListSimple({
+  isMobile = false,
+}: PostListSimpleProps): JSX.Element {
   const colors = getCurrentTheme();
   const postListRef = useRef<HTMLDivElement>(null);
 
   // 使用URL参数同步分页状态 - 必须在组件顶层调用
-  const { startIndex: urlStartIndex, pageSize: urlPageSize, updateUrl } = usePaginationUrl({
+  const {
+    startIndex: urlStartIndex,
+    pageSize: urlPageSize,
+    updateUrl,
+  } = usePaginationUrl({
     defaultStartIndex: 0,
     defaultPageSize: 10,
   });
@@ -42,14 +48,17 @@ export default function PostListSimple({ isMobile = false }: PostListSimpleProps
   );
 
   // 处理分页变化的回调函数
-  const handlePageChange = useCallback((newCurrent: number, newPageSize: number) => {
-    // 计算新的startIndex
-    const newStartIndex = (newCurrent - 1) * newPageSize;
-    // 更新URL参数
-    updateUrl(newStartIndex, newPageSize);
-    // 更新分页状态
-    pagination.onChange(newCurrent, newPageSize);
-  }, [updateUrl, pagination]);
+  const handlePageChange = useCallback(
+    (newCurrent: number, newPageSize: number) => {
+      // 计算新的startIndex
+      const newStartIndex = (newCurrent - 1) * newPageSize;
+      // 更新URL参数
+      updateUrl(newStartIndex, newPageSize);
+      // 更新分页状态
+      pagination.onChange(newCurrent, newPageSize);
+    },
+    [updateUrl, pagination],
+  );
 
   // 监听分页变化，滚动到组件顶部
   useUpdateEffect(() => {
@@ -96,12 +105,16 @@ export default function PostListSimple({ isMobile = false }: PostListSimpleProps
     return (
       <div ref={postListRef} style={containerStyles}>
         <h2 style={titleStyles}>最新文章</h2>
-        <div style={loadingStyles}>正在加载文章...<br />blogger api可能抽风,偶发加载时间超过10秒</div>
+        <div style={loadingStyles}>
+          正在加载文章...
+          <br />
+          blogger api可能抽风,偶发加载时间超过10秒
+        </div>
       </div>
     );
   }
 
-  if (!data || !data.list || data.list.length === 0) {
+  if (!data?.list || data.list.length === 0) {
     return (
       <div ref={postListRef} style={containerStyles}>
         <h2 style={titleStyles}>最新文章</h2>
@@ -127,14 +140,20 @@ export default function PostListSimple({ isMobile = false }: PostListSimpleProps
         ))}
       </div>
 
-      <PostListPageToggle
-        current={pagination.current}
-        total={data.total}
-        pageSize={pagination.pageSize}
-        displayedItemsCount={data.list.length}
-        onPrevious={() => handlePageChange(pagination.current - 1, pagination.pageSize)}
-        onNext={() => handlePageChange(pagination.current + 1, pagination.pageSize)}
-      />
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '20px 0' }}>
+        <Pagination
+          style={{ scale: isMobile ? 0.8 : 1.35 }}
+          current={pagination.current}
+          total={data.total}
+          pageSizeOptions={[5, 10]}
+          pageSize={pagination.pageSize}
+          onChange={(pageInfo) => {
+            handlePageChange(pageInfo.current, pageInfo.pageSize ?? pagination.pageSize);
+          }
+          }
+          totalContent
+        />
+      </div>
     </div>
   );
 }

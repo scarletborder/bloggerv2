@@ -5,12 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { getCurrentTheme } from '../../constants/colors';
 import { useTheme } from '../../hooks';
 import sliders from '../../constants/sliders';
+import type { JSX } from 'react/jsx-runtime';
 
 interface SliderProps {
   isMobile?: boolean;
 }
 
-export default function Slider({ isMobile = false }: SliderProps) {
+export default function Slider({ isMobile = false }: SliderProps): JSX.Element {
   const colors = getCurrentTheme();
   const { theme } = useTheme();
   const navigate = useNavigate();
@@ -69,13 +70,13 @@ export default function Slider({ isMobile = false }: SliderProps) {
     fontSize: isMobile ? '16px' : '20px',
     fontWeight: 'bold',
     marginBottom: '8px',
-    textShadow: textShadow,
+    textShadow,
   };
 
   const descStyles: React.CSSProperties = {
     fontSize: isMobile ? '12px' : '14px',
     opacity: 0.9,
-    textShadow: textShadow,
+    textShadow,
     lineHeight: '1.4',
     display: '-webkit-box',
     WebkitLineClamp: isMobile ? 2 : 3,

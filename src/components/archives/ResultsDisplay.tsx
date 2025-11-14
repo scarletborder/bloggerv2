@@ -2,15 +2,17 @@ import React, { useRef } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useMemoizedFn } from 'ahooks';
 import { getCurrentTheme } from '../../constants/colors';
-
+import type { JSX } from 'react/jsx-runtime';
 import { type PostItem } from '../../models/PostItem';
 import { useNavigate } from 'react-router-dom';
 
 interface ResultsDisplayProps {
-  data: {
+  data:
+  | {
     list: PostItem[];
     nextId?: string;
-  } | undefined;
+  }
+  | undefined;
   loading: boolean;
   loadingMore: boolean;
   noMore: boolean;
@@ -23,9 +25,9 @@ export default function ResultsDisplay({
   loading,
   loadingMore,
   noMore,
-  emptyMessage = "暂无文章",
-  scrollContainerRef
-}: ResultsDisplayProps) {
+  emptyMessage = '暂无文章',
+  scrollContainerRef,
+}: ResultsDisplayProps): JSX.Element {
   const colors = getCurrentTheme();
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -56,9 +58,7 @@ export default function ResultsDisplay({
           </span>
         ))}
         {tags.length > 3 && (
-          <span style={moreTagsStyles}>
-            +{tags.length - 3}
-          </span>
+          <span style={moreTagsStyles}>+{tags.length - 3}</span>
         )}
       </div>
     );
@@ -149,8 +149,16 @@ export default function ResultsDisplay({
 
   const tagStyles = (index: number): React.CSSProperties => {
     const tagColors = [
-      '#007bff', '#28a745', '#dc3545', '#ffc107', '#17a2b8',
-      '#6f42c1', '#e83e8c', '#fd7e14', '#20c997', '#6c757d'
+      '#007bff',
+      '#28a745',
+      '#dc3545',
+      '#ffc107',
+      '#17a2b8',
+      '#6f42c1',
+      '#e83e8c',
+      '#fd7e14',
+      '#20c997',
+      '#6c757d',
     ];
     return {
       fontSize: isMobile ? '10px' : '11px',
@@ -216,7 +224,7 @@ export default function ResultsDisplay({
       <h3 style={titleStyles}>📄 搜索结果</h3>
 
       <div ref={scrollContainerRef || ref} style={scrollContainerStyles}>
-        {!data || !data.list || data.list.length === 0 ? (
+        {!data?.list || data.list.length === 0 ? (
           <div style={emptyStyles}>{emptyMessage}</div>
         ) : (
           <>
@@ -227,7 +235,7 @@ export default function ResultsDisplay({
                 onMouseEnter={(e) => {
                   if (!isMobile) {
                     e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.15)';
+                    e.currentTarget.style.boxShadow =                      '0 6px 12px rgba(0, 0, 0, 0.15)';
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -250,15 +258,11 @@ export default function ResultsDisplay({
             ))}
 
             {loadingMore && (
-              <div style={loadingMoreStyles}>
-                正在加载更多文章...
-              </div>
+              <div style={loadingMoreStyles}>正在加载更多文章...</div>
             )}
 
             {noMore && data.list.length > 0 && (
-              <div style={noMoreStyles}>
-                已显示全部文章
-              </div>
+              <div style={noMoreStyles}>已显示全部文章</div>
             )}
           </>
         )}
