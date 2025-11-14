@@ -46,7 +46,7 @@ type SinglePost = {
 };
 
 type PostListResponse = {
-  // 总文章数量
+  // 总文章数量, 非页数量
   total: number;
 
   // 本轮请求的列表 (为了兼容 ahooks usePagination)

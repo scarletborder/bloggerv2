@@ -33,6 +33,8 @@
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.5",
     "swiper": "^12.0.3",
+    "tdesign-icons-react": "^0.6.1",
+    "tdesign-react": "^1.15.8",
     "vite-plugin-remove-console": "^2.2.0",
     "zod": "^4.1.12"
   },

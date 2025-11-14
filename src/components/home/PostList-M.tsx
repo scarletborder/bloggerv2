@@ -6,6 +6,7 @@ import { getCurrentTheme } from '../../constants/colors';
 import { usePaginationUrl } from '../../hooks';
 import { type PostItem as MobilePostItemProps } from '../../models/PostItem';
 import type { JSX } from 'react/jsx-runtime';
+import { ChevronLeftIcon, ChevronRightIcon } from 'tdesign-icons-react';
 
 // interface PostListMobileProps { }
 
@@ -174,31 +175,35 @@ function MobilePageToggle({
   const containerStyles: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: '8px',
     padding: '0 12px',
     marginTop: '24px',
   };
 
   const buttonStyles: React.CSSProperties = {
-    flex: '1',
-    padding: '12px 16px',
-    fontSize: '16px',
+    flex: '0 0 56px',
+    padding: '8px',
+    fontSize: '1rem',
     fontWeight: '600',
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: colors.border,
     borderRadius: '8px',
     backgroundColor: colors.surface,
-    color: colors.text,
+    color: colors.background,
     cursor: 'pointer',
     textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     transition: 'all 0.2s ease',
   };
 
   const disabledButtonStyles: React.CSSProperties = {
     ...buttonStyles,
     backgroundColor: colors.border,
-    color: '#627077',
+    color: colors.textSecondary,
     cursor: 'not-allowed',
     opacity: 0.6,
   };
@@ -206,7 +211,7 @@ function MobilePageToggle({
   const activeButtonStyles: React.CSSProperties = {
     ...buttonStyles,
     backgroundColor: colors.primary,
-    color: '#ffffff',
+    color: colors.background,
     borderColor: colors.primary,
   };
 
@@ -225,7 +230,7 @@ function MobilePageToggle({
         onClick={onPrevious}
         disabled={!canGoPrevious}
       >
-        ←
+        <ChevronLeftIcon style={{ width: 22, height: 22 }} fillColor="transparent" strokeColor="currentColor" strokeWidth={2} />
       </button>
 
       <div style={pageInfoStyles}>第 {current} 页</div>
@@ -235,7 +240,7 @@ function MobilePageToggle({
         onClick={onNext}
         disabled={!canGoNext}
       >
-        →
+        <ChevronRightIcon style={{ width: 22, height: 22 }} fillColor="transparent" strokeColor="currentColor" strokeWidth={2} />
       </button>
     </div>
   );
@@ -261,7 +266,7 @@ export default function PostListMobile(): JSX.Element {
   const { data, loading, pagination } = usePagination(
     ({ current, pageSize }) => {
       // 使用URL中的startIndex或根据当前页计算
-      const startIndex =        current === initialCurrent ? urlStartIndex : (current - 1) * pageSize;
+      const startIndex = current === initialCurrent ? urlStartIndex : (current - 1) * pageSize;
 
       return GetPostList({
         current,
