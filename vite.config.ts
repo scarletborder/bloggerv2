@@ -93,7 +93,9 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: (chunkInfo) => {
             const name = chunkInfo.name || '';
             if (VENDORS_TO_CHUNK.includes(name)) {
-              return `assets/${name}.js`;
+              return ENABLE_HASH
+                ? `assets/${name}-[hash].js`
+                : `assets/${name}.js`;
             }
             return ENABLE_HASH
               ? 'assets/[name]-[hash].js'
