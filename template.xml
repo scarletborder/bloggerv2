@@ -48,7 +48,7 @@
     </style>
 
     <script>
-      window.__static_url = 'https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static';
+      window.__CDN_BASE__ = 'https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static';
     </script>
 
     <script>
