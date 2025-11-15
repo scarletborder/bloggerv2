@@ -4,6 +4,8 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentTheme } from '../../constants/colors';
 import { useTheme } from '../../hooks';
+import { Image, TooltipLite } from 'tdesign-react';
+import { ImageErrorIcon } from 'tdesign-icons-react';
 import sliders from '../../constants/sliders';
 import type { JSX } from 'react/jsx-runtime';
 
@@ -23,15 +25,10 @@ export default function Slider({ isMobile = false }: SliderProps): JSX.Element {
 
   // 根据主题确定文字和背景颜色
   const isDarkMode = theme === 'dark';
-  const overlayTextColor = isDarkMode ? '#ffffff' : '#000000';
 
   const overlayBackground = isDarkMode
     ? 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7))'
-    : 'linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.7))';
-
-  const textShadow = isDarkMode
-    ? '1px 1px 3px rgba(0,0,0,0.7)'
-    : '1px 1px 3px rgba(0,0,0,0.3)';
+    : 'linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.7))';
 
   const containerStyles: React.CSSProperties = {
     width: '100%',
@@ -54,34 +51,6 @@ export default function Slider({ isMobile = false }: SliderProps): JSX.Element {
     height: '100%',
     objectFit: 'contain', // 改为 contain 以显示完整图片
     objectPosition: 'center',
-  };
-
-  const overlayStyles: React.CSSProperties = {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    background: overlayBackground,
-    color: overlayTextColor,
-    padding: isMobile ? '15px' : '20px',
-  };
-
-  const titleStyles: React.CSSProperties = {
-    fontSize: isMobile ? '16px' : '20px',
-    fontWeight: 'bold',
-    marginBottom: '8px',
-    textShadow,
-  };
-
-  const descStyles: React.CSSProperties = {
-    fontSize: isMobile ? '12px' : '14px',
-    opacity: 0.9,
-    textShadow,
-    lineHeight: '1.4',
-    display: '-webkit-box',
-    WebkitLineClamp: isMobile ? 2 : 3,
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
   };
 
   return (
@@ -108,24 +77,40 @@ export default function Slider({ isMobile = false }: SliderProps): JSX.Element {
       >
         {sliders.map((slide, index) => (
           <SwiperSlide key={index}>
+
             <div
               style={slideStyles}
               onClick={() => handleSlideClick(slide.link)}
             >
-              <img
+
+              <Image
                 src={slide.img}
                 alt={slide.title}
                 style={imageStyles}
-                onError={(e) => {
-                  // 图片加载失败时的处理
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                }}
+                error={
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <ImageErrorIcon fillColor="transparent" strokeColor="currentColor" strokeWidth={2} style={{ width: '60%', height: '60%' }} />
+                  </div>
+                }
               />
-              <div style={overlayStyles}>
-                <h3 style={titleStyles}>{slide.title}</h3>
-                <p style={descStyles}>{slide.desp}</p>
-              </div>
+              <TooltipLite content={slide.desp} placement="mouse">
+                <div
+                  style={{
+                    width: '100%',
+                    height: '56px',
+                    padding: '0 16px',
+                    lineHeight: '56px',
+                    position: 'absolute',
+                    bottom: '0',
+                    color: 'var(--td-text-color-anti)',
+                    backgroundImage: overlayBackground,
+                    boxSizing: 'border-box',
+                    zIndex: 1,
+                  }}
+                >
+                  <span>{slide.title}</span>
+                </div>
+              </TooltipLite>
             </div>
           </SwiperSlide>
         ))}

@@ -5,17 +5,20 @@ import viteCompression from 'vite-plugin-compression';
 import removeConsole from 'vite-plugin-remove-console';
 
 const ENABLE_HASH = true;
-const VENDORS_TO_CHUNK = ['tdesign-react', 'lodash'];
+const VENDORS_TO_CHUNK = ['tdesign-react', 'lodash', 'tdesign-mobile-react'];
+
+interface EnvConfig {
+  base: string;
+  defineMap: { [key: string]: string };
+}
+
 
 /**
  * 根据环境变量和构建模式获取环境相关配置
  * @param mode Vite 的构建模式 ('development' or 'production')
  * @returns 返回一个包含环境特定配置的对象
  */
-const getEnv = (mode: string): {
-  base: string;
-  apiEndpoint: string;
-} => {
+const getEnv = (mode: string): EnvConfig => {
   // --- base URL 配置 ---
   const isCdnDeploy = process.env.DEPLOY_ENV === 'CDN';
   const cdnBaseUrl = process.env.CDN_BASEURL;
@@ -36,11 +39,19 @@ const getEnv = (mode: string): {
 
   // 优先从环境变量中读取 API_ENDPOINT。如果不存在，则默认为 '/proxy-api' 以便本地开发代理
   const apiEndpoint = process.env.API_ENDPOINT || '/proxy-api';
-
-  return {
+  const ret: EnvConfig = {
     base,
-    apiEndpoint,
+    defineMap: {
+      '__API_ENDPOINT__': JSON.stringify(apiEndpoint),
+
+    },
   };
+  
+  if (mode === 'development') {
+    ret.defineMap['__CDN_BASE__'] = JSON.stringify('/');
+  }
+
+  return ret;
 };
 
 // https://vite.dev/config/
@@ -50,9 +61,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     base: envConfig.base,
-    define: {
-      '__API_ENDPOINT__': JSON.stringify(envConfig.apiEndpoint),
-    },
+    define: envConfig.defineMap,
     plugins: [
       react({
         babel: {
@@ -93,7 +102,9 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: (chunkInfo) => {
             const name = chunkInfo.name || '';
             if (VENDORS_TO_CHUNK.includes(name)) {
-              return `assets/${name}.js`;
+              return ENABLE_HASH
+                ? `assets/${name}-[hash].js`
+                : `assets/${name}.js`;
             }
             return ENABLE_HASH
               ? 'assets/[name]-[hash].js'

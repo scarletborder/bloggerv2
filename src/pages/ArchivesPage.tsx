@@ -274,10 +274,12 @@ export default function ArchivesPage(): JSX.Element {
   };
 
   const titleStyles: React.CSSProperties = {
+    // 减少PC设备上的上下空隙
+    padding: isMobile ? 'unset' : '8px 0',
+    margin: isMobile ? '0 0 44px 0' : '0 0 16px 0',
     fontSize: isMobile ? '2em' : '28px',
     fontWeight: '800',
     textAlign: 'center',
-    marginBottom: isMobile ? '24px' : '16px',
     background: `linear-gradient(45deg, ${colors.primary}, ${colors.primaryHover})`,
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
@@ -285,9 +287,6 @@ export default function ArchivesPage(): JSX.Element {
     maxHeight: isMobile ? 'unset' : '5vh',
     lineHeight: isMobile ? 'unset' : '1.2',
     overflow: 'hidden',
-    // 减少PC设备上的上下空隙
-    padding: isMobile ? 'unset' : '8px 0',
-    margin: isMobile ? 'unset' : '0 0 16px 0',
   };
 
   // PC版布局样式
@@ -337,7 +336,7 @@ export default function ArchivesPage(): JSX.Element {
   if (isMobile) {
     return (
       <div style={containerStyles}>
-        <h1 style={titleStyles}>📚 文章归档</h1>
+        <h1>📚 文章归档</h1>
 
         <div style={mobileContentStyles}>
           <TagsFilter
