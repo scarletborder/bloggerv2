@@ -5,7 +5,7 @@ import viteCompression from 'vite-plugin-compression';
 import removeConsole from 'vite-plugin-remove-console';
 
 const ENABLE_HASH = true;
-const VENDORS_TO_CHUNK = ['tdesign-react', 'lodash'];
+const VENDORS_TO_CHUNK = ['tdesign-react', 'lodash', 'tdesign-mobile-react'];
 
 interface EnvConfig {
   base: string;

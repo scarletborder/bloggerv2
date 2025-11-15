@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Tooltip, Image } from 'tdesign-react';
+import { List, TooltipLite, Image } from 'tdesign-react';
 import { getCurrentTheme } from '../../constants/colors';
 import type { BlogRollItem } from '../../constants/blogroll';
 import type { JSX } from 'react/jsx-runtime';
@@ -79,7 +79,7 @@ export default function Blogroll({ isMobile = false }: BlogrollProps): JSX.Eleme
       // Banner 类型：图片占满整个 ListItem，悬浮可见 alt/desc
       return (
         <ListItem key={item.url || item.alt} style={{ padding: '4px 8px', display: 'block' }}>
-          <Tooltip content={tooltip} placement="top" style={{ display: 'block' }}>
+          <TooltipLite content={tooltip} placement="bottom">
             <Image
               src={item.pic.url}
               alt={item.alt}
@@ -110,7 +110,7 @@ export default function Blogroll({ isMobile = false }: BlogrollProps): JSX.Eleme
                 </div>
               }
             />
-          </Tooltip>
+          </TooltipLite>
         </ListItem>
       );
     }
@@ -124,7 +124,7 @@ export default function Blogroll({ isMobile = false }: BlogrollProps): JSX.Eleme
             cursor: isClickable ? 'pointer' : 'default',
           }}
         >
-          <Tooltip content={tooltip} placement='top'>
+          <TooltipLite content={tooltip} placement='bottom'>
             <ListItemMeta
               image={
                 item.pic?.url ? (
@@ -147,7 +147,7 @@ export default function Blogroll({ isMobile = false }: BlogrollProps): JSX.Eleme
                 ) : undefined
               }
             />
-          </Tooltip>
+          </TooltipLite>
         </div>
       </ListItem>
     );
@@ -159,7 +159,7 @@ export default function Blogroll({ isMobile = false }: BlogrollProps): JSX.Eleme
         <h3 style={titleStyles}>友站链接</h3>
         <List
           layout='vertical'
-          split={false}
+          split={true}
           style={{
             height: 'auto',
             backgroundColor: 'transparent',

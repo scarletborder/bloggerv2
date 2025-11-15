@@ -3,6 +3,8 @@ import { isMobile } from 'react-device-detect';
 import ThemeToggle from '../components/ThemeToggle';
 import useTheme from '../hooks/useTheme';
 import SearchInput from '../components/search/SearchInput';
+import { Navbar } from 'tdesign-mobile-react';
+
 
 interface NavButtonProps {
   title: string;
@@ -174,21 +176,41 @@ const WithNav: React.FC<WithNavProps> = ({ children }) => {
     { title: 'PAGES', to: '/pages' },
   ];
 
+  if (isMobile) {
+    return (
+      <div style={containerStyles}>
+
+        <Navbar
+          fixed={false}
+          left={
+            <MobileNavSelect navItems={navItems} />
+          }
+          right={
+            <>
+              <SearchInput compact />
+              <MobileThemeButton />
+            </>
+          }
+        />
+
+        <main style={contentStyles}>{children}</main>
+      </div>
+    );
+  }
+
   return (
     <div style={containerStyles}>
       <nav style={navStyles}>
         <div style={leftSectionStyles}>
-          {isMobile ? (
-            <MobileNavSelect navItems={navItems} />
-          ) : (
+          {
             navItems.map(item => (
               <NavButton key={item.title} title={item.title} to={item.to} />
             ))
-          )}
+          }
         </div>
         <div style={rightSectionStyles}>
           <SearchInput compact />
-          {isMobile ? <MobileThemeButton /> : <ThemeToggle />}
+          <ThemeToggle />
         </div>
       </nav>
       <main style={contentStyles}>{children}</main>

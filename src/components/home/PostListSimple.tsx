@@ -6,6 +6,8 @@ import { Pagination } from 'tdesign-react';
 import { getCurrentTheme } from '../../constants/colors';
 import { usePaginationUrl } from '../../hooks';
 import type { JSX } from 'react/jsx-runtime';
+import './index.less';
+
 interface PostListSimpleProps {
   isMobile?: boolean;
 }
@@ -142,7 +144,6 @@ export default function PostListSimple({
 
       <div style={{ display: 'flex', justifyContent: 'center', padding: '20px 0' }}>
         <Pagination
-          style={{}}
           current={pagination.current}
           total={data.total}
           pageSizeOptions={[5, 10]}
