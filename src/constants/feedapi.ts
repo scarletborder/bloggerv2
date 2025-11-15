@@ -17,6 +17,10 @@ export const API_URL_PREFIX = __API_ENDPOINT__.startsWith('/')
   ? `${window.location.origin}${__API_ENDPOINT__}`
   : __API_ENDPOINT__;
 
+export const CDN_URL_PREFIX = __CDN_BASE__.startsWith('/')
+  ? `${window.location.origin}${__CDN_BASE__}`
+  : __CDN_BASE__;
+
 /**
  * Default timeout for API requests in milliseconds.
  */

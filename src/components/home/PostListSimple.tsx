@@ -142,15 +142,14 @@ export default function PostListSimple({
 
       <div style={{ display: 'flex', justifyContent: 'center', padding: '20px 0' }}>
         <Pagination
-          style={{ scale: isMobile ? 0.8 : 1.35 }}
+          style={{}}
           current={pagination.current}
           total={data.total}
           pageSizeOptions={[5, 10]}
           pageSize={pagination.pageSize}
           onChange={(pageInfo) => {
             handlePageChange(pageInfo.current, pageInfo.pageSize ?? pagination.pageSize);
-          }
-          }
+          }}
           totalContent
         />
       </div>
