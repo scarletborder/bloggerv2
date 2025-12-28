@@ -50,6 +50,9 @@ const getEnv = (mode: string): EnvConfig => {
   if (mode === 'development') {
     ret.defineMap['__CDN_BASE__'] = JSON.stringify('/');
   }
+  if (cdnBaseUrl) {
+    ret.defineMap['__CDN_BASE__'] = JSON.stringify(cdnBaseUrl);
+  }
 
   return ret;
 };

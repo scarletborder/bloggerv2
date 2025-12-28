@@ -126,6 +126,7 @@ export default function Blogroll({ isMobile = false }: BlogrollProps): JSX.Eleme
         >
           <TooltipLite content={tooltip} placement='bottom'>
             <ListItemMeta
+              className='blogroll-list'
               image={
                 item.pic?.url ? (
                   <Image

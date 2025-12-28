@@ -12,240 +12,180 @@ interface TableOfContentsProps {
   content: string;
 }
 
-/**
- * 文章目录组件 - 自动生成并显示文章目录
- */
 const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
   const [tocItems, setTocItems] = React.useState<TocItem[]>([]);
   const [activeId, setActiveId] = React.useState<string>('');
-  const [isOpen, setIsOpen] = React.useState(() => {
-    if (isMobile) return false;
-    if (typeof window !== 'undefined') {
-      return window.innerWidth >= 1200;
-    }
-    return true;
-  });
+  const [isOpen, setIsOpen] = React.useState(false);
 
-  const tocWidth = 250;
+  // PC 端固定尺寸配置
+  const sidebarWidth = 280;
+  const buttonWidth = 48;
+  const offset = sidebarWidth - buttonWidth;
 
   React.useEffect(() => {
     const generateToc = () => {
       const headings = document.querySelectorAll('.blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4, .blog-content h5, .blog-content h6');
       const items: TocItem[] = [];
-
       headings.forEach((heading, index) => {
         const element = heading as HTMLElement;
         const level = parseInt(element.tagName.substring(1));
         const text = element.textContent || '';
-
-        if (!element.id) {
-          element.id = `heading-${index}`;
-        }
-
-        items.push({
-          id: element.id,
-          text,
-          level,
-          element,
-        });
+        if (!element.id) element.id = `heading-${index}`;
+        items.push({ id: element.id, text, level, element });
       });
-
       setTocItems(items);
     };
-
     const timer = setTimeout(generateToc, 100);
     return () => clearTimeout(timer);
   }, [content]);
 
   React.useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 100;
-
+      const scrollPosition = window.scrollY + 120;
       for (let i = tocItems.length - 1; i >= 0; i--) {
-        const item = tocItems[i];
-        if (item.element.offsetTop <= scrollPosition) {
-          setActiveId(item.id);
+        if (tocItems[i].element.offsetTop <= scrollPosition) {
+          setActiveId(tocItems[i].id);
           break;
         }
       }
     };
-
-    const handleResize = () => {
-      if (!isMobile) {
-        const shouldOpen = window.innerWidth >= 1200;
-        setIsOpen(shouldOpen);
-      }
-    };
-
-    if (tocItems.length > 0) {
-      window.addEventListener('scroll', handleScroll);
-      handleScroll();
-    }
-
-    if (!isMobile) {
-      window.addEventListener('resize', handleResize);
-    }
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (!isMobile) {
-        window.removeEventListener('resize', handleResize);
-      }
-    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [tocItems]);
 
   const scrollToHeading = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
-  if (tocItems.length === 0) {
-    return null;
-  }
+  if (tocItems.length === 0) return null;
 
-  // PC端容器样式
-  const pcContainerStyles: React.CSSProperties = {
+  // --- PC 端样式 (上下结构 + 位移逻辑) ---
+
+  const pcWrapperStyles: React.CSSProperties = {
     position: 'fixed',
-    left: '0',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    width: `${tocWidth}px`,
-    maxHeight: '80vh',
+    left: '24px',
+    top: '20vh',
+    zIndex: 1000,
+    width: `${sidebarWidth}px`,
+    height: '60vh',
     backgroundColor: 'var(--surface-color)',
     border: '1px solid var(--border-color)',
     borderRadius: '12px',
-    padding: '16px',
-    fontSize: '14px',
-    zIndex: 100,
-    boxShadow: 'var(--shadow-color) 0px 4px 12px',
-    overflow: 'auto',
-    transition: 'opacity 0.3s ease, visibility 0.3s ease',
-    visibility: isOpen ? 'visible' : 'hidden',
-    opacity: isOpen ? 1 : 0,
+    boxShadow: isOpen ? '0 12px 40px rgba(0,0,0,0.15)' : '0 4px 12px rgba(0,0,0,0.1)',
+    // 核心位移动画
+    transform: isOpen ? 'translateX(0)' : `translateX(-${offset}px)`,
+    transition: 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column', // 改为纵向布局，取消左右分列
   };
 
-  // 移动端容器样式
-  const mobileContainerStyles: React.CSSProperties = {
-    position: 'relative',
-    width: '100%',
-    backgroundColor: 'var(--surface-color)',
-    border: '1px solid var(--border-color)',
-    borderRadius: '12px',
-    padding: '12px',
-    fontSize: '13px',
-    zIndex: 100,
-    boxShadow: 'var(--shadow-color) 0px 4px 12px',
-    marginBottom: '20px',
-    overflow: 'auto',
-  };
-
+  // 顶部 Header 区域：包含标题和按钮
   const headerStyles: React.CSSProperties = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: isOpen ? '12px' : '0',
-    fontSize: isMobile ? '14px' : '15px',
-    fontWeight: 'bold',
-    color: 'var(--text-color)',
-    cursor: isMobile ? 'pointer' : 'default',
+    width: '100%',
+    height: `${buttonWidth}px`, // 头部高度与按钮宽度一致，保持比例
+    padding: '0 0 0 16px', // 左侧给标题留 padding，右侧不需要（按钮自带）
+    borderBottom: isOpen ? '1px solid var(--border-color)' : '1px solid transparent',
+    flexShrink: 0, // 防止头部被压缩
+    transition: 'border-bottom 0.3s ease',
   };
 
-  const listStyles: React.CSSProperties = {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
+  // 按钮样式
+  const toggleBtnStyles: React.CSSProperties = {
+    width: `${buttonWidth}px`,
+    height: '100%', // 占满 Header 高度
+    border: 'none',
+    backgroundColor: isOpen ? 'transparent' : 'var(--primary-color)',
+    color: isOpen ? 'var(--text-secondary-color)' : '#fff',
+    cursor: 'pointer',
+    fontSize: '18px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.3s ease',
   };
 
-  const itemStyles = (level: number): React.CSSProperties => ({
-    paddingLeft: `${(level - 1) * 12}px`,
-    marginBottom: '6px',
-  });
+  // 列表滚动区域样式
+  const scrollAreaStyles: React.CSSProperties = {
+    flex: 1, // 占满剩余高度
+    width: '100%', // 宽度占满 100%，不再受右侧挤压
+    overflowY: 'auto',
+    padding: '12px 0',
+    scrollbarWidth: 'thin',
+    // 关键：收起时隐藏列表内容，避免在右侧残留条中看到文字
+    opacity: isOpen ? 1 : 0,
+    visibility: isOpen ? 'visible' : 'hidden',
+    transition: 'opacity 0.2s ease, visibility 0.2s ease', // 快速隐藏
+  };
 
-  const linkStyles = (isActive: boolean): React.CSSProperties => ({
+  const linkStyles = (isActive: boolean, level: number): React.CSSProperties => ({
     display: 'block',
     textDecoration: 'none',
-    padding: '4px 8px',
-    borderRadius: '6px',
-    backgroundColor: isActive ? 'var(--primary-color)' : 'transparent',
-    color: isActive ? 'var(--surface-color)' : 'var(--text-secondary-color)',
-    fontSize: 'inherit',
-    lineHeight: 1.4,
+    padding: '6px 12px',
+    paddingRight: '12px', // 右侧留白，不再担心被按钮遮挡
+    fontSize: '18px',
+    lineHeight: '1.3',
     cursor: 'pointer',
     transition: 'all 0.2s ease',
     wordBreak: 'break-word',
+    color: isActive ? 'var(--primary-color)' : 'var(--text-secondary-color)',
+    backgroundColor: isActive ? 'var(--primary-color-light, rgba(0,0,0,0.05))' : 'transparent',
+    borderRadius: '6px',
+    marginLeft: `${(level - 1) * 12 + 12}px`, // 增加左边距适配全宽
+    marginRight: '12px',
+    marginBottom: '2px',
+    fontWeight: isActive ? '600' : '400',
   });
 
-  const toggleButtonStyles: React.CSSProperties = {
-    background: 'none',
-    border: 'none',
-    color: 'var(--text-secondary-color)',
-    cursor: 'pointer',
-    fontSize: '16px',
-    padding: 0,
-    display: isMobile ? 'block' : 'none',
-  };
-
-  // --- 变更点: 调整梯形书签的宽高和形状 ---
-  const floatingToggleStyles: React.CSSProperties = {
-    position: 'fixed',
-    left: isOpen ? `${tocWidth}px` : '0px',
-    top: '50%',
-    transform: isOpen
-      ? 'translateY(-50%) translateX(-100%)'
-      : 'translateY(-50%)',
-    width: '1%', // 变更: 宽度变窄
-    height: '100px', // 变更: 高度变高
-    backgroundColor: 'var(--surface-color)',
-    border: '1px solid var(--border-color)',
-    borderLeft: isOpen ? 'none' : '1px solid var(--border-color)',
-    borderRight: isOpen ? '1px solid var(--border-color)' : 'none',
-    boxShadow: 'var(--shadow-color) 0px 4px 12px',
-    cursor: 'pointer',
-    display: isMobile ? 'none' : 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '16px',
-    color: 'var(--primary-color)',
-    zIndex: 101,
-    transition: 'all 0.3s ease-in-out',
-    // 变更: 调整 clip-path 使斜边更陡峭
-    clipPath: isOpen
-      ? 'polygon(100% 0, 0 10%, 0 90%, 100% 100%)'
-      : 'polygon(0 0, 100% 10%, 100% 90%, 0 100%)',
-  };
-
-  const hoverStyles = `
-    .toc-link:hover {
-      background-color: var(--primary-color) !important;
-      color: var(--surface-color) !important;
-    }
-    .floating-toggle:hover {
-      background-color: var(--primary-color) !important;
-      color: var(--surface-color) !important;
+  const cssInjection = `
+    .toc-scroll-area::-webkit-scrollbar { width: 4px; }
+    .toc-scroll-area::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+    .toc-link:hover { 
+      background-color: var(--border-color); 
+      color: var(--primary-color);
     }
   `;
 
   return (
     <>
-      <style>{hoverStyles}</style>
+      <style>{cssInjection}</style>
 
-      {!isMobile && (
-        <>
-          <nav style={pcContainerStyles}>
-            <div style={headerStyles}>
-              <span>📋 目录</span>
+      {!isMobile ? (
+        <nav style={pcWrapperStyles}>
+          {/* 顶部：标题 + 按钮 */}
+          <div style={headerStyles}>
+            <div style={{
+              fontSize: '14px',
+              fontWeight: 'bold',
+              opacity: isOpen ? 0.6 : 0, // 收起时隐藏标题
+              transition: 'opacity 0.3s ease',
+              whiteSpace: 'nowrap',
+            }}>
+              目录 CONTENTS
             </div>
-            <ul style={listStyles}>
+            <button
+              style={toggleBtnStyles}
+              onClick={() => setIsOpen(!isOpen)}
+              title={isOpen ? '收起' : '展开目录'}
+            >
+              {isOpen ? '✕' : '☰'}
+            </button>
+          </div>
+
+          {/* 底部：全宽列表内容 */}
+          <div className="toc-scroll-area" style={scrollAreaStyles}>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {tocItems.map(item => (
-                <li key={item.id} style={itemStyles(item.level)}>
+                <li key={item.id}>
                   <a
                     className="toc-link"
-                    style={linkStyles(item.id === activeId)}
+                    style={linkStyles(item.id === activeId, item.level)}
                     onClick={(e) => {
                       e.preventDefault();
                       scrollToHeading(item.id);
@@ -256,46 +196,20 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
                 </li>
               ))}
             </ul>
-          </nav>
-
-          <button
-            className="floating-toggle"
-            style={floatingToggleStyles}
-            onClick={() => setIsOpen(!isOpen)}
-            title={isOpen ? '收起目录' : '展开目录'}
-          >
-            {isOpen ? '◀' : '▶'}
-          </button>
-        </>
-      )}
-
-      {isMobile && (
-        <nav style={mobileContainerStyles}>
-          <div style={headerStyles} onClick={() => setIsOpen(!isOpen)}>
-            <span>📋 目录</span>
-            <button
-              style={toggleButtonStyles}
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsOpen(!isOpen);
-              }}
-            >
-              {isOpen ? '▲' : '▼'}
-            </button>
           </div>
-
+        </nav>
+      ) : (
+        /* 移动端保持不变 */
+        <nav style={{ margin: '20px', padding: '12px', border: '1px solid var(--border-color)', borderRadius: '8px', backgroundColor: 'var(--surface-color)' }}>
+          <div onClick={() => setIsOpen(!isOpen)} style={{ fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}>
+            <span>📋 目录</span>
+            <span>{isOpen ? '▲' : '▼'}</span>
+          </div>
           {isOpen && (
-            <ul style={listStyles}>
+            <ul style={{ listStyle: 'none', padding: 0, marginTop: '10px' }}>
               {tocItems.map(item => (
-                <li key={item.id} style={itemStyles(item.level)}>
-                  <a
-                    className="toc-link"
-                    style={linkStyles(item.id === activeId)}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToHeading(item.id);
-                    }}
-                  >
+                <li key={item.id} style={{ marginBottom: '8px', paddingLeft: (item.level - 1) * 10 }}>
+                  <a onClick={() => scrollToHeading(item.id)} style={{ fontSize: '16px', color: 'var(--text-secondary-color)' }}>
                     {item.text}
                   </a>
                 </li>
