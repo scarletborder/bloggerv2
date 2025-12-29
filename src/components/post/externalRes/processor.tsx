@@ -4,6 +4,10 @@ import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 
 // 定义全局注入的 CSS
 const tweetFixStyle = `
+  .tweet-container-fix  .react-tweet-theme {
+    background-color: transparent !important;
+  }
+
   .tweet-container-fix div[class*="_avatarOverflow"] img {
     object-position: center top !important;
     transform: translateY(-16px) !important; 
@@ -56,7 +60,38 @@ const getProcessorOptions = () => ({
             overflow: 'hidden',
             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
           }}>
-            <LiteYouTubeEmbed id={id} title="YouTube Video" />
+            <LiteYouTubeEmbed id={id} title="YouTube Video" lazyLoad={true} />
+          </div>
+        );
+      }
+
+      // 3. 新增：Bilibili 逻辑
+      if (type === 'bilibili' && id) {
+        return (
+          <div style={{
+            margin: '20px 0',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            backgroundColor: '#000', // 防止加载前白屏
+            position: 'relative',
+            width: '100%',
+            aspectRatio: '16 / 9', // 保持 16:9 比例
+          }}>
+            <iframe
+              title="Bilibili Video"
+              src={`//player.bilibili.com/player.html?bvid=${id}&page=1&high_quality=1&danmaku=0&autoplay=0`}
+              allowFullScreen={true}
+              width="100%"
+              height="100%"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                border: 'none',
+              }}
+              loading="lazy" // 性能优化：滚动到位置再加载
+            />
           </div>
         );
       }
