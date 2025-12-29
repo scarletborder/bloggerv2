@@ -25,7 +25,7 @@ export default function CommentList({
   const latestPostId = useLatest(postId);
 
   const { startIndex, pageSize, updateUrl } = usePaginationUrl({
-    defaultStartIndex: 1,
+    defaultStartIndex: 0,
     defaultPageSize: 10,
   });
 
@@ -46,9 +46,11 @@ export default function CommentList({
     setCtx(prev => ({ ...prev, loading: true }));
 
     try {
+      const apiStartIndex = (page - 1) * size + 1;
+
       const result = await GetPostLegacyComments({
         postId: latestPostId.current,
-        startIndex: (page - 1) * size + 1, // Blogger API startIndex 从1开始
+        startIndex: apiStartIndex,
         maxResults: size,
       });
       setComments(result.items);
@@ -69,7 +71,7 @@ export default function CommentList({
   };
 
   useEffect(() => {
-    fetchComments(startIndex + 1, pageSize); // startIndex 从0开始，页码从1开始
+    fetchComments(startIndex + 1, pageSize);
   }, [postId, startIndex, pageSize]);
 
   const scrollAreaStyles: React.CSSProperties = {

@@ -32,6 +32,7 @@ function transformComment(comments: any): CommentItem {
   };
 }
 
+
 export async function GetPostLegacyComments(req: LegacyCommentRequest): Promise<LegacyCommentResponse> {
   const feed = new BloggerFeed(API_URL_PREFIX, {
     jsonp: true,
@@ -44,41 +45,45 @@ export async function GetPostLegacyComments(req: LegacyCommentRequest): Promise<
     maxResults: req.maxResults,
   });
 
-  // 2. 转换评论数据结构，并使用 lodash.keyBy 创建一个以评论ID为键的高效查找映射
-  const initialComments = Object.values(commentsData).map(transformComment);
+  // ==================== 修复点 1: 正确提取 items 数组 ====================
+  // 原代码使用 Object.values(commentsData) 会错误地包含 totalResults 等元数据
+  // Blogger API 返回结构通常是 { items: [...], totalResults: 100, ... }
+  const initialComments = commentsData.map(transformComment);
   const idToCommentItem = keyBy(initialComments, 'meta.id');
 
   // 3. 识别出所有在当前列表中不存在的父评论ID
   const parentCommentIdsToFetch = new Set<string>();
   forEach(initialComments, (commentItem) => {
     const replyToId = commentItem.meta?.replyToId;
-    // 如果一个评论是回复，并且它的父评论不在当前列表中，则记录其ID以便后续获取
     if (replyToId && !idToCommentItem[replyToId]) {
       parentCommentIdsToFetch.add(replyToId);
     }
   });
 
-  // 4. 使用 Promise.all 并行获取所有缺失的父评论，以提高效率
+  // 4. 并行获取缺失的父评论
   if (parentCommentIdsToFetch.size > 0) {
-    const parentCommentPromises = Array.from(parentCommentIdsToFetch).map(id => feed.comments.get(req.postId, id).then(transformComment));
-    const fetchedParentComments = await Promise.all(parentCommentPromises);
+    try {
+      const parentCommentPromises = Array.from(parentCommentIdsToFetch).map(id => feed.comments.get(req.postId, id)
+        .then(transformComment)
+        .catch(() => null));
+      const fetchedParentComments = await Promise.all(parentCommentPromises);
 
-    // 5. 将新获取的父评论也加入到查找映射中，以便后续引用
-    forEach(fetchedParentComments, (parentComment) => {
-      if (parentComment.meta?.id) {
-        idToCommentItem[parentComment.meta.id] = parentComment;
-      }
-    });
+      forEach(fetchedParentComments, (parentComment) => {
+        if (parentComment?.meta?.id) {
+          idToCommentItem[parentComment.meta.id] = parentComment;
+        }
+      });
+    } catch (e) {
+      console.warn('Failed to fetch parent comments', e);
+    }
   }
 
-  // 6. 最后一次遍历，为每个子评论添加对父评论的引用
-  // 此时 idToCommentItem 包含了所有需要的评论（无论是初始加载的还是补充获取的）
+  // 6. 关联父子评论
   forEach(initialComments, (commentItem) => {
     const replyToId = commentItem.meta?.replyToId;
     if (replyToId) {
       const parentComment = idToCommentItem[replyToId];
       if (parentComment) {
-        // 在子评论 (commentItem) 上添加 inReplyTo 字段，引用父评论的信息
         commentItem.inReplyTo = {
           author: {
             name: parentComment.author.name,
@@ -90,11 +95,12 @@ export async function GetPostLegacyComments(req: LegacyCommentRequest): Promise<
   });
 
   return {
+    // 从交叉类型中直接读取 totalResults
     total: commentsData.totalResults ?? 0,
-    // 返回最初获取和转换后的评论列表，现在它们已经包含了正确的 inReplyTo 信息
     items: initialComments,
   };
 }
+
 
 /**
  * 获取比指定时间戳更新的评论。
