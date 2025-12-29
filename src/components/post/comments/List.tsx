@@ -1,12 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { useVirtualList, useLatest } from 'ahooks';
-import { isMobile } from 'react-device-detect';
+import React, { useState, useEffect } from 'react';
+import { useLatest } from 'ahooks';
 import { GetPostLegacyComments } from '../../../services/BloggerComment';
 import { getCurrentTheme } from '../../../constants/colors';
 import { CommentItemComponent } from './Item';
 import type { CommentsState } from './types';
 import type { SetState } from 'ahooks/lib/useSetState';
 import type { CommentItem } from '../../../models/CommentItem';
+import { usePaginationUrl } from '../../../hooks/usePaginationUrl';
+import { Pagination } from 'tdesign-react';
 
 type CommentListProps = {
   Ctx: CommentsState;
@@ -23,23 +24,19 @@ export default function CommentList({
   const { postId } = Ctx;
   const latestPostId = useLatest(postId);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const [allComments, setAllComments] = useState<CommentItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // useVirtualList Hook 仅在桌面端有意义，但我们可以在这里保留其定义
-  const [virtualList] = useVirtualList(allComments, {
-    containerTarget: containerRef,
-    wrapperTarget: wrapperRef,
-    itemHeight: 110,
-    overscan: 10,
+  const { startIndex, pageSize, updateUrl } = usePaginationUrl({
+    defaultStartIndex: 1,
+    defaultPageSize: 10,
   });
 
-  const fetchAllComments = async () => {
+  const [comments, setComments] = useState<CommentItem[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const fetchComments = async (page: number, size: number) => {
     if (!latestPostId.current) {
-      setAllComments([]);
+      setComments([]);
+      setTotal(0);
       setCtx({ totalComments: 0, loading: false });
       setLoading(false);
       return;
@@ -51,8 +48,11 @@ export default function CommentList({
     try {
       const result = await GetPostLegacyComments({
         postId: latestPostId.current,
+        startIndex: (page - 1) * size + 1, // Blogger API startIndex 从1开始
+        maxResults: size,
       });
-      setAllComments(result.items);
+      setComments(result.items);
+      setTotal(result.total);
       setCtx(prev => ({
         ...prev,
         totalComments: result.total,
@@ -60,7 +60,8 @@ export default function CommentList({
       }));
     } catch (error) {
       console.error('Failed to fetch comments:', error);
-      setAllComments([]);
+      setComments([]);
+      setTotal(0);
       setCtx(prev => ({ ...prev, totalComments: 0, loading: false }));
     } finally {
       setLoading(false);
@@ -68,8 +69,8 @@ export default function CommentList({
   };
 
   useEffect(() => {
-    fetchAllComments();
-  }, [postId]);
+    fetchComments(startIndex + 1, pageSize); // startIndex 从0开始，页码从1开始
+  }, [postId, startIndex, pageSize]);
 
   const scrollAreaStyles: React.CSSProperties = {
     // 桌面端样式保持不变，移动端样式将不再直接使用在这个容器上
@@ -86,6 +87,10 @@ export default function CommentList({
     fontSize: '16px',
   };
 
+  const handlePageChange = (pageInfo: { current: number; pageSize: number }) => {
+    updateUrl(pageInfo.current - 1, pageInfo.pageSize); // startIndex 从0开始
+  };
+
   if (loading) {
     return <div style={emptyStyles}>正在加载评论...</div>;
   }
@@ -93,38 +98,31 @@ export default function CommentList({
   // ==================== 修改开始 (JSX 渲染逻辑) ====================
   return (
     <>
-      {allComments.length === 0 ? (
+      {comments.length === 0 ? (
         <div style={emptyStyles}>暂无评论，快来抢沙发吧！</div>
-      ) // 根据是否为移动端进行条件渲染
-        : isMobile ? (
-        // --- 移动端：渲染完整列表 ---
-        // 不需要 ref，也不需要固定的高度和滚动样式
-        <div>
-          {allComments.map(comment => (
-            <CommentItemComponent
-              key={comment.timeStamp}
-              comment={comment}
-              setCtx={setCtx}
-              ClickReplyButton={ClickReplyButton}
-            />
-          ))}
-        </div>
-        ) : (
-        // --- 桌面端：使用虚拟列表 ---
-        <div ref={containerRef} style={scrollAreaStyles}>
-          <div ref={wrapperRef}>
-            {virtualList.map(ele => (
-              <div key={ele.data.timeStamp}>
-                <CommentItemComponent
-                  comment={ele.data}
-                  setCtx={setCtx}
-                  ClickReplyButton={ClickReplyButton}
-                />
-              </div>
+      ) : (
+        <>
+          <div style={scrollAreaStyles}>
+            {comments.map(comment => (
+              <CommentItemComponent
+                key={comment.timeStamp}
+                comment={comment}
+                setCtx={setCtx}
+                ClickReplyButton={ClickReplyButton}
+              />
             ))}
           </div>
-        </div>
-        )}
+          <Pagination
+            current={startIndex + 1}
+            total={total}
+            pageSize={pageSize}
+            onChange={handlePageChange}
+            showJumper
+            showPageSize
+            pageSizeOptions={[5, 10, 20, 50]}
+          />
+        </>
+      )}
     </>
   );
   // ==================== 修改结束 (JSX 渲染逻辑) ====================

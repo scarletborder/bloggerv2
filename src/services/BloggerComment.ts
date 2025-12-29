@@ -6,6 +6,8 @@ import type { CommentItem } from '../models/CommentItem';
 
 export type LegacyCommentRequest = {
   postId: string;
+  startIndex?: number;
+  maxResults?: number;
 };
 
 export type LegacyCommentResponse = {
@@ -38,6 +40,8 @@ export async function GetPostLegacyComments(req: LegacyCommentRequest): Promise<
   // 1. 获取主评论列表
   const commentsData = await feed.comments.list({
     postId: req.postId,
+    startIndex: req.startIndex,
+    maxResults: req.maxResults,
   });
 
   // 2. 转换评论数据结构，并使用 lodash.keyBy 创建一个以评论ID为键的高效查找映射
