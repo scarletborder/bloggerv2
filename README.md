@@ -30,6 +30,9 @@ Blogger 也能如此美丽
 - [x] Discuss(Comments)
 - [x] Pages
 - [ ] More Docs
+- [ ] Extra component
+  - [x] Twitter
+  - [x] Youtube
 
 ## 说明
 
