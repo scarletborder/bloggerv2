@@ -47,49 +47,6 @@ jobs:
       - name: Build project
         run: pnpm run build
 
-      - name: Find built assets and generate report
-        id: generate-report
-        run: |
-          CDN_BASE="${{ env.CDN_BASEURL }}"
-          REPORT_FILE="build_report.txt"
-
-          # 清空报告文件，以便重新写入
-          > "$REPORT_FILE"
-
-          echo "--- Generating CSS <link> tags ---"
-          # 查找所有 .css 文件，排序以保证顺序一致，然后生成 <link> 标签
-          for CSS_FILE in $(find dist/assets -name "*.css" | sort); do
-            CSS_FILENAME=$(basename "$CSS_FILE")
-            CSS_CDN_URL="${CDN_BASE}assets/${CSS_FILENAME}"
-            echo "Found CSS: ${CSS_FILENAME}"
-            echo "<link crossorigin='anonymous' href='${CSS_CDN_URL}' rel='stylesheet'/>" >> "$REPORT_FILE"
-          done
-
-          echo "--- Generating JS <script> tags ---"
-          # 查找所有 .js 文件，排序以保证顺序一致，然后生成 <script> 标签
-          for JS_FILE in $(find dist/assets -name "*.js" | sort); do
-            JS_FILENAME=$(basename "$JS_FILE")
-            JS_CDN_URL="${CDN_BASE}assets/${JS_FILENAME}"
-            echo "Found JS: ${JS_FILENAME}"
-            echo "<script crossorigin='anonymous' src='${JS_CDN_URL}' type='module'></script>" >> "$REPORT_FILE"
-          done
-
-          echo "--- Build Report Generated ---"
-          cat "$REPORT_FILE"
-
-          # 将完整的、多行的报告内容设置为 GitHub Actions 的输出
-          # 使用 <<EOF 语法可以安全地处理多行字符串
-          echo "report_content<<EOF" >> $GITHUB_OUTPUT
-          cat "$REPORT_FILE" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Upload Build Report as Artifact
-        uses: actions/upload-artifact@v4 # 使用 v4 版本上传 Artifact [1, 4, 6, 11]
-        with:
-          name: build-report
-          path: build_report.txt
-          retention-days: 7 # 保留 Artifact 7 天
-
       - name: Check if static branch exists
         id: check-branch
         run: |
@@ -119,3 +76,62 @@ jobs:
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
           commit_message: "Deploy static assets from release branch"
+
+      - name: Get static branch commit SHA
+        id: get-sha
+        run: |
+          # 获取刚刚部署到 static 分支的最新 Commit SHA
+          STATIC_SHA=$(git ls-remote origin refs/heads/static | cut -f 1)
+          if [ -z "$STATIC_SHA" ]; then
+            echo "Error: Failed to retrieve commit SHA for static branch"
+            exit 1
+          fi
+          echo "Latest static branch commit SHA is: $STATIC_SHA"
+          echo "static_sha=$STATIC_SHA" >> $GITHUB_OUTPUT
+
+      - name: Find built assets and generate report
+        id: generate-report
+        run: |
+          STATIC_SHA="${{ steps.get-sha.outputs.static_sha }}"
+          
+          # 动态将 env.CDN_BASEURL 中的 @static 替换为 @<commit_sha>
+          CDN_BASE=$(echo "${{ env.CDN_BASEURL }}" | sed "s/@static/@${STATIC_SHA}/g")
+          echo "Using Dynamic CDN Base URL: ${CDN_BASE}"
+          
+          REPORT_FILE="build_report.txt"
+
+          # 清空报告文件，以便重新写入
+          > "$REPORT_FILE"
+
+          echo "--- Generating CSS <link> tags ---"
+          # 查找所有 .css 文件，排序以保证顺序一致，然后生成 <link> 标签
+          for CSS_FILE in $(find dist/assets -name "*.css" | sort); do
+            CSS_FILENAME=$(basename "$CSS_FILE")
+            CSS_CDN_URL="${CDN_BASE}assets/${CSS_FILENAME}"
+            echo "Found CSS: ${CSS_FILENAME}"
+            echo "<link crossorigin='anonymous' href='${CSS_CDN_URL}' rel='stylesheet'/>" >> "$REPORT_FILE"
+          done
+
+          echo "--- Generating JS <script> tags ---"
+          # 查找所有 .js 文件，排序以保证顺序一致，然后生成 <script> 标签
+          for JS_FILE in $(find dist/assets -name "*.js" | sort); do
+            JS_FILENAME=$(basename "$JS_FILE")
+            JS_CDN_URL="${CDN_BASE}assets/${JS_FILENAME}"
+            echo "Found JS: ${JS_FILENAME}"
+            echo "<script crossorigin='anonymous' src='${JS_CDN_URL}' type='module'></script>" >> "$REPORT_FILE"
+          done
+
+          echo "--- Build Report Generated ---"
+          cat "$REPORT_FILE"
+
+          # 将完整的、多行的报告内容设置为 GitHub Actions 的输出
+          echo "report_content<<EOF" >> $GITHUB_OUTPUT
+          cat "$REPORT_FILE" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Upload Build Report as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-report
+          path: build_report.txt
+          retention-days: 7
