@@ -1,16 +1,306 @@
-.blogroll-list {
-  .t-list-item__meta-avatar {
-    width: unset;
-    height: 100%;
-  }
+/* ============ Blogroll 友情链接 ============ */
 
-  .t-list-item__meta-title {
-    margin-bottom: 0;
-  }
+.blogroll {
+    position: relative;
+    width: 100%;
+    padding: 14px 14px 16px;
+    border-radius: 16px;
+    background: var(--td-bg-color-container);
+    border: 1px solid var(--td-border-level-1-color);
+    box-shadow: var(--td-shadow-1);
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
+/* 顶部渐变高光条 */
+.blogroll::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--td-brand-color-5), var(--td-brand-color-3) 46%, transparent);
+}
+
+.blogroll__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.blogroll__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+    color: var(--td-text-color-anti);
+    background: linear-gradient(135deg, var(--td-brand-color-5), var(--td-brand-color-7));
+    box-shadow: 0 2px 8px var(--td-brand-color-focus);
+    flex: 0 0 auto;
+}
+
+.blogroll__title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--td-text-color-primary);
+    white-space: nowrap;
+}
+
+.blogroll__divider {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--td-border-level-1-color), transparent);
+}
+
+.blogroll__body {
+    display: flex;
+    flex-direction: column;
+}
+
+.blogroll:not(.blogroll--mobile) .blogroll__body {
+    max-height: 58vh;
+    overflow-y: auto;
+    padding-right: 2px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--td-scrollbar-color) transparent;
+}
+
+.blogroll:not(.blogroll--mobile) .blogroll__body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.blogroll:not(.blogroll--mobile) .blogroll__body::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: var(--td-scrollbar-color);
+}
+
+.blogroll:not(.blogroll--mobile) .blogroll__body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* ---------- 横幅卡片 ---------- */
+
+.blogroll__banners {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.blogroll-banner {
+    position: relative;
+    width: 100%;
+    height: 88px;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--td-border-level-1-color);
+    background: var(--td-bg-color-secondarycontainer);
+    transition: transform 0.3s cubic-bezier(0.34, 1.16, 0.64, 1), box-shadow 0.3s ease;
+    outline: none;
+}
+
+.blogroll-banner:hover,
+.blogroll-banner:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: var(--td-shadow-2);
+}
+
+.blogroll-banner__cover,
+.blogroll-banner__cover .t-image__img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.blogroll-banner:hover .t-image__img {
+    transform: scale(1.06);
+}
+
+.blogroll-banner__error {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--td-text-color-placeholder);
+}
+
+.blogroll-banner__mask {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 22px 12px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.68));
+    pointer-events: none;
+}
+
+.blogroll-banner__title {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.blogroll-banner__desc {
+    font-size: 11px;
+    line-height: 16px;
+    color: rgba(255, 255, 255, 0.82);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---------- 头像卡片网格 ---------- */
+
+.blogroll__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+}
+
+.blogroll-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    overflow: hidden;
+    background: var(--td-bg-color-secondarycontainer);
+    border: 1px solid transparent;
+    transition:
+        transform 0.28s cubic-bezier(0.34, 1.16, 0.64, 1),
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.28s ease;
+    outline: none;
+}
+
+/* 悬浮掠过的高光 */
+.blogroll-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 32%, rgba(255, 255, 255, 0.18) 50%, transparent 68%);
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: opacity 0.3s ease, transform 0.6s ease;
+    pointer-events: none;
+}
+
+.blogroll-card:hover,
+.blogroll-card:focus-visible {
+    transform: translateY(-3px);
+    background: var(--td-bg-color-container-hover);
+    border-color: var(--td-brand-color-5);
+    box-shadow: var(--td-shadow-2);
+}
+
+.blogroll-card:hover::after,
+.blogroll-card:focus-visible::after {
+    opacity: 1;
+    transform: translateX(100%);
+}
+
+.blogroll-card--disabled {
+    cursor: default;
+}
+
+.blogroll-card--disabled:hover {
+    transform: none;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.blogroll-card__avatar {
+    flex: 0 0 auto;
+}
+
+.blogroll-card__main {
+    flex: 1;
+    min-width: 0;
+}
+
+.blogroll-card:hover .blogroll-card__title,
+.blogroll-card:focus-visible .blogroll-card__title {
+    color: var(--td-brand-color);
+}
+
+.blogroll-card__title {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    color: var(--td-text-color-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.25s ease;
+}
+
+.blogroll-card__desc {
+    margin-top: 2px;
+    font-size: 11px;
+    line-height: 16px;
+    color: var(--td-text-color-placeholder);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.blogroll-card__arrow {
+    flex: 0 0 auto;
+    color: var(--td-text-color-placeholder);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
+}
+
+.blogroll-card:hover .blogroll-card__arrow,
+.blogroll-card:focus-visible .blogroll-card__arrow {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--td-brand-color);
+}
+
+/* ---------- 加载骨架屏 ---------- */
+
+.blogroll-card--skeleton {
+    cursor: default;
+    pointer-events: none;
+}
+
+.blogroll-card--skeleton:hover {
+    transform: none;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.blogroll-card--skeleton .t-skeleton {
+    display: block;
+}
+
+/* ============ 其他 ============ */
+
 .t-pagination__select {
-  .t-input.t-align-left.t-input--suffix {
-    flex: unset;
-  }
+    .t-input.t-align-left.t-input--suffix {
+        flex: unset;
+    }
 }
