@@ -1,5 +1,12 @@
 import React from 'react';
 import { isMobile } from 'react-device-detect';
+import './toc.css';
+
+/** 锚点滚动时距离视口顶部保留的高度（顶部导航 60px + 呼吸留白） */
+const SCROLL_OFFSET_DESKTOP = 84;
+const SCROLL_OFFSET_MOBILE = 68;
+/** 桌面端目录折叠状态的持久化 key */
+const COLLAPSE_STORAGE_KEY = 'blog.toc.collapsed';
 
 interface TocItem {
   id: string;
@@ -8,215 +15,386 @@ interface TocItem {
   element: HTMLElement;
 }
 
-interface TableOfContentsProps {
-  content: string;
-}
+/**
+ * 由标题文本生成稳定、可分享的锚点 id，并去重
+ */
+const createSlug = (raw: string, used: Set<string>): string => {
+  const normalized = raw
+    .trim()
+    .toLowerCase()
+    .replace(/[\s\u3000]+/g, '-')
+    .replace(/[^\p{L}\p{N}]+/gu, '-')
+    .replace(/-{2,}/g, '-')
+    .replace(/^-+|-+$/g, '');
 
-const TableOfContents: React.FC<TableOfContentsProps> = ({ content }) => {
+  let slug = normalized || 'section';
+  if (used.has(slug)) {
+    let suffix = 2;
+    while (used.has(`${slug}-${suffix}`)) suffix += 1;
+    slug = `${slug}-${suffix}`;
+  }
+  used.add(slug);
+  return slug;
+};
+
+const readCollapsed = (): boolean => {
+  try {
+    return window.localStorage.getItem(COLLAPSE_STORAGE_KEY) === '1';
+  } catch {
+    return false;
+  }
+};
+
+const ListIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <path
+      d="M2 3.5h1.6M2 8h1.6M2 12.5h1.6"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+    />
+    <path
+      d="M6.6 3.5H14M6.6 8H14M6.6 12.5H14"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      opacity="0.6"
+    />
+  </svg>
+);
+
+const ChevronIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    width="14"
+    height="14"
+    viewBox="0 0 16 16"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M6 4l4 4-4 4"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const TableOfContents: React.FC<{ content: string }> = ({ content }) => {
   const [tocItems, setTocItems] = React.useState<TocItem[]>([]);
-  const [activeId, setActiveId] = React.useState<string>('');
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [activeId, setActiveId] = React.useState('');
+  const [progress, setProgress] = React.useState(0);
+  const [collapsed, setCollapsed] = React.useState(readCollapsed);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [indicator, setIndicator] = React.useState({ top: 0, height: 0, visible: false });
 
-  // PC 端固定尺寸配置
-  const sidebarWidth = 280;
-  const buttonWidth = 48;
-  const offset = sidebarWidth - buttonWidth;
+  const bodyRef = React.useRef<HTMLDivElement | null>(null);
+  const innerRef = React.useRef<HTMLDivElement | null>(null);
+  const linkRefs = React.useRef(new Map<string, HTMLAnchorElement>());
+  const linkedHashRef = React.useRef<string | null>(null);
 
+  /* ---------- 1. 提取正文标题并回填锚点 id ---------- */
   React.useEffect(() => {
-    const generateToc = () => {
-      const headings = document.querySelectorAll('.blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4, .blog-content h5, .blog-content h6');
+    let cancelled = false;
+    let timer: number | undefined;
+    setTocItems([]);
+    setActiveId('');
+
+    const collect = (): boolean => {
+      const root = document.querySelector('.blog-content');
+      if (!root) return false;
+
+      const headings = Array.from(root.querySelectorAll<HTMLElement>('h1, h2, h3, h4, h5, h6'));
+      if (headings.length === 0) return false;
+
+      const used = new Set<string>();
       const items: TocItem[] = [];
-      headings.forEach((heading, index) => {
-        const element = heading as HTMLElement;
-        const level = parseInt(element.tagName.substring(1));
-        const text = element.textContent || '';
-        if (!element.id) element.id = `heading-${index}`;
-        items.push({ id: element.id, text, level, element });
+      headings.forEach((heading) => {
+        const text = (heading.textContent || '').trim();
+        if (!text) return;
+        if (!heading.id || heading.dataset.tocGenerated === '1') {
+          heading.id = createSlug(text, used);
+          heading.dataset.tocGenerated = '1';
+        } else {
+          used.add(heading.id);
+        }
+        items.push({ id: heading.id, text, level: Number(heading.tagName.slice(1)), element: heading });
       });
+
+      if (items.length === 0) return false;
       setTocItems(items);
+      return true;
     };
-    const timer = setTimeout(generateToc, 100);
-    return () => clearTimeout(timer);
+
+    // 正文由 ContentView 解析渲染，挂载时机不固定，这里做短时轮询兜底
+    const attempt = (tries = 0) => {
+      if (cancelled) return;
+      if (collect()) return;
+      if (tries >= 40) return;
+      timer = window.setTimeout(() => attempt(tries + 1), 50);
+    };
+    attempt();
+
+    return () => {
+      cancelled = true;
+      if (timer) window.clearTimeout(timer);
+    };
   }, [content]);
 
+  /* ---------- 2. 滚动监听：高亮当前章节 + 阅读进度 ---------- */
   React.useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 120;
-      for (let i = tocItems.length - 1; i >= 0; i--) {
-        if (tocItems[i].element.offsetTop <= scrollPosition) {
-          setActiveId(tocItems[i].id);
-          break;
-        }
+    if (tocItems.length === 0) return;
+
+    const offset = isMobile ? SCROLL_OFFSET_MOBILE : SCROLL_OFFSET_DESKTOP;
+    let frame = 0;
+
+    const update = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = scrollable > 0 ? Math.min(1, Math.max(0, scrollTop / scrollable)) : 0;
+      const percent = Math.round(ratio * 100);
+      setProgress(prev => (prev === percent ? prev : percent));
+
+      // 触底时直接高亮最后一节，避免短小节永远无法激活
+      if (scrollable > 0 && scrollTop >= scrollable - 2) {
+        setActiveId(tocItems[tocItems.length - 1].id);
+        return;
       }
+
+      let current = '';
+      for (let i = 0; i < tocItems.length; i += 1) {
+        const { id, element } = tocItems[i];
+        // 正文可能被代码高亮等副作用重排，这里按 id 回源一次真实节点
+        const live = element.isConnected ? element : document.getElementById(id);
+        if (!live) continue;
+        if (live.getBoundingClientRect().top - offset <= 1) current = id;
+        else break;
+      }
+      setActiveId(current);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        update();
+      });
+    };
+
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    // 图片 / 代码块异步撑开高度时同步修正
+    const resizeObserver =      typeof ResizeObserver !== 'undefined' ? new ResizeObserver(onScroll) : null;
+    resizeObserver?.observe(document.body);
+
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      resizeObserver?.disconnect();
+    };
   }, [tocItems]);
 
+  /* ---------- 3. 指示条位置测量 ---------- */
+  const measureIndicator = React.useCallback(() => {
+    if (!activeId) {
+      setIndicator(prev => (prev.visible ? { ...prev, visible: false } : prev));
+      return;
+    }
+    const link = linkRefs.current.get(activeId);
+    // offsetParent 为空说明列表处于折叠 / 隐藏状态
+    if (!link?.offsetParent) {
+      setIndicator(prev => (prev.visible ? { ...prev, visible: false } : prev));
+      return;
+    }
+    const top = link.offsetTop;
+    const height = link.offsetHeight;
+    setIndicator(prev => (prev.visible && prev.top === top && prev.height === height
+      ? prev
+      : { top, height, visible: true }));
+  }, [activeId]);
+
+  React.useEffect(() => {
+    measureIndicator();
+  }, [measureIndicator, tocItems, collapsed, mobileOpen]);
+
+  React.useEffect(() => {
+    const inner = innerRef.current;
+    if (!inner || typeof ResizeObserver === 'undefined') return;
+    const resizeObserver = new ResizeObserver(() => measureIndicator());
+    resizeObserver.observe(inner);
+    return () => resizeObserver.disconnect();
+  }, [measureIndicator]);
+
+  /* ---------- 4. 让当前章节始终留在目录可视区内 ---------- */
+  React.useEffect(() => {
+    if (!activeId) return;
+    const body = bodyRef.current;
+    const link = linkRefs.current.get(activeId);
+    if (!body || !link?.offsetParent) return;
+
+    const top = link.offsetTop;
+    const bottom = top + link.offsetHeight;
+    const viewTop = body.scrollTop;
+    const viewBottom = viewTop + body.clientHeight;
+    if (top >= viewTop + 4 && bottom <= viewBottom - 4) return;
+
+    body.scrollTo({
+      top: Math.max(0, top - body.clientHeight / 3),
+      behavior: 'smooth',
+    });
+  }, [activeId, tocItems, mobileOpen, collapsed]);
+
+  /* ---------- 5. 支持带 hash 进入文章时直达对应章节 ---------- */
+  React.useEffect(() => {
+    if (tocItems.length === 0) return;
+    const hash = decodeURIComponent(window.location.hash.replace('#', ''));
+    if (!hash || linkedHashRef.current === hash) return;
+
+    const target = tocItems.find(item => item.id === hash);
+    if (!target) return;
+    linkedHashRef.current = hash;
+
+    const offset = isMobile ? SCROLL_OFFSET_MOBILE : SCROLL_OFFSET_DESKTOP;
+    const top = target.element.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  }, [tocItems]);
+
+  /* ---------- 交互 ---------- */
   const scrollToHeading = (id: string) => {
     const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!element) return;
+    const offset = isMobile ? SCROLL_OFFSET_MOBILE : SCROLL_OFFSET_DESKTOP;
+    const top = element.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    try {
+      window.history.replaceState(null, '', `#${encodeURIComponent(id)}`);
+    } catch {
+      /* 忽略不支持 history API 的环境 */
+    }
+    setActiveId(id);
+  };
+
+  const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    // 保留新标签页打开等浏览器原生行为
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    scrollToHeading(id);
+    if (isMobile) setMobileOpen(false);
+  };
+
+  const toggleCollapsed = () => {
+    const next = !collapsed;
+    setCollapsed(next);
+    try {
+      window.localStorage.setItem(COLLAPSE_STORAGE_KEY, next ? '1' : '0');
+    } catch {
+      /* 忽略隐私模式下的写入失败 */
     }
   };
 
   if (tocItems.length === 0) return null;
 
-  // --- PC 端样式 (上下结构 + 位移逻辑) ---
+  const list = (
+    <div className="toc-body" ref={bodyRef}>
+      <div className="toc-inner" ref={innerRef}>
+        <span className="toc-rail" aria-hidden="true" />
+        <span
+          className={`toc-indicator${indicator.visible ? ' is-visible' : ''}`}
+          style={{
+            transform: `translateY(${indicator.top}px)`,
+            height: `${indicator.height}px`,
+          }}
+          aria-hidden="true"
+        />
+        <ul className="toc-list">
+          {tocItems.map(item => (
+            <li key={item.id} className="toc-item" data-level={item.level}>
+              <a
+                className={`toc-link${item.id === activeId ? ' is-active' : ''}`}
+                href={`#${encodeURIComponent(item.id)}`}
+                title={item.text}
+                aria-current={item.id === activeId ? 'true' : undefined}
+                ref={(node) => {
+                  if (node) linkRefs.current.set(item.id, node);
+                  else linkRefs.current.delete(item.id);
+                }}
+                onClick={event => handleLinkClick(event, item.id)}
+              >
+                {item.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
 
-  const pcWrapperStyles: React.CSSProperties = {
-    position: 'fixed',
-    left: '24px',
-    top: '20vh',
-    zIndex: 1000,
-    width: `${sidebarWidth}px`,
-    height: '60vh',
-    backgroundColor: 'var(--surface-color)',
-    border: '1px solid var(--border-color)',
-    borderRadius: '12px',
-    boxShadow: isOpen ? '0 12px 40px rgba(0,0,0,0.15)' : '0 4px 12px rgba(0,0,0,0.1)',
-    // 核心位移动画
-    transform: isOpen ? 'translateX(0)' : `translateX(-${offset}px)`,
-    transition: 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease',
-    overflow: 'hidden',
-    display: 'flex',
-    flexDirection: 'column', // 改为纵向布局，取消左右分列
-  };
+  const progressBar = (
+    <div className="toc-progress" role="presentation">
+      <i style={{ transform: `scaleX(${progress / 100})` }} />
+    </div>
+  );
 
-  // 顶部 Header 区域：包含标题和按钮
-  const headerStyles: React.CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    height: `${buttonWidth}px`, // 头部高度与按钮宽度一致，保持比例
-    padding: '0 0 0 16px', // 左侧给标题留 padding，右侧不需要（按钮自带）
-    borderBottom: isOpen ? '1px solid var(--border-color)' : '1px solid transparent',
-    flexShrink: 0, // 防止头部被压缩
-    transition: 'border-bottom 0.3s ease',
-  };
+  /* ---------- 移动端：文章顶部的折叠卡片 ---------- */
+  if (isMobile) {
+    return (
+      <nav className={`toc-mobile${mobileOpen ? ' is-open' : ''}`} aria-label="文章目录">
+        <button
+          type="button"
+          className="toc-mobile-head"
+          onClick={() => setMobileOpen(open => !open)}
+          aria-expanded={mobileOpen}
+        >
+          <ListIcon />
+          <span className="toc-title">目录</span>
+          <span className="toc-count">{tocItems.length}</span>
+          <span className="toc-percent">{progress}%</span>
+          <ChevronIcon className="toc-chevron" />
+        </button>
+        {progressBar}
+        {list}
+      </nav>
+    );
+  }
 
-  // 按钮样式
-  const toggleBtnStyles: React.CSSProperties = {
-    width: `${buttonWidth}px`,
-    height: '100%', // 占满 Header 高度
-    border: 'none',
-    backgroundColor: isOpen ? 'transparent' : 'var(--primary-color)',
-    color: isOpen ? 'var(--text-secondary-color)' : '#fff',
-    cursor: 'pointer',
-    fontSize: '18px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: 'all 0.3s ease',
-  };
-
-  // 列表滚动区域样式
-  const scrollAreaStyles: React.CSSProperties = {
-    flex: 1, // 占满剩余高度
-    width: '100%', // 宽度占满 100%，不再受右侧挤压
-    overflowY: 'auto',
-    padding: '12px 0',
-    scrollbarWidth: 'thin',
-    // 关键：收起时隐藏列表内容，避免在右侧残留条中看到文字
-    opacity: isOpen ? 1 : 0,
-    visibility: isOpen ? 'visible' : 'hidden',
-    transition: 'opacity 0.2s ease, visibility 0.2s ease', // 快速隐藏
-  };
-
-  const linkStyles = (isActive: boolean, level: number): React.CSSProperties => ({
-    display: 'block',
-    textDecoration: 'none',
-    padding: '6px 12px',
-    paddingRight: '12px', // 右侧留白，不再担心被按钮遮挡
-    fontSize: '18px',
-    lineHeight: '1.3',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-    wordBreak: 'break-word',
-    color: isActive ? 'var(--primary-color)' : 'var(--text-secondary-color)',
-    backgroundColor: isActive ? 'var(--primary-color-light, rgba(0,0,0,0.05))' : 'transparent',
-    borderRadius: '6px',
-    marginLeft: `${(level - 1) * 12 + 12}px`, // 增加左边距适配全宽
-    marginRight: '12px',
-    marginBottom: '2px',
-    fontWeight: isActive ? '600' : '400',
-  });
-
-  const cssInjection = `
-    .toc-scroll-area::-webkit-scrollbar { width: 4px; }
-    .toc-scroll-area::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-    .toc-link:hover { 
-      background-color: var(--border-color); 
-      color: var(--primary-color);
-    }
-  `;
-
+  /* ---------- 桌面端：左侧常驻面板 ---------- */
   return (
     <>
-      <style>{cssInjection}</style>
+      <nav
+        className={`toc-panel${collapsed ? ' is-collapsed' : ''}`}
+        aria-label="文章目录"
+        aria-hidden={collapsed}
+      >
+        <div className="toc-head">
+          <span className="toc-title">
+            <ListIcon />
+            目录
+          </span>
+          <span className="toc-count">{tocItems.length}</span>
+          <span className="toc-percent">{progress}%</span>
+          <button
+            type="button"
+            className="toc-icon-btn"
+            onClick={toggleCollapsed}
+            aria-label={collapsed ? '展开目录' : '收起目录'}
+            aria-expanded={!collapsed}
+          >
+            <ChevronIcon />
+          </button>
+        </div>
+        {progressBar}
+        {list}
+      </nav>
 
-      {!isMobile ? (
-        <nav style={pcWrapperStyles}>
-          {/* 顶部：标题 + 按钮 */}
-          <div style={headerStyles}>
-            <div style={{
-              fontSize: '14px',
-              fontWeight: 'bold',
-              opacity: isOpen ? 0.6 : 0, // 收起时隐藏标题
-              transition: 'opacity 0.3s ease',
-              whiteSpace: 'nowrap',
-            }}>
-              目录 CONTENTS
-            </div>
-            <button
-              style={toggleBtnStyles}
-              onClick={() => setIsOpen(!isOpen)}
-              title={isOpen ? '收起' : '展开目录'}
-            >
-              {isOpen ? '✕' : '☰'}
-            </button>
-          </div>
-
-          {/* 底部：全宽列表内容 */}
-          <div className="toc-scroll-area" style={scrollAreaStyles}>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {tocItems.map(item => (
-                <li key={item.id}>
-                  <a
-                    className="toc-link"
-                    style={linkStyles(item.id === activeId, item.level)}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToHeading(item.id);
-                    }}
-                  >
-                    {item.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
-      ) : (
-        /* 移动端保持不变 */
-        <nav style={{ margin: '20px', padding: '12px', border: '1px solid var(--border-color)', borderRadius: '8px', backgroundColor: 'var(--surface-color)' }}>
-          <div onClick={() => setIsOpen(!isOpen)} style={{ fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}>
-            <span>📋 目录</span>
-            <span>{isOpen ? '▲' : '▼'}</span>
-          </div>
-          {isOpen && (
-            <ul style={{ listStyle: 'none', padding: 0, marginTop: '10px' }}>
-              {tocItems.map(item => (
-                <li key={item.id} style={{ marginBottom: '8px', paddingLeft: (item.level - 1) * 10 }}>
-                  <a onClick={() => scrollToHeading(item.id)} style={{ fontSize: '16px', color: 'var(--text-secondary-color)' }}>
-                    {item.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </nav>
+      {collapsed && (
+        <button type="button" className="toc-fab" onClick={toggleCollapsed} aria-label="展开目录">
+          <ListIcon />
+          目录
+        </button>
       )}
     </>
   );

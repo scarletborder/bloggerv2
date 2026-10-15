@@ -1,0 +1,441 @@
+/**
+ * 文章目录（Table of Contents）样式
+ * 设计目标：常驻可见、层级清晰、带阅读进度与滑动指示条的活动态标识
+ */
+
+/* ---------- 布局变量（供 PostPage 计算正文左侧留白） ---------- */
+:root {
+  --toc-panel-width: 248px;
+  --toc-panel-left: 24px;
+  --toc-panel-top: 88px;
+  --toc-panel-bottom: 28px;
+  --toc-anchor-offset: 84px;
+}
+
+@media (max-width: 1360px) {
+  :root {
+    --toc-panel-width: 216px;
+    --toc-panel-left: 16px;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    /* 视口过窄时不再占位，避免与正文重叠 */
+    --toc-panel-width: 0px;
+    --toc-panel-left: 0px;
+  }
+}
+
+/* ---------- 颜色令牌（跟随主题变量自动适配浅色 / 深色） ---------- */
+:root {
+  --toc-line: rgba(130, 150, 159, 0.26);
+  --toc-line-strong: rgba(130, 150, 159, 0.5);
+  --toc-hover: rgba(130, 150, 159, 0.12);
+  --toc-active-bg: rgba(130, 150, 159, 0.14);
+  --toc-bg: var(--surface-color);
+  --toc-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --toc-shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+@supports (color: color-mix(in srgb, red, blue)) {
+  :root {
+    --toc-line: color-mix(in srgb, var(--border-color) 26%, transparent);
+    --toc-line-strong: color-mix(in srgb, var(--border-color) 52%, transparent);
+    --toc-hover: color-mix(in srgb, var(--primary-color) 10%, transparent);
+    --toc-active-bg: color-mix(in srgb, var(--primary-color) 14%, transparent);
+    --toc-bg: color-mix(in srgb, var(--surface-color) 88%, transparent);
+  }
+}
+
+/* 锚点跳转时给标题留出顶部导航的高度 */
+.blog-content :is(h1, h2, h3, h4, h5, h6) {
+  scroll-margin-top: var(--toc-anchor-offset);
+}
+
+/* ---------- 桌面端面板 ---------- */
+.toc-panel {
+  position: fixed;
+  top: var(--toc-panel-top);
+  left: var(--toc-panel-left);
+  width: var(--toc-panel-width);
+  max-height: calc(100vh - var(--toc-panel-top) - var(--toc-panel-bottom));
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid var(--toc-line);
+  border-radius: 14px;
+  background: var(--toc-bg);
+  box-shadow: var(--toc-shadow);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  backdrop-filter: saturate(180%) blur(12px);
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.24s ease,
+    box-shadow 0.3s ease;
+}
+
+.toc-panel:hover {
+  box-shadow: var(--toc-shadow-hover);
+}
+
+.toc-panel.is-collapsed {
+  transform: translateX(calc(-1 * var(--toc-panel-width) - 12px));
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 折叠后的悬浮入口 */
+.toc-fab {
+  position: fixed;
+  top: var(--toc-panel-top);
+  left: var(--toc-panel-left);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  margin: 0;
+  padding: 0 14px;
+  border: 1px solid var(--toc-line);
+  border-radius: 999px;
+  background: var(--toc-bg);
+  box-shadow: var(--toc-shadow);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  backdrop-filter: saturate(180%) blur(12px);
+  color: var(--text-secondary-color);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  animation: toc-fab-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.toc-fab:hover {
+  color: var(--primary-color);
+  box-shadow: var(--toc-shadow-hover);
+}
+
+.toc-fab > svg {
+  flex: 0 0 auto;
+}
+
+@keyframes toc-fab-in {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ---------- 头部 ---------- */
+.toc-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 10px 8px 16px;
+}
+
+.toc-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-color);
+  white-space: nowrap;
+}
+
+.toc-count {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--toc-hover);
+  color: var(--text-secondary-color);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 500;
+}
+
+.toc-percent {
+  font-size: 11px;
+  color: var(--text-secondary-color);
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+
+.toc-icon-btn {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  margin-left: auto;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary-color);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.toc-icon-btn:hover {
+  background: var(--toc-hover);
+  color: var(--primary-color);
+}
+
+.toc-icon-btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 1px;
+}
+
+/* ---------- 阅读进度条 ---------- */
+.toc-progress {
+  position: relative;
+  flex: 0 0 auto;
+  height: 2px;
+  margin: 0 16px;
+  border-radius: 2px;
+  background: var(--toc-line);
+  overflow: hidden;
+}
+
+.toc-progress > i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: 2px;
+  background: var(--primary-color);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.18s linear;
+}
+
+/* ---------- 列表区域 ---------- */
+.toc-body {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 10px 12px 12px 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.toc-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toc-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toc-body::-webkit-scrollbar-thumb {
+  background: var(--toc-line-strong);
+  border-radius: 4px;
+}
+
+.toc-inner {
+  position: relative;
+}
+
+/* 竖向导轨 */
+.toc-rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--toc-line);
+}
+
+/* 当前章节指示条 */
+.toc-indicator {
+  position: absolute;
+  left: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--primary-color);
+  opacity: 0;
+  transition:
+    transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s ease;
+}
+
+.toc-indicator.is-visible {
+  opacity: 1;
+}
+
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc-item {
+  margin: 0;
+  font-size: inherit;
+}
+
+.toc-link {
+  display: block;
+  position: relative;
+  margin: 1px 0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text-secondary-color);
+  text-decoration: none;
+  cursor: pointer;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -webkit-transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.toc-link:hover {
+  background: var(--toc-hover);
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.toc-link.is-active {
+  background: var(--toc-active-bg);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.toc-link.is-active:hover {
+  color: var(--primary-color);
+}
+
+.toc-link:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -2px;
+  text-decoration: none;
+}
+
+/* 层级缩进：越深越小、越淡 */
+.toc-item[data-level='1'] .toc-link {
+  padding-left: 14px;
+  font-weight: 500;
+}
+
+.toc-item[data-level='2'] .toc-link {
+  padding-left: 14px;
+  font-weight: 500;
+}
+
+.toc-item[data-level='3'] .toc-link {
+  padding-left: 28px;
+  font-size: 12.5px;
+}
+
+.toc-item[data-level='4'] .toc-link {
+  padding-left: 42px;
+  font-size: 12.5px;
+}
+
+.toc-item[data-level='5'] .toc-link {
+  padding-left: 56px;
+  font-size: 12px;
+}
+
+.toc-item[data-level='6'] .toc-link {
+  padding-left: 70px;
+  font-size: 12px;
+}
+
+/* ---------- 移动端：文章顶部的可折叠卡片 ---------- */
+.toc-mobile {
+  margin: 8px 4px 16px;
+  border: 1px solid var(--toc-line);
+  border-radius: 12px;
+  background: var(--toc-bg);
+  overflow: hidden;
+}
+
+.toc-mobile-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-color);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.toc-mobile-head:hover {
+  background: var(--toc-hover);
+}
+
+.toc-mobile-head .toc-title {
+  font-size: 13px;
+}
+
+.toc-chevron {
+  margin-left: auto;
+  color: var(--text-secondary-color);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.toc-mobile.is-open .toc-chevron {
+  transform: rotate(180deg);
+}
+
+.toc-mobile .toc-body {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition:
+    max-height 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.24s ease,
+    padding 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.toc-mobile.is-open .toc-body {
+  max-height: 52vh;
+  opacity: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-top: 6px;
+  padding-bottom: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toc-panel,
+  .toc-indicator,
+  .toc-chevron,
+  .toc-mobile .toc-body,
+  .toc-progress > i,
+  .toc-fab {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

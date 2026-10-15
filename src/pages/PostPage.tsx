@@ -87,7 +87,10 @@ const PostPage: React.FC = () => {
     minWidth: isMobile ? '100%' : '1080px',
     margin: '0 auto',
     paddingTop: isMobile ? '16px' : '32px',
-    paddingLeft: isMobile ? '4px' : '180px', // 为桌面端目录留出空间
+    // 桌面端为常驻目录预留空间（窄视口下目录会隐藏，变量自动归零）
+    paddingLeft: isMobile
+      ? '4px'
+      : 'calc(var(--toc-panel-left, 24px) + var(--toc-panel-width, 248px) + 32px)',
     paddingRight: isMobile ? '4px' : '32px',
     position: 'relative',
   };

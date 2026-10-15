@@ -23,12 +23,40 @@ export default function Slider({ isMobile = false }: SliderProps): JSX.Element {
     navigate(link);
   };
 
-  // 根据主题确定文字和背景颜色
-  const isDarkMode = theme === 'dark';
+  // 字幕条主题变量：统一使用深色半透明玻璃，避免亮色模式白底盖住图片
+  const captionBg = 'var(--slider-caption-bg)';
 
-  const overlayBackground = isDarkMode
-    ? 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7))'
-    : 'linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.7))';
+  const captionStyles: React.CSSProperties = {
+    position: 'absolute',
+    left: 12,
+    right: 12,
+    bottom: 12,
+    zIndex: 2,
+    display: 'flex',
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    width: 'auto',
+    maxWidth: isMobile ? 'calc(100% - 92px)' : 'calc(100% - 116px)', // 右侧留出分页圆点位置
+    minHeight: isMobile ? 38 : 44,
+    padding: isMobile ? '8px 14px' : '10px 18px',
+    borderRadius: 12,
+    background: captionBg,
+    border: '1px solid var(--slider-caption-border)',
+    backdropFilter: 'blur(10px) saturate(120%)',
+    WebkitBackdropFilter: 'blur(10px) saturate(120%)',
+    color: 'var(--slider-caption-text)',
+  };
+
+  const captionTitleStyles: React.CSSProperties = {
+    width: '100%',
+    fontSize: isMobile ? 13 : 15,
+    fontWeight: 600,
+    lineHeight: 1.4,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    textShadow: '0 1px 2px rgba(0, 0, 0, 0.35)',
+  };
 
   const containerStyles: React.CSSProperties = {
     width: '100%',
@@ -54,7 +82,7 @@ export default function Slider({ isMobile = false }: SliderProps): JSX.Element {
   };
 
   return (
-    <div style={containerStyles}>
+    <div style={containerStyles} data-theme={theme}>
       <Swiper
         ref={swiperRef}
         modules={[Navigation, Pagination, Autoplay]}
@@ -94,21 +122,8 @@ export default function Slider({ isMobile = false }: SliderProps): JSX.Element {
                 }
               />
               <TooltipLite content={slide.desp} placement="mouse">
-                <div
-                  style={{
-                    width: '100%',
-                    height: '56px',
-                    padding: '0 16px',
-                    lineHeight: '56px',
-                    position: 'absolute',
-                    bottom: '0',
-                    color: 'var(--td-text-color-anti)',
-                    backgroundImage: overlayBackground,
-                    boxSizing: 'border-box',
-                    zIndex: 1,
-                  }}
-                >
-                  <span>{slide.title}</span>
+                <div style={captionStyles}>
+                  <span style={captionTitleStyles}>{slide.title}</span>
                 </div>
               </TooltipLite>
             </div>
@@ -117,30 +132,55 @@ export default function Slider({ isMobile = false }: SliderProps): JSX.Element {
       </Swiper>
 
       <style>{`
+        :root {
+          --slider-caption-bg: rgba(0, 0, 0, 0.42);
+          --slider-caption-border: rgba(255, 255, 255, 0.16);
+          --slider-caption-text: rgba(255, 255, 255, 0.95);
+          --slider-nav-bg: rgba(0, 0, 0, 0.28);
+          --slider-nav-color: rgba(255, 255, 255, 0.9);
+          --slider-bullet: rgba(255, 255, 255, 0.5);
+          --slider-bullet-active: #fff;
+        }
+
+        :root[theme-mode="dark"] {
+          --slider-caption-bg: rgba(0, 0, 0, 0.6);
+          --slider-caption-border: rgba(255, 255, 255, 0.14);
+          --slider-caption-text: rgba(255, 255, 255, 0.92);
+          --slider-nav-bg: rgba(0, 0, 0, 0.5);
+          --slider-nav-color: rgba(255, 255, 255, 0.92);
+          --slider-bullet: rgba(255, 255, 255, 0.55);
+          --slider-bullet-active: #fff;
+        }
+
         .swiper-button-next,
         .swiper-button-prev {
-          color: white !important;
-          background: rgba(0,0,0,0.5) !important;
+          color: var(--slider-nav-color) !important;
+          background: var(--slider-nav-bg) !important;
+          backdrop-filter: blur(8px);
           border-radius: 50% !important;
           width: 40px !important;
           height: 40px !important;
         }
-        
+
         .swiper-button-next:after,
         .swiper-button-prev:after {
           font-size: 18px !important;
         }
-        
-        .swiper-pagination-bullet {
-          background: rgba(255,255,255,0.7) !important;
-        }
-        
-        .swiper-pagination-bullet-active {
-          background: white !important;
-        }
-        
+
         .swiper-pagination {
-          bottom: 10px !important;
+          bottom: 28px !important;
+          left: auto !important;
+          right: 16px !important;
+          width: auto !important;
+        }
+
+        .swiper-pagination-bullet {
+          background: var(--slider-bullet) !important;
+          opacity: 1 !important;
+        }
+
+        .swiper-pagination-bullet-active {
+          background: var(--slider-bullet-active) !important;
         }
       `}</style>
     </div>
