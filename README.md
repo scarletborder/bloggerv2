@@ -16,9 +16,29 @@ Blogger 也能如此美丽
 # call push in the release branch to trigger github actions
 # which upload those compiled static files to jsDeliver CDN
 
+# 用 CI 产物 build_report.txt 中的 <script>/<link> 标签
+# 替换 template.xml head 中标注的 React 产物占位块
+
 # upload the theme to blogger->theme->customize->restore
 # CAUTION: BACKUP your original theme first
 ```
+
+## 架构：Blogger 原生渲染 + React 岛屿增强
+
+主页与文章详情由 Blogger 原生 Blog 部件（`data:posts` / `data:post.body`）**服务端渲染**，
+因此原生评论、访客类原生部件可用，且页面可被 Google 正常索引。
+React 依旧负责全部组件，但以「岛屿」形式只做增强：
+
+| 模板挂载点               | React 岛屿          | 作用                                                                      |
+| ------------------------ | ------------------- | ------------------------------------------------------------------------- |
+| `#react-theme`           | `ThemeToggle`       | 明暗主题切换（所有原生页面）                                              |
+| `#react-post-body`       | `PostBodyEnhancer`  | CodeMirror 清理、Prism 高亮、KaTeX、Tweet/YouTube/Bilibili 嵌入、图片灯箱 |
+| `#react-toc`             | `TableOfContents`   | 文章目录（桌面常驻 / 移动折叠）                                           |
+| `#react-blogroll`        | `Blogroll`          | 主页友站链接                                                              |
+| `#root`（仅 error 视图） | SPA（react-router） | `/archives`、`/search`、`/pages` 等纯客户端路由                           |
+
+入口 `src/main.tsx` 按是否存在 `#root` 自动分流 SPA / 岛屿两种模式，
+两者代码均拆分为独立 chunk，原生页面不会下载 swiper、tdesign-mobile 等重依赖。
 
 ## Features
 

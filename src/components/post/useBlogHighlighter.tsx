@@ -1,43 +1,52 @@
 // hooks/useBlogHighlighter.ts
 import { useEffect } from 'react';
-import DOMPurify from 'dompurify';
 
 // 导入拆分后的模块
-import { cleanCodeMirrorContent } from './codeBlocks/codeMirrorCleaner';
-import {
-  performCompleteHighlight,
-  highlightOnMount,
-} from './codeBlocks/prismHighlighter';
+import { performCompleteHighlight } from './codeBlocks/prismHighlighter';
 import {
   removeCodeBlockEnhancements,
   createCodeBlockObserver,
 } from './codeBlocks/codeBlockEnhancer';
 
-
-export const useBlogHighlighter = (content: string, cssLoaded: boolean, theme: string) => {
+/**
+ * 博客代码高亮副作用
+ * @param processedContent 已经过 cleanCodeMirrorContent + DOMPurify 处理的内容
+ * @param cssLoaded 主题 CSS 是否加载完成
+ * @param theme 当前主题
+ */
+export const useBlogHighlighter = (
+  processedContent: string,
+  cssLoaded: boolean,
+  theme: string,
+) => {
   useEffect(() => {
-    if (!cssLoaded) return;
+    if (!cssLoaded || !processedContent) return;
+
+    let cancelled = false;
+    let observer: MutationObserver | null = null;
 
     const initHighlight = async () => {
-      // 1. 清理增强效果
+      // 1. 清理上一轮增强效果
       removeCodeBlockEnhancements();
 
-      // 2. 执行高亮 (这里直接传入清理过后的内容或直接操作 DOM)
-      const cleaned = cleanCodeMirrorContent(content);
-      const sanitized = DOMPurify.sanitize(cleaned);
+      // 2. 单次完整高亮流程（语言包加载 + 高亮 + 增强）
+      await performCompleteHighlight(processedContent);
 
-      await performCompleteHighlight(sanitized);
-      await highlightOnMount(sanitized);
+      if (cancelled) return;
 
-      // 3. 启动观察器
-      const observer = createCodeBlockObserver();
-      observer.observe(document.body, { childList: true, subtree: true });
-      return () => observer.disconnect();
+      // 3. 观察器收敛到正文容器，避免监听整个 document.body 造成巨大开销
+      const root = document.querySelector('.blog-content');
+      if (root) {
+        observer = createCodeBlockObserver();
+        observer.observe(root, { childList: true, subtree: true });
+      }
     };
 
-    const cleanupPromise = initHighlight();
+    void initHighlight();
+
     return () => {
-      cleanupPromise.then(cleanup => cleanup?.());
+      cancelled = true;
+      observer?.disconnect();
     };
-  }, [content, cssLoaded, theme]);
+  }, [processedContent, cssLoaded, theme]);
 };

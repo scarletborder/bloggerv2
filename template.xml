@@ -1,141 +1,1204 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html b:css='false' b:js='false' b:version='2' class='v2' expr:dir='data:blog.languageDirection'
-  expr:lang='data:blog.locale' xmlns='http://www.w3.org/1999/xhtml'
-  xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data'
-  xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+  <meta charset='UTF-8'/>
+  <link href='https://s2.loli.net/2025/04/14/LnsCqG8ZVcrJN4l.png' rel='shortcut icon' type='image/vnd.microsoft.icon'/>
+  <meta content='width=device-width, initial-scale=1.0' name='viewport'/>
+  <!-- all-head-content: 提供 canonical / meta description / RSS 等 SEO 所需头部信息 -->
+  <b:include data='blog' name='all-head-content'/>
+  <title><data:blog.pageTitle/></title>
 
-  <!--<head>-->
-  <head>
-    <meta charset='UTF-8' />
-    <link href='https://s2.loli.net/2025/04/14/LnsCqG8ZVcrJN4l.png' rel='shortcut icon'
-      type='image/vnd.microsoft.icon' />
+  <style id='theme-blocking-styles'>
+    /*<![CDATA[*/
+    /* 阻塞样式，确保页面在加载时立即有正确的背景色 */
+    html,
+    body {
+    background-color: #f5f5f9 !important;
+    color: #212529 !important;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    transition: none !important;
+    /* 禁用过渡动画，避免闪烁 */
+    }
 
-    <meta content='width=device-width, initial-scale=1.0' name='viewport' />
-    <title>绯境之外~Outside of Scarlet</title>
-    <style id='theme-blocking-styles'>
-      /*<![CDATA[*/
-      /* 阻塞样式，确保页面在加载时立即有正确的背景色 */
-      html,
-      body,
-      #root {
-      background-color: #f5f5f9 !important;
-      color: #212529 !important;
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      transition: none !important;
-      /* 禁用过渡动画，避免闪烁 */
-      }
+    /* 暗色模式样式 */
+    html[theme-mode="dark"],
+    html[theme-mode="dark"] body {
+    background-color: #1a1a1e !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    }
+  /*]]>*/
+  </style>
 
-      /* 暗色模式样式 */
-      html[theme-mode="dark"],
-      html[theme-mode="dark"] body,
-      html[theme-mode="dark"] #root {
-      background-color: #1a1a1e !important;
-      color: rgba(255, 255, 255, 0.85) !important;
-      }
+  <script>
+    window.__CDN_BASE__ = 'https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static';
+  </script>
 
-      /* 浅色模式样式 */
-      html:not([theme-mode]),
-      html[theme-mode="light"],
-      html[theme-mode="light"] body,
-      html[theme-mode="light"] #root {
-      background-color: #f5f5f9 !important;
-      color: #212529 !important;
-      }
-/*]]>*/
-    </style>
+  <script>
+    /*<![CDATA[*/
+    (function () {
+    const { search, hash, pathname } = window.location;
 
-    <script>
-      window.__CDN_BASE__ = 'https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static';
+    // 条件1: URL 中包含 ?sc=... 查询参数
+    const hasSuccessParam = search.includes('sc=');
+
+    // 条件2: URL 中包含 #c... 哈希
+    const hasCommentHash = hash.startsWith('#c');
+
+    // 条件3 (备用): 检查旧的 window.name 方式，作为补充
+    const hasSuccessName = pathname.startsWith('new-comment-');
+
+    // 如果满足URL条件，或者满足备用的 window.name 条件，就认为是成功弹窗
+    const isCommentSuccessPopup = (hasSuccessParam && hasCommentHash) || hasSuccessName;
+    if (isCommentSuccessPopup) {
+    window.close();
+    }
+    try {
+    // 从 localStorage 获取主题
+    let theme = localStorage.getItem('theme');
+
+    // 如果没有手动设置主题，才使用系统偏好
+    if (theme === null || theme === undefined) {
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    theme = prefersDark ? 'dark' : 'light';
+    }
+
+    // 立即设置主题属性，让CSS立即生效
+    if (theme === 'dark') {
+    document.documentElement.setAttribute('theme-mode', 'dark');
+    } else {
+    document.documentElement.removeAttribute('theme-mode');
+    }
+
+    // 在页面加载完成后移除阻塞样式，让正常的CSS接管
+    function enableTransitions() {
+    const blockingStyles = document.getElementById('theme-blocking-styles');
+    if (blockingStyles) {
+    blockingStyles.remove();
+    }
+    }
+
+    // 在DOMContentLoaded和load事件后都尝试移除，确保React应用启动后
+    if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', enableTransitions);
+    window.addEventListener('load', enableTransitions);
+    } else {
+    enableTransitions();
+    }
+
+    } catch (e) {
+    // 出现错误时，设置默认浅色主题
+    document.documentElement.removeAttribute('theme-mode');
+    }
+    })();
+  /*]]>*/
+  </script>
+
+  <!-- ↓↓↓ React 产物：构建后请用 CI 产出的 build_report.txt 中的标签替换 ↓↓↓ -->
+  <script crossorigin='anonymous' src='https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.js' type='module'/>
+  <link crossorigin='anonymous' href='https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.css' rel='stylesheet'/>
+  <!-- ↑↑↑ React 产物 END ↑↑↑ -->
+
+  <b:skin><![CDATA[
+  /* ================= 基础 ================= */
+  * { box-sizing: border-box; }
+  body {
+    background-color: var(--bg-color, #f5f5f9);
+    color: var(--text-color, #212529);
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; height: auto; }
+  .widget { margin: 0; }
+  .section { margin: 0; padding: 0; }
+
+  /* ================= 顶部导航（原生渲染，主题切换为 React 岛屿） ================= */
+  .site-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--surface-color, #ececf3);
+    border-bottom: 1px solid var(--border-color, #82969f);
+    box-shadow: 0 2px 4px var(--shadow-color, rgba(0, 0, 0, 0.1));
+  }
+  .site-nav__inner {
+    max-width: 1200px; margin: 0 auto; height: 60px; padding: 0 24px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .site-nav__brand { font-size: 18px; font-weight: 700; white-space: nowrap; }
+  .site-nav__links {
+    display: flex; align-items: center; gap: 20px; flex: 1; min-width: 0;
+    overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;
+  }
+  .site-nav__links::-webkit-scrollbar { display: none; }
+  .site-nav__link {
+    font-size: 14px; font-weight: 600; letter-spacing: 0.05em; white-space: nowrap;
+    padding: 4px 2px; border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .site-nav__link:hover { color: var(--primary-color, #82969f); border-bottom-color: var(--primary-color, #82969f); }
+  .site-nav__tools { display: flex; align-items: center; gap: 12px; }
+  .site-nav__search { display: flex; align-items: center; gap: 6px; }
+  .site-nav__search input {
+    width: 140px; padding: 6px 12px; font-size: 13px;
+    color: var(--text-color, #212529); background: var(--bg-color, #f5f5f9);
+    border: 1px solid var(--border-color, #82969f); border-radius: 999px;
+    outline: none; transition: width 0.25s, border-color 0.2s;
+  }
+  .site-nav__search input:focus { width: 200px; border-color: var(--primary-color, #82969f); }
+  .site-nav__search button {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border: none; border-radius: 50%;
+    background: transparent; color: var(--text-secondary-color, #627077); cursor: pointer;
+  }
+  .site-nav__search button:hover { color: var(--primary-color, #82969f); background: var(--bg-color, #f5f5f9); }
+  #react-theme { display: inline-flex; }
+
+  /* ================= 主页 / 列表页 ================= */
+  .home { padding: 40px 24px 64px; }
+  .home__inner { max-width: 1200px; margin: 0 auto; }
+  .home__hero { padding: 16px 0 28px; margin-bottom: 32px; border-bottom: 1px solid var(--border-color, #82969f); }
+  .home__title { margin: 0 0 12px; font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+  .home__desc { margin: 0; max-width: 720px; color: var(--text-secondary-color, #627077); font-size: 15px; }
+  .home__body { display: flex; gap: 40px; align-items: flex-start; }
+  .home__main { flex: 1; min-width: 0; }
+  .home__list-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; }
+  .home__list-title { margin: 0; font-size: 20px; font-weight: 700; }
+  .post-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 768px) { .post-grid { grid-template-columns: 1fr 1fr; } }
+  .post-card {
+    background: var(--surface-color, #ececf3);
+    border: 1px solid var(--border-color, #82969f);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 0, 0, 0.08));
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .post-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px var(--shadow-color, rgba(0, 0, 0, 0.12)); }
+  .post-card__link { display: block; padding: 20px; }
+  .post-card__meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text-secondary-color, #627077); }
+  .post-card__tag {
+    padding: 2px 10px; border-radius: 999px; font-weight: 600;
+    background: var(--primary-color, #82969f); color: var(--surface-color, #ececf3);
+  }
+  .post-card__title { margin: 0 0 8px; font-size: 18px; font-weight: 700; line-height: 1.35; }
+  .post-card:hover .post-card__title { color: var(--primary-color, #82969f); }
+  .post-card__snippet {
+    margin: 0; font-size: 14px; color: var(--text-secondary-color, #627077);
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .pager { display: flex; justify-content: center; gap: 16px; margin-top: 36px; }
+  .pager__btn {
+    padding: 8px 22px; border: 1px solid var(--border-color, #82969f); border-radius: 999px;
+    font-size: 14px; font-weight: 600; transition: background 0.2s, color 0.2s;
+  }
+  .pager__btn:hover { background: var(--primary-color, #82969f); color: var(--surface-color, #ececf3); }
+  .home__side { flex: 0 0 300px; position: sticky; top: 84px; min-width: 0; }
+  @media (max-width: 1024px) {
+    .home__body { flex-direction: column; }
+    .home__side { flex: none; width: 100%; position: static; }
+  }
+
+  /* ================= 文章 / 页面详情 ================= */
+  .post-detail { padding: 48px 24px 72px; }
+  .post-detail__header { max-width: 900px; margin: 0 auto 36px; }
+  .post-detail__label {
+    display: inline-block; margin-bottom: 12px; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary-color, #82969f);
+  }
+  .post-detail__title { margin: 0 0 24px; font-size: 40px; line-height: 1.2; font-weight: 800; word-break: break-word; }
+  .post-detail__meta { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 24px; padding-top: 20px; border-top: 1px solid var(--border-color, #82969f); }
+  @media (min-width: 768px) { .post-detail__meta { grid-template-columns: repeat(4, 1fr); } }
+  .post-detail__meta-item { display: flex; flex-direction: column; gap: 4px; font-size: 14px; min-width: 0; }
+  .post-detail__meta-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--text-secondary-color, #627077); }
+  .post-detail__meta-value { font-weight: 600; word-break: break-word; }
+  .post-detail__meta-value a:hover { color: var(--primary-color, #82969f); }
+  .post-detail__share { color: var(--primary-color, #82969f); font-weight: 700; cursor: pointer; }
+  .post-detail__share:hover { text-decoration: underline; }
+  .post-detail__cover { max-width: 1200px; margin: 0 auto 40px; border-radius: 12px; overflow: hidden; }
+  .post-detail__layout { max-width: 900px; margin: 0 auto; }
+  /* 桌面端为左侧常驻目录预留空间（变量由 toc.css 定义，窄视口自动归零） */
+  @media (min-width: 1025px) {
+    .post-detail__layout { padding-left: calc(var(--toc-panel-left, 24px) + var(--toc-panel-width, 248px) + 32px); }
+  }
+  .post-detail__content { min-width: 0; }
+
+  /* 正文兜底排版：细化样式由 PostBodyEnhancer 岛屿注入的 .blog-content 规则提供 */
+  .post-body { font-size: 17px; line-height: 1.8; overflow-wrap: break-word; }
+  .post-body h1, .post-body h2, .post-body h3, .post-body h4 { margin: 1.5em 0 0.8em; line-height: 1.3; }
+  .post-body img { border-radius: 8px; margin: 1rem 0; cursor: zoom-in; }
+  .post-body pre { padding: 1rem; border-radius: 8px; overflow-x: auto; background: rgba(127, 127, 127, 0.12); }
+  .post-body code { font-family: 'JetBrains Mono', Consolas, Monaco, 'Courier New', monospace; }
+  .post-body blockquote {
+    margin: 1rem 0; padding: 0.5rem 1rem; border-left: 4px solid var(--primary-color, #82969f);
+    border-radius: 4px; color: var(--text-secondary-color, #627077); background: var(--surface-color, #ececf3);
+  }
+  .post-body table { width: 100%; border-collapse: collapse; }
+  .post-body th, .post-body td { border: 1px solid var(--border-color, #82969f); padding: 0.5rem 0.75rem; }
+
+  /* ================= 原生评论 ================= */
+  .post-detail__comments { max-width: 900px; margin: 56px auto 0; padding-top: 32px; border-top: 1px solid var(--border-color, #82969f); }
+  #comments h3 { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 800; margin: 0 0 24px; }
+  #comments h3::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--primary-color, #82969f); }
+  .comment { margin-bottom: 28px; }
+  .comment-block { margin-left: 16px; }
+  .comment-header { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+  .comment-author { font-weight: 700; font-style: normal; }
+  .comment-author a { color: inherit; }
+  .comment-timestamp { font-size: 12px; color: var(--text-secondary-color, #627077); }
+  .comment-timestamp a { color: inherit; }
+  .comment-body { font-size: 15px; line-height: 1.6; }
+  .comment-body p { margin: 0 0 0.5em; }
+  .avatar-image-container img { border-radius: 50%; width: 40px; height: 40px; border: 2px solid var(--surface-color, #ececf3); }
+  .comment-actions a, .comment-reply-link, .comment-footer a {
+    display: inline-block; margin: 8px 8px 0 0; padding: 4px 14px;
+    font-size: 12px; font-weight: 700; color: var(--primary-color, #82969f);
+    border: 1px solid var(--primary-color, #82969f); border-radius: 999px;
+    text-decoration: none; transition: background 0.2s, color 0.2s;
+  }
+  .comment-actions a:hover, .comment-reply-link:hover, .comment-footer a:hover {
+    background: var(--primary-color, #82969f); color: var(--surface-color, #ececf3);
+  }
+  .comment-form h4 { font-size: 16px; font-weight: 800; margin: 24px 0 12px; }
+  .comments .paging-control-container { display: flex; gap: 12px; align-items: center; font-size: 13px; margin: 16px 0; }
+
+  /* ================= 页脚 ================= */
+  .site-footer { border-top: 1px solid var(--border-color, #82969f); background: var(--surface-color, #ececf3); padding: 28px 24px; margin-top: auto; }
+  .site-footer__inner {
+    max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap;
+    justify-content: space-between; gap: 20px; font-size: 13px; color: var(--text-secondary-color, #627077);
+  }
+  .site-footer__brand { font-size: 18px; font-weight: 800; color: var(--text-color, #212529); }
+  .site-footer__col { display: flex; flex-direction: column; gap: 6px; }
+  .site-footer a:hover { color: var(--primary-color, #82969f); }
+
+  /* ================= 复制链接 Toast ================= */
+  #copy-toast {
+    position: fixed; left: 50%; bottom: 32px; transform: translateX(-50%); z-index: 200;
+    padding: 10px 22px; border-radius: 999px; font-size: 13px; font-weight: 600;
+    background: var(--text-color, #212529); color: var(--bg-color, #f5f5f9);
+    opacity: 0; visibility: hidden; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s, bottom 0.3s, visibility 0.3s;
+  }
+  #copy-toast.show { opacity: 1; visibility: visible; bottom: 48px; }
+  ]]></b:skin>
+</head>
+
+<body>
+  <!-- 顶部导航：error 视图（SPA 模式）下由 React 自行渲染导航，这里隐藏 -->
+  <b:if cond='!data:view.isError'>
+    <nav class='site-nav' aria-label='主导航'>
+      <div class='site-nav__inner'>
+        <a class='site-nav__brand' expr:href='data:blog.homepageUrl'><data:blog.title/></a>
+        <div class='site-nav__links'>
+          <a class='site-nav__link' expr:href='data:blog.homepageUrl'>HOME</a>
+          <a class='site-nav__link' href='/archives'>ARCHIVES</a>
+          <a class='site-nav__link' href='/pages'>PAGES</a>
+        </div>
+        <div class='site-nav__tools'>
+          <!-- Blogger 原生搜索 -->
+          <form action='/search' class='site-nav__search' method='get' role='search'>
+            <input aria-label='搜索' name='q' placeholder='Search...' type='text'/>
+            <button aria-label='搜索' type='submit'>
+              <svg fill='none' height='16' stroke='currentColor' stroke-width='2' viewBox='0 0 24 24' width='16'>
+                <circle cx='11' cy='11' r='8'/>
+                <line x1='21' y1='21' x2='16.65' y2='16.65'/>
+              </svg>
+            </button>
+          </form>
+          <!-- React 岛屿：主题切换 -->
+          <div id='react-theme'/>
+        </div>
+      </div>
+    </nav>
+  </b:if>
+
+  <main class='site-main'>
+    <b:section id='main' showaddelement='yes'>
+      <b:widget id='Blog1' locked='true' title='博文' type='Blog' version='2' visible='true'>
+        <b:widget-settings>
+          <b:widget-setting name='showDateHeader'>false</b:widget-setting>
+          <b:widget-setting name='commentLabel'>comments</b:widget-setting>
+          <b:widget-setting name='style.textcolor'>#212529</b:widget-setting>
+          <b:widget-setting name='showShareButtons'>true</b:widget-setting>
+          <b:widget-setting name='showCommentLink'>true</b:widget-setting>
+          <b:widget-setting name='style.urlcolor'>#212529</b:widget-setting>
+          <b:widget-setting name='postLocationLabel'>Location:</b:widget-setting>
+          <b:widget-setting name='showAuthor'>false</b:widget-setting>
+          <b:widget-setting name='style.linkcolor'>#212529</b:widget-setting>
+          <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
+          <b:widget-setting name='style.bgcolor'>#f5f5f9</b:widget-setting>
+          <b:widget-setting name='timestampLabel'>-</b:widget-setting>
+          <b:widget-setting name='reactionsLabel'/>
+          <b:widget-setting name='showAuthorProfile'>true</b:widget-setting>
+          <b:widget-setting name='style.layout'>1x1</b:widget-setting>
+          <b:widget-setting name='showLabels'>true</b:widget-setting>
+          <b:widget-setting name='showLocation'>true</b:widget-setting>
+          <b:widget-setting name='postLabelsLabel'/>
+          <b:widget-setting name='showTimestamp'>true</b:widget-setting>
+          <b:widget-setting name='postsPerAd'>1</b:widget-setting>
+          <b:widget-setting name='showBacklinks'>false</b:widget-setting>
+          <b:widget-setting name='style.bordercolor'>#82969f</b:widget-setting>
+          <b:widget-setting name='showInlineAds'>false</b:widget-setting>
+          <b:widget-setting name='showReactions'>false</b:widget-setting>
+        </b:widget-settings>
+        <b:includable id='main' var='top'>
+          <!-- [VIEW 0] SPA 回退：Blogger 无法识别的纯客户端路由（/archives、/search、/pages 等），交给 React Router -->
+          <b:if cond='data:view.isError'>
+            <div id='root'/>
+
+          <!-- [VIEW 1] 列表页：主页 / 标签 / 归档 / 搜索结果（服务端渲染，可被 Google 索引） -->
+          <b:elseif cond='data:view.isMultipleItems'/>
+            <div class='home'>
+              <div class='home__inner'>
+                <header class='home__hero'>
+                  <h1 class='home__title'><data:blog.title/></h1>
+                  <p class='home__desc'>生活分享和记录技术的博客，同时也兼作为社团的资料站。饮盏茶再走吧。</p>
+                </header>
+                <div class='home__body'>
+                  <div class='home__main'>
+                    <div class='home__list-head'>
+                      <h2 class='home__list-title'>
+                        <b:if cond='data:view.isSearch and not data:view.isLabelSearch'>
+                          搜索结果
+                        <b:elseif cond='data:view.isLabelSearch'/>
+                          标签：<data:blog.searchLabel/>
+                        <b:elseif cond='data:view.isArchive'/>
+                          归档：<data:blog.pageName/>
+                        <b:else/>
+                          最新文章
+                        </b:if>
+                      </h2>
+                    </div>
+                    <div class='post-grid'>
+                      <b:loop values='data:posts' var='post'>
+                        <article class='post-card'>
+                          <a class='post-card__link' expr:href='data:post.url'>
+                            <div class='post-card__meta'>
+                              <b:if cond='data:post.labels'>
+                                <span class='post-card__tag'><data:post.labels.first.name/></span>
+                              </b:if>
+                              <time expr:datetime='data:post.date.iso8601'><data:post.date/></time>
+                            </div>
+                            <h3 class='post-card__title'><data:post.title/></h3>
+                            <p class='post-card__snippet'><data:post.snippet/></p>
+                          </a>
+                        </article>
+                      </b:loop>
+                    </div>
+                    <!-- 原生分页（链接可被搜索引擎跟随） -->
+                    <nav class='pager' aria-label='分页'>
+                      <b:if cond='data:newerPageUrl'>
+                        <a class='pager__btn' expr:href='data:newerPageUrl' rel='prev'>&#8592; 上一页</a>
+                      </b:if>
+                      <b:if cond='data:olderPageUrl'>
+                        <a class='pager__btn' expr:href='data:olderPageUrl' rel='next'>下一页 &#8594;</a>
+                      </b:if>
+                    </nav>
+                  </div>
+                  <aside class='home__side'>
+                    <!-- React 岛屿：友站链接 -->
+                    <div id='react-blogroll'/>
+                    <!-- 预留原生小工具挂载点：可在 Blogger 布局 UI 中添加热门文章 / 标签 / 归档等原生部件 -->
+                    <b:section id='home-sidebar' showaddelement='yes'/>
+                  </aside>
+                </div>
+              </div>
+            </div>
+
+          <!-- [VIEW 2] 文章 / 页面详情（服务端渲染正文，启用原生评论） -->
+          <b:else/>
+            <b:loop values='data:posts' var='post'>
+              <article class='post-detail'>
+                <!-- 结构化数据（SEO） -->
+                <b:if cond='data:view.isPost'>
+                  <script type='application/ld+json'>
+                  {
+                    "@context": "https://schema.org",
+                    "@type": "BlogPosting",
+                    "mainEntityOfPage": {
+                      "@type": "WebPage",
+                      "@id": "<data:post.url.canonical/>"
+                    },
+                    "headline": "<data:post.title/>",
+                    "datePublished": "<data:post.date.iso8601/>",
+                    "dateModified": "<data:post.lastUpdated.iso8601/>",
+                    "author": {
+                      "@type": "Person",
+                      "name": "<data:post.author.name/>"
+                    },
+                    "publisher": {
+                      "@type": "Organization",
+                      "name": "<data:blog.title/>"
+                    }
+                  }
+                  </script>
+                </b:if>
+
+                <header class='post-detail__header'>
+                  <b:if cond='data:post.labels'>
+                    <a class='post-detail__label' expr:href='data:post.labels.first.url'><data:post.labels.first.name/></a>
+                  </b:if>
+                  <h1 class='post-detail__title'><data:post.title/></h1>
+                  <b:if cond='!data:view.isPage'>
+                    <div class='post-detail__meta'>
+                      <div class='post-detail__meta-item'>
+                        <span class='post-detail__meta-label'>AUTHOR</span>
+                        <span class='post-detail__meta-value'><data:post.author.name/></span>
+                      </div>
+                      <div class='post-detail__meta-item'>
+                        <span class='post-detail__meta-label'>DATE</span>
+                        <span class='post-detail__meta-value'><data:post.date/></span>
+                      </div>
+                      <div class='post-detail__meta-item'>
+                        <span class='post-detail__meta-label'>LABELS</span>
+                        <span class='post-detail__meta-value'>
+                          <b:if cond='data:post.labels'>
+                            <b:loop index='i' values='data:post.labels' var='label'>
+                              <a expr:href='data:label.url'><data:label.name/></a><b:if cond='data:i &lt; data:post.labels.size - 1'>, </b:if>
+                            </b:loop>
+                          <b:else/>
+                            -
+                          </b:if>
+                        </span>
+                      </div>
+                      <div class='post-detail__meta-item'>
+                        <span class='post-detail__meta-label'>SHARE</span>
+                        <span class='post-detail__meta-value'>
+                          <a class='post-detail__share' href='#' onclick='copyPostLink(); return false;'>Copy Link &#8599;</a>
+                        </span>
+                      </div>
+                    </div>
+                  </b:if>
+                </header>
+
+                <b:if cond='data:post.firstImageUrl'>
+                  <div class='post-detail__cover'>
+                    <img expr:alt='data:post.title' expr:src='resizeImage(data:post.firstImageUrl, 1600)'/>
+                  </div>
+                </b:if>
+
+                <div class='post-detail__layout'>
+                  <!-- React 岛屿：文章目录（桌面端常驻左侧，移动端折叠卡片） -->
+                  <div id='react-toc'/>
+                  <div class='post-detail__content'>
+                    <!-- 正文由 Blogger 服务端渲染；blog-content 类供目录/增强岛屿定位 -->
+                    <div class='post-body blog-content'>
+                      <data:post.body/>
+                    </div>
+                    <!-- React 岛屿：正文增强（代码高亮 / KaTeX / 外链嵌入 / 图片灯箱） -->
+                    <div id='react-post-body'/>
+                  </div>
+                </div>
+
+                <!-- 原生评论区（页面类型不显示） -->
+                <b:if cond='!data:view.isPage'>
+                  <section class='post-detail__comments' aria-label='评论'>
+                    <b:include data='post' name='commentPicker'/>
+                  </section>
+                </b:if>
+              </article>
+            </b:loop>
+          </b:if>
+        </b:includable>
+            <b:includable id='aboutPostAuthor'>
+  <div class='author-name'>
+    <a class='g-profile' expr:href='data:post.author.profileUrl' rel='author' title='author profile'>
+      <span>
+        <data:post.author.name/>
+      </span>
+    </a>
+  </div>
+  <div>
+    <span class='author-desc'>
+      <data:post.author.aboutMe/>
+    </span>
+  </div>
+</b:includable>
+            <b:includable id='addComments'>
+  <a expr:href='data:post.commentsUrl' expr:onclick='data:post.commentsUrlOnclick'>
+    <b:message name='messages.postAComment'/>
+  </a>
+</b:includable>
+            <b:includable id='blogThisShare'>
+  <b:with value='&quot;window.open(this.href, \&quot;_blank\&quot;, \&quot;height=270,width=475\&quot;); return false;&quot;' var='onclick'>
+    <b:include name='platformShare'/>
+  </b:with>
+</b:includable>
+            <b:includable id='bylineByName' var='byline'>
+  <b:switch var='data:byline.name'>
+  <b:case value='share'/>
+    <b:include cond='data:post.shareUrl' name='postShareButtons'/>
+  <b:case value='comments'/>
+    <b:include cond='data:post.allowComments' name='postCommentsLink'/>
+  <b:case value='location'/>
+    <b:include cond='data:post.location' name='postLocation'/>
+  <b:case value='timestamp'/>
+    <b:include cond='not data:view.isPage' name='postTimestamp'/>
+  <b:case value='author'/>
+    <b:include name='postAuthor'/>
+  <b:case value='labels'/>
+    <b:include cond='data:post.labels' name='postLabels'/>
+  <b:case value='icons'/>
+    <b:include cond='data:post.emailPostUrl' name='emailPostIcon'/>
+  </b:switch>
+</b:includable>
+            <b:includable id='bylineRegion' var='regionItems'>
+  <b:loop values='data:regionItems' var='byline'>
+    <b:include data='byline' name='bylineByName'/>
+  </b:loop>
+</b:includable>
+            <b:includable id='commentAuthorAvatar'>
+  <div class='avatar-image-container'>
+    <img class='author-avatar' expr:src='data:comment.authorAvatarSrc' height='35' width='35'/>
+  </div>
+</b:includable>
+            <b:includable id='commentDeleteIcon' var='comment'>
+  <span expr:class='&quot;item-control &quot; + data:comment.adminClass'>
+    <b:if cond='data:showCmtPopup'>
+      <div class='goog-toggle-button'>
+        <div class='goog-inline-block comment-action-icon'/>
+      </div>
+    <b:else/>
+      <a class='comment-delete' expr:href='data:comment.deleteUrl' expr:title='data:messages.deleteComment'>
+        <img src='https://resources.blogblog.com/img/icon_delete13.gif'/>
+      </a>
+    </b:if>
+  </span>
+</b:includable>
+            <b:includable id='commentForm' var='post'>
+  <div class='comment-form'>
+    <a name='comment-form'/>
+    <h4 id='comment-post-message'><data:messages.postAComment/></h4>
+    <b:if cond='data:this.messages.blogComment != &quot;&quot;'>
+      <p><data:this.messages.blogComment/></p>
+    </b:if>
+    <b:include data='post' name='commentFormIframeSrc'/>
+    <iframe allowtransparency='allowtransparency' class='blogger-iframe-colorize blogger-comment-from-post' expr:height='data:cmtIframeInitialHeight ?: &quot;90px&quot;' frameborder='0' id='comment-editor' name='comment-editor' src='' width='100%'/>
+    <data:post.cmtfpIframe/>
+    <script type='text/javascript'>
+      BLOG_CMT_createIframe(&#39;<data:post.appRpcRelayPath/>&#39;);
     </script>
+  </div>
+</b:includable>
+            <b:includable id='commentFormIframeSrc' var='post'>
+  <a expr:href='data:post.commentFormIframeSrc' id='comment-editor-src'/>
+</b:includable>
+            <b:includable id='commentItem' var='comment'>
+  <div class='comment' expr:id='&quot;c&quot; + data:comment.id'>
+    <b:include cond='data:blog.enabledCommentProfileImages' name='commentAuthorAvatar'/>
 
-    <script>
-      /*<![CDATA[*/
-      (function () {
-      const { search, hash, pathname } = window.location;
+    <div class='comment-block'>
+      <!-- [NEW] Modified Comment Header -->
+      <div class='comment-header'>
+        <div class='comment-author'>
+          <b:if cond='data:comment.authorUrl'>
+            <a expr:href='data:comment.authorUrl' rel='nofollow' target='_blank'><data:comment.author/></a>
+          <b:else/>
+            <data:comment.author/>
+          </b:if>
+        </div>
+        <span class='comment-timestamp'>
+          <data:comment.timestamp/>
+        </span>
+      </div>
 
-      // 条件1: URL 中包含 ?sc=... 查询参数
-      const hasSuccessParam = search.includes('sc=');
+      <!-- Comment Body -->
+      <div expr:class='&quot;comment-body&quot; + (data:comment.isDeleted ? &quot; deleted&quot; : &quot;&quot;)'>
+        <data:comment.body/>
+      </div>
 
-      // 条件2: URL 中包含 #c... 哈希
-      const hasCommentHash = hash.startsWith('#c');
+      <!-- Comment Actions (Footer) -->
+      <div class='comment-footer'>
+        <b:include data='comment' name='commentDeleteIcon'/>
+      </div>
+    </div>
+  </div>
+</b:includable>
+            <b:includable id='commentList' var='comments'>
+  <div id='comments-block'>
+    <b:loop values='data:comments' var='comment'>
+      <b:include data='comment' name='commentItem'/>
+    </b:loop>
+  </div>
+</b:includable>
+            <b:includable id='commentPicker' var='post'>
+  <b:if cond='data:post.showThreadedComments'>
+    <b:include data='post' name='threadedComments'/>
+  <b:else/>
+    <b:include data='post' name='comments'/>
+  </b:if>
+</b:includable>
+            <b:includable id='comments' var='post'>
+  <section expr:class='&quot;comments&quot; + (data:post.embedCommentForm ? &quot; embed&quot; : &quot;&quot;)' expr:data-num-comments='data:post.numberOfComments' id='comments'>
+    <a name='comments'/>
+    <b:if cond='data:post.allowComments'>
 
-      // 条件3 (备用): 检查旧的 window.name 方式，作为补充
-      const hasSuccessName = pathname.startsWith('new-comment-');
+      <b:include name='commentsTitle'/>
 
-      // 如果满足URL条件，或者满足备用的 window.name 条件，就认为是成功弹窗
-      const isCommentSuccessPopup = (hasSuccessParam && hasCommentHash) || hasSuccessName; 
-      if (isCommentSuccessPopup) {
-        window.close();
-      }
-      try {
-      // 从 localStorage 获取主题
-      let theme = localStorage.getItem('theme');
+      <div expr:id='data:widget.instanceId + &quot;_comments-block-wrapper&quot;'>
+        <b:include cond='data:post.comments' data='post.comments' name='commentList'/>
+      </div>
 
-      // 如果没有手动设置主题，才使用系统偏好
-      if (theme === null || theme === undefined) {
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      theme = prefersDark ? 'dark' : 'light';
-      }
+      <b:if cond='data:post.commentPagingRequired'>
+        <div class='paging-control-container'>
+          <b:if cond='data:post.hasOlderLinks'>
+            <a expr:class='data:post.oldLinkClass' expr:href='data:post.oldestLinkUrl'>
+              <data:messages.oldest/>
+            </a>
+            <a expr:class='data:post.oldLinkClass' expr:href='data:post.olderLinkUrl'>
+              <data:messages.older/>
+            </a>
+          </b:if>
 
-      // 立即设置主题属性，让CSS立即生效
-      // TDesign 推荐使用 theme-mode 属性
-      if (theme === 'dark') {
-      document.documentElement.setAttribute('theme-mode', 'dark');
-      } else {
-      document.documentElement.removeAttribute('theme-mode');
-      }
+          <span class='comment-range-text'>
+            <data:post.commentRangeText/>
+          </span>
 
-      // 在页面加载完成后移除阻塞样式，让正常的CSS接管
-      function enableTransitions() {
-      const blockingStyles = document.getElementById('theme-blocking-styles');
-      if (blockingStyles) {
-      blockingStyles.remove();
-      }
-      }
+          <b:if cond='data:post.hasNewerLinks'>
+            <a expr:class='data:post.newLinkClass' expr:href='data:post.newerLinkUrl'>
+              <data:messages.newer/>
+            </a>
+            <a expr:class='data:post.newLinkClass' expr:href='data:post.newestLinkUrl'>
+              <data:messages.newest/>
+            </a>
+          </b:if>
+        </div>
+      </b:if>
 
-      // 在DOMContentLoaded和load事件后都尝试移除，确保React应用启动后
-      if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', enableTransitions);
-      window.addEventListener('load', enableTransitions);
-      } else {
-      enableTransitions();
-      }
+      <div class='footer'>
+        <b:if cond='data:post.embedCommentForm'>
+          <b:if cond='data:post.allowNewComments'>
+            <b:include data='post' name='commentForm'/>
+          <b:else/>
+            <data:post.noNewCommentsText/>
+          </b:if>
+        <b:else/>
+          <b:if cond='data:post.allowComments'>
+            <b:include data='post' name='addComments'/>
+          </b:if>
+        </b:if>
+      </div>
+    </b:if>
+    <b:if cond='data:showCmtPopup'>
+      <div id='comment-popup'>
+        <iframe allowtransparency='allowtransparency' frameborder='0' id='comment-actions' name='comment-actions' scrolling='no'>
+        </iframe>
+      </div>
+    </b:if>
+  </section>
+</b:includable>
+            <b:includable id='commentsLink'>
+  <a class='comment-link' expr:href='data:post.commentsUrl' expr:onclick='data:post.commentsUrlOnclick'>
+    <b:if cond='data:post.numberOfComments &gt; 0'>
+      <b:message name='messages.numberOfComments'>
+        <b:param expr:value='data:post.numberOfComments' name='numComments'/>
+      </b:message>
+    <b:else/>
+      <data:messages.postAComment/>
+    </b:if>
+  </a>
+</b:includable>
+            <b:includable id='commentsLinkIframe'>
+  <!-- G+ comments, no longer available. The includable is retained for backwards-compatibility. -->
+</b:includable>
+            <b:includable id='commentsTitle'>
+  <h3 class='title'><data:messages.comments/></h3>
+</b:includable>
+            <b:includable id='defaultAdUnit'>
+  <ins class='adsbygoogle' data-ad-format='auto' expr:data-ad-client='data:adClientId ?: data:blog.adsenseClientId' expr:data-ad-host='data:blog.adsenseHostId' expr:style='data:style ?: &quot;display: block;&quot;'>
+    <b:attr cond='not data:blog.analytics4' expr:value='data:blog.analyticsAccountNumber' name='data-analytics-uacct'/>
+  </ins>
+  <script>
+   (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</b:includable>
+            <b:includable id='emailPostIcon'>
+  <span class='byline post-icons'>
+    <!-- email post links -->
+    <span class='item-action'>
+      <a expr:href='data:post.emailPostUrl' expr:title='data:messages.emailPost'>
+        <b:include data='{ iconClass: &quot;touch-icon sharing-icon&quot; }' name='emailIcon'/>
+      </a>
+    </span>
+  </span>
+</b:includable>
+            <b:includable id='facebookShare'>
+  <b:with value='&quot;window.open(this.href, \&quot;_blank\&quot;, \&quot;height=430,width=640\&quot;); return false;&quot;' var='onclick'>
+    <b:include name='platformShare'/>
+  </b:with>
+</b:includable>
+            <b:includable id='feedLinks'>
+  <b:if cond='!data:view.isPost'> <!-- Blog feed links -->
+    <b:if cond='data:feedLinks'>
+      <div class='blog-feeds'>
+        <b:include data='feedLinks' name='feedLinksBody'/>
+      </div>
+    </b:if>
+  <b:else/> <!--Post feed links -->
+    <div class='post-feeds'>
+      <b:loop values='data:posts' var='post'>
+        <b:if cond='data:post.allowComments and data:post.feedLinks'>
+          <b:include data='post.feedLinks' name='feedLinksBody'/>
+        </b:if>
+      </b:loop>
+    </div>
+  </b:if>
+</b:includable>
+            <b:includable id='feedLinksBody' var='links'>
+  <div class='feed-links'>
+  <data:messages.subscribeTo/>
+  <b:loop values='data:links' var='f'>
+     <a class='feed-link' expr:href='data:f.url' expr:type='data:f.mimeType' target='_blank'><data:f.name/> (<data:f.feedType/>)</a>
+  </b:loop>
+  </div>
+</b:includable>
+            <b:includable id='footerBylines'>
+  <b:if cond='data:widgets.Blog.first.footerBylines'>
+    <b:loop index='i' values='data:widgets.Blog.first.footerBylines' var='region'>
+      <b:if cond='not data:region.items.empty'>
+        <div expr:class='&quot;post-footer-line post-footer-line-&quot; + (data:i + 1)'>
+          <b:with value='&quot;footer-&quot; + (data:i + 1)' var='regionName'>
+            <b:include data='region.items' name='bylineRegion'/>
+          </b:with>
+        </div>
+      </b:if>
+    </b:loop>
+  </b:if>
+</b:includable>
+            <b:includable id='googlePlusShare'>
+</b:includable>
+            <b:includable id='headerByline'>
+  <b:if cond='data:widgets.Blog.first.headerByline'>
+    <div class='post-header'>
+      <div class='post-header-line-1'>
+        <b:with value='&quot;header-1&quot;' var='regionName'>
+          <b:include data='data:widgets.Blog.first.headerByline.items' name='bylineRegion'/>
+        </b:with>
+      </div>
+    </div>
+  </b:if>
+</b:includable>
+            <b:includable id='homePageLink'>
+  <a class='home-link' expr:href='data:blog.homepageUrl'>
+    <data:messages.home/>
+  </a>
+</b:includable>
+            <b:includable id='iframeComments' var='post'>
+  <!-- G+ comments, no longer available. The includable is retained for backwards-compatibility. -->
+</b:includable>
+            <b:includable id='inlineAd' var='post'>
+  <b:if cond='!data:view.isPreview'>
+    <b:if cond='data:this.adCode or data:this.adClientId or data:blog.adsenseClientId'>
+      <!-- Ad -->
+      <div class='inline-ad'>
+        <b:if cond='data:this.adCode != &quot;&quot;'>
+          <data:this.adCode/>
+        <b:else/>
+          <b:include cond='data:this.adClientId or data:blog.adsenseClientId' name='defaultAdUnit'/>
+        </b:if>
+      </div>
+    </b:if>
+  <b:else/>
+    <div class='inline-ad'>
+      <div class='inline-ad-placeholder'>
+        <span><b:message name='messages.adsGoHere'/></span>
+      </div>
+    </div>
+  </b:if>
+</b:includable>
+            <b:includable id='linkShare'>
+  <b:with value='&quot;window.prompt(\&quot;Copy to clipboard: Ctrl+C, Enter\&quot;, \&quot;&quot; + data:originalUrl + &quot;\&quot;); return false;&quot;' var='onclick'>
+    <b:include name='platformShare'/>
+  </b:with>
+</b:includable>
+            <b:includable id='nextPageLink'>
+  <a class='blog-pager-older-link' expr:href='data:olderPageUrl' expr:id='data:widget.instanceId + &quot;_blog-pager-older-link&quot;' expr:title='data:messages.olderPosts'>
+    <data:messages.olderPosts/>
+  </a>
+</b:includable>
+            <b:includable id='otherSharingButton'>
+  <span class='sharing-platform-button sharing-element-other' expr:aria-label='data:messages.shareToOtherApps.escaped' expr:data-url='data:originalUrl' expr:title='data:messages.shareToOtherApps.escaped' role='menuitem' tabindex='-1'>
+    <b:with value='{key: &quot;sharingOther&quot;}' var='platform'>
+      <b:include name='sharingPlatformIcon'/>
+    </b:with>
+    <span class='platform-sharing-text'><data:messages.shareOtherApps.escaped/></span>
+  </span>
+</b:includable>
+            <b:includable id='platformShare'>
+  <a expr:class='&quot;goog-inline-block sharing-&quot; + data:platform.key' expr:data-url='data:originalUrl' expr:href='data:shareUrl + &quot;&amp;target=&quot; + data:platform.target' expr:onclick='data:onclick ? data:onclick : &quot;&quot;' expr:title='data:platform.shareMessage' target='_blank'>
+    <span class='share-button-link-text'>
+      <data:platform.shareMessage/>
+    </span>
+  </a>
+</b:includable>
+            <b:includable id='post' var='post'>
+  <div class='post'>
+    <b:include data='post' name='postMeta'/>
+    <b:include data='post' name='postTitle'/>
+    <b:include name='headerByline'/>
+    <b:if cond='data:view.isSingleItem'>
+      <b:include data='post' name='postBody'/>
+    <b:else/>
+      <b:include data='post' name='postBodySnippet'/>
+      <b:include data='post' name='postJumpLink'/>
+    </b:if>
+    <b:include data='post' name='postFooter'/>
+  </div>
+</b:includable>
+            <b:includable id='postAuthor'>
+  <span class='byline post-author vcard'>
+    <span class='post-author-label'>
+      <data:byline.label/>
+    </span>
+    <span class='fn'>
+      <b:if cond='data:post.author.profileUrl'>
+        <meta expr:content='data:post.author.profileUrl'/>
+        <a class='g-profile' expr:href='data:post.author.profileUrl' rel='author' title='author profile'>
+          <span><data:post.author.name/></span>
+        </a>
+      <b:else/>
+        <span><data:post.author.name/></span>
+      </b:if>
+    </span>
+  </span>
+</b:includable>
+            <b:includable id='postBody' var='post'>
+  <!-- If metaDescription is empty, use the post body as the schema.org description too, for G+/FB snippeting. -->
+  <div class='post-body entry-content float-container' expr:id='&quot;post-body-&quot; + data:post.id'>
+    <data:post.body/>
+  </div>
+</b:includable>
+            <b:includable id='postBodySnippet' var='post'>
+  <b:include data='post' name='postBody'/>
+</b:includable>
+            <b:includable id='postCommentsAndAd' var='post'>
+  <article class='post-outer-container'>
+    <!-- Post title and body -->
+    <div class='post-outer'>
+      <b:include data='post' name='post'/>
+    </div>
 
-      } catch (e) {
-      // 出现错误时，设置默认浅色主题
-      document.documentElement.removeAttribute('theme-mode');
-      }
-      })();
-/*]]>*/
+    <!-- Comments -->
+    <b:include cond='data:view.isSingleItem' data='post' name='commentPicker'/>
+
+    <!-- Show ad inside post container, after comments, if single item. -->
+    <b:include cond='data:view.isSingleItem and data:post.includeAd' data='post' name='inlineAd'/>
+  </article>
+
+  <!-- Show ad outside post container (between posts) for feed pages. -->
+  <b:include cond='data:view.isMultipleItems and data:post.includeAd' data='post' name='inlineAd'/>
+</b:includable>
+            <b:includable id='postCommentsLink'>
+  <b:if cond='data:view.isMultipleItems'>
+    <span class='byline post-comment-link container'>
+      <b:include cond='data:post.commentSource != 1' name='commentsLink'/>
+    </span>
+  </b:if>
+</b:includable>
+            <b:includable id='postFooter' var='post'>
+  <div class='post-footer'>
+    <b:include name='footerBylines'/>
+    <b:include data='post' name='postFooterAuthorProfile'/>
+  </div>
+</b:includable>
+            <b:includable id='postFooterAuthorProfile' var='post'>
+  <b:if cond='data:post.author.aboutMe and data:view.isPost'>
+    <div class='author-profile'>
+      <b:if cond='data:post.author.authorPhoto.url'>
+        <img class='author-image' expr:src='data:post.author.authorPhoto.url' width='50px'/>
+        <div class='author-about'>
+          <b:include data='post' name='aboutPostAuthor'/>
+        </div>
+      <b:else/>
+        <b:include data='post' name='aboutPostAuthor'/>
+      </b:if>
+    </div>
+  </b:if>
+</b:includable>
+            <b:includable id='postHeader' var='post'>
+  <b:include name='headerByline'/>
+</b:includable>
+            <b:includable id='postJumpLink' var='post'>
+  <div class='jump-link flat-button'>
+    <a expr:href='data:post.url fragment &quot;more&quot;' expr:title='data:post.title'>
+      <b:eval expr='data:blog.jumpLinkMessage'/>
+    </a>
+  </div>
+</b:includable>
+            <b:includable id='postLabels'>
+  <span class='byline post-labels'>
+    <span class='byline-label'><data:byline.label/></span>
+    <b:loop index='i' values='data:post.labels' var='label'>
+      <a expr:href='data:label.url' rel='tag'>
+        <data:label.name/>
+      </a>
+    </b:loop>
+  </span>
+</b:includable>
+            <b:includable id='postLocation'>
+  <span class='byline post-location'>
+    <data:byline.label/>
+    <a expr:href='data:post.location.mapsUrl' target='_blank'><data:post.location.name/></a>
+  </span>
+</b:includable>
+            <b:includable id='postMeta' var='post'>
+  <b:include data='post' name='postMetadataJSON'/>
+</b:includable>
+            <b:includable id='postMetadataJSONImage'>
+  &quot;image&quot;: {
+    &quot;@type&quot;: &quot;ImageObject&quot;,
+    <b:if cond='data:post.featuredImage.isResizable'>
+    &quot;url&quot;: &quot;<b:eval expr='resizeImage(data:post.featuredImage, 1200, &quot;1200:630&quot;)'/>&quot;,
+    &quot;height&quot;: 630,
+    &quot;width&quot;: 1200
+    <b:else/>
+    &quot;url&quot;: &quot;https://blogger.googleusercontent.com/img/b/U2hvZWJveA/AVvXsEgfMvYAhAbdHksiBA24JKmb2Tav6K0GviwztID3Cq4VpV96HaJfy0viIu8z1SSw_G9n5FQHZWSRao61M3e58ImahqBtr7LiOUS6m_w59IvDYwjmMcbq3fKW4JSbacqkbxTo8B90dWp0Cese92xfLMPe_tg11g/w1200/&quot;,
+    &quot;height&quot;: 348,
+    &quot;width&quot;: 1200
+    </b:if>
+  },
+</b:includable>
+            <b:includable id='postMetadataJSONPublisher'>
+ &quot;publisher&quot;: {
+    &quot;@type&quot;: &quot;Organization&quot;,
+    &quot;name&quot;: &quot;Blogger&quot;,
+    &quot;logo&quot;: {
+      &quot;@type&quot;: &quot;ImageObject&quot;,
+      &quot;url&quot;: &quot;https://blogger.googleusercontent.com/img/b/U2hvZWJveA/AVvXsEgfMvYAhAbdHksiBA24JKmb2Tav6K0GviwztID3Cq4VpV96HaJfy0viIu8z1SSw_G9n5FQHZWSRao61M3e58ImahqBtr7LiOUS6m_w59IvDYwjmMcbq3fKW4JSbacqkbxTo8B90dWp0Cese92xfLMPe_tg11g/h60/&quot;,
+      &quot;width&quot;: 206,
+      &quot;height&quot;: 60
+    }
+  },
+</b:includable>
+            <b:includable id='postPagination'>
+  <div class='blog-pager container' id='blog-pager'>
+    <b:include cond='data:newerPageUrl' name='previousPageLink'/>
+    <b:include cond='data:olderPageUrl' name='nextPageLink'/>
+    <b:include cond='data:view.url != data:blog.homepageUrl' name='homePageLink'/>
+  </div>
+</b:includable>
+            <b:includable id='postReactions'>
+  <!-- Reaction feature no longer available. The includable is retained for backwards-compatibility. -->
+</b:includable>
+            <b:includable id='postShareButtons'>
+  <div class='byline post-share-buttons goog-inline-block'>
+    <b:with value='data:sharingId ?: ((data:widget.instanceId ?: &quot;sharing&quot;) + &quot;-&quot; + (data:regionName ?: &quot;byline&quot;) + &quot;-&quot; + data:post.id)' var='sharingId'>
+      <!-- Note: 'sharingButtons' includable is from the default Sharing widget markup. -->
+      <b:include data='{                                                sharingId: data:sharingId,                                                originalUrl: data:post.url,                                                platforms: data:this.sharing.platforms,                                                shareUrl: data:post.shareUrl,                                                shareTitle: data:post.title,                                              }' name='sharingButtons'/>
+    </b:with>
+  </div>
+</b:includable>
+            <b:includable id='postTimestamp'>
+  <span class='byline post-timestamp'>
+    <data:byline.label/>
+    <b:if cond='data:post.url'>
+      <meta expr:content='data:post.url.canonical'/>
+      <a class='timestamp-link' expr:href='data:post.url' rel='bookmark' title='permanent link'>
+        <time class='published' expr:datetime='data:post.date.iso8601' expr:title='data:post.date.iso8601'>
+          <data:post.date/>
+        </time>
+      </a>
+    </b:if>
+  </span>
+</b:includable>
+            <b:includable id='postTitle' var='post'>
+  <a expr:name='data:post.id'/>
+  <b:if cond='data:post.title != &quot;&quot;'>
+    <h3 class='post-title entry-title'>
+      <b:if cond='data:post.link or (data:post.url and data:view.url != data:post.url)'>
+        <a expr:href='data:post.link ?: data:post.url'><data:post.title/></a>
+      <b:else/>
+        <data:post.title/>
+      </b:if>
+    </h3>
+  </b:if>
+</b:includable>
+            <b:includable id='previousPageLink'>
+  <a class='blog-pager-newer-link' expr:href='data:newerPageUrl' expr:id='data:widget.instanceId + &quot;_blog-pager-newer-link&quot;' expr:title='data:messages.newerPosts'>
+    <data:messages.newerPosts/>
+  </a>
+</b:includable>
+            <b:includable id='sharingButton'>
+  <span expr:aria-label='data:platform.shareMessage' expr:class='&quot;sharing-platform-button sharing-element-&quot; + data:platform.key' expr:data-href='data:shareUrl + &quot;&amp;target=&quot; + data:platform.target' expr:data-url='data:originalUrl' expr:title='data:platform.shareMessage' role='menuitem' tabindex='-1'>
+    <b:include name='sharingPlatformIcon'/>
+    <span class='platform-sharing-text'><data:platform.name/></span>
+  </span>
+</b:includable>
+            <b:includable id='sharingButtonContent'>
+  <div class='flat-icon-button ripple'>
+    <b:include name='shareIcon'/>
+  </div>
+</b:includable>
+            <b:includable id='sharingButtons'>
+  <div class='sharing' expr:aria-owns='&quot;sharing-popup-&quot; + data:sharingId' expr:data-title='data:shareTitle'>
+    <button class='sharing-button touch-icon-button' expr:aria-controls='&quot;sharing-popup-&quot; + data:sharingId' expr:aria-label='data:messages.share.escaped' expr:id='&quot;sharing-button-&quot; + data:sharingId' role='button'>
+      <b:include name='sharingButtonContent'/>
+    </button>
+    <b:include name='sharingButtonsMenu'/>
+  </div>
+</b:includable>
+            <b:includable id='sharingButtonsMenu'>
+  <div class='share-buttons-container'>
+    <ul aria-hidden='true' class='share-buttons hidden' expr:aria-label='data:messages.share.escaped' expr:id='&quot;sharing-popup-&quot; + data:sharingId' role='menu'>
+      <b:loop values='(data:platforms ?: data:blog.sharing.platforms) filter (p =&gt; p.key not in {&quot;blogThis&quot;})' var='platform'>
+        <li>
+          <b:include name='sharingButton'/>
+        </li>
+      </b:loop>
+      <li aria-hidden='true' class='hidden'>
+        <b:include name='otherSharingButton'/>
+      </li>
+    </ul>
+  </div>
+</b:includable>
+            <b:includable id='sharingPlatformIcon'>
+  <b:include data='{ iconClass: (&quot;touch-icon sharing-&quot; + data:platform.key) }' expr:name='data:platform.key + &quot;Icon&quot;'/>
+</b:includable>
+            <b:includable id='threadedCommentForm' var='post'>
+  <div class='comment-form'>
+    <a name='comment-form'/>
+    <h4 id='comment-post-message'><data:messages.postAComment/></h4>
+    <b:if cond='data:this.messages.blogComment != &quot;&quot;'>
+      <p><data:this.messages.blogComment/></p>
+    </b:if>
+    <b:include data='post' name='commentFormIframeSrc'/>
+    <iframe allowtransparency='allowtransparency' class='blogger-iframe-colorize blogger-comment-from-post' expr:height='data:cmtIframeInitialHeight ?: &quot;90px&quot;' frameborder='0' id='comment-editor' name='comment-editor' src='' width='100%'/>
+    <data:post.cmtfpIframe/>
+    <script type='text/javascript'>
+      BLOG_CMT_createIframe(&#39;<data:post.appRpcRelayPath/>&#39;);
     </script>
-    <!-- 粘贴 编译后的 index.html head -->
+  </div>
+</b:includable>
+            <b:includable id='threadedCommentJs' var='post'>
+  <script async='async' expr:src='data:post.commentSrc' type='text/javascript'/>
+  <b:template-script inline='true' name='threaded_comments'/>
+  <script type='text/javascript'>
+    blogger.widgets.blog.initThreadedComments(
+        <data:post.commentJso/>,
+        <data:post.commentMsgs/>,
+        <data:post.commentConfig/>);
+  </script>
+</b:includable>
+            <b:includable id='threadedComments' var='post'>
+  <section class='comments threaded' expr:data-embed='data:post.embedCommentForm' expr:data-num-comments='data:post.numberOfComments' id='comments'>
+    <a name='comments'/>
 
-    <script crossorigin='anonymous'
-      src='https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.js' type='module' />
-    <link crossorigin='anonymous'
-      href='https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index.css'
-      rel='stylesheet' />
+    <b:include name='commentsTitle'/>
 
-    <!-- END Paste -->
-    <script
-      src='https://cdn.jsdelivr.net/gh/scarletborder/public_js@main/blogs/apis.google.com_js_plusone.js'
-      type='text/javascript' />
+    <div class='comments-content'>
+      <b:if cond='data:post.embedCommentForm'>
+        <b:include data='post' name='threadedCommentJs'/>
+      </b:if>
+      <div id='comment-holder'>
+         <data:post.commentHtml/>
+      </div>
+    </div>
 
-    <!-- 不使用Blogger管理颜色 -->
-    <b:skin><![CDATA[ ]]></b:skin>
+    <p class='comment-footer'>
+      <b:if cond='data:post.allowNewComments'>
+        <b:include data='post' name='threadedCommentForm'/>
+      <b:else/>
+        <data:post.noNewCommentsText/>
+      </b:if>
+      <b:if cond='data:post.showManageComments'>
+        <b:include data='post' name='manageComments'/>
+      </b:if>
+    </p>
 
-  </head><!--</head>-->
-  <!-- head 终于结束 -->
+    <b:if cond='data:showCmtPopup'>
+      <div id='comment-popup'>
+        <iframe allowtransparency='allowtransparency' frameborder='0' id='comment-actions' name='comment-actions' scrolling='no'>
+        </iframe>
+      </div>
+    </b:if>
+  </section>
+</b:includable>
+            <b:includable id='tooltipCss'>
+  <!-- LINT.IfChange -->
+  <style>
+    .post-body a.b-tooltip-container {
+      position: relative;
+      display: inline-block;
+    }
 
+    .post-body a.b-tooltip-container .b-tooltip {
+      display: block !important;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translate(-20%, 1px);
+      visibility: hidden;
+      opacity: 0;
+      z-index: 1;
+      transition: opacity 0.2s ease-in-out;
+    }
 
-  <!-- body 开始 -->
-  <body>
-    <div id='root' />
-    <!--</body>-->
-  </body>
+    .post-body a.b-tooltip-container .b-tooltip iframe {
+      width: 200px;
+      height: 198px;
+      max-width: none;
+      border: none;
+      border-radius: 20px;
+      box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+    }
 
-  <b:section id='footer' />
+    @media (hover: hover) {
+      .post-body a.b-tooltip-container:hover .b-tooltip {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  </style>
+  <!-- LINT.ThenChange(//depot/google3/java/com/google/blogger/b2/layouts/widgets/v2-style.css) -->
+</b:includable>
+      </b:widget>
+    </b:section>
+  </main>
+
+  <!-- error 视图（SPA 模式）下由 React 自行渲染页脚，这里隐藏 -->
+  <b:if cond='!data:view.isError'>
+    <footer class='site-footer'>
+      <div class='site-footer__inner'>
+        <div class='site-footer__col'>
+          <div class='site-footer__brand'>绯境之外</div>
+          <div>&#169; 2022 - <span id='current-year'/> Copyright 绯境之外</div>
+          <div>Powered by <a href='https://blogger.com' rel='noopener' target='_blank'>Blogger</a> and React</div>
+        </div>
+        <div class='site-footer__col'>
+          <div>联系方式</div>
+          <div>邮箱: baishuibeef@gmail.com</div>
+          <div>scarletborder / 黯界绯</div>
+        </div>
+      </div>
+    </footer>
+  </b:if>
+
+  <!-- 复制链接 Toast -->
+  <div id='copy-toast'>Link Copied to Clipboard! &#8599;</div>
+
+  <script>
+    //<![CDATA[
+    function showCopyToast() {
+      var toast = document.getElementById('copy-toast');
+      if (!toast) return;
+      toast.classList.add('show');
+      setTimeout(function () { toast.classList.remove('show'); }, 2000);
+    }
+    function copyPostLink() {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(window.location.href).then(showCopyToast, showCopyToast);
+      } else {
+        showCopyToast();
+      }
+    }
+    var yearEl = document.getElementById('current-year');
+    if (yearEl) yearEl.innerText = new Date().getFullYear();
+    //]]>
+  </script>
+</body>
 </html>

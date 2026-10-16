@@ -103,14 +103,6 @@ export default function ArchivesPage(): JSX.Element {
       const currentYear = latestSearchYear.current;
       const currentMonth = latestSearchMonth.current;
 
-      console.log(
-        'useInfiniteScroll: Loading data for',
-        currentYear,
-        currentMonth,
-        'startIndex:',
-        startIndex,
-      );
-
       // 如果是第一次加载，先检查缓存
       if (startIndex === 0) {
         const cachedPosts = await PostCacheManager.getCache(
@@ -118,11 +110,6 @@ export default function ArchivesPage(): JSX.Element {
           currentMonth,
         );
         if (cachedPosts !== null) {
-          console.log(
-            'useInfiniteScroll: Using cached data:',
-            cachedPosts.length,
-            'posts',
-          );
           return {
             list: cachedPosts,
             noMore: true, // 缓存数据是完整的，不需要分页
@@ -141,13 +128,6 @@ export default function ArchivesPage(): JSX.Element {
       // 如果是第一次加载，保存到缓存
       if (startIndex === 0) {
         try {
-          console.log(
-            'useInfiniteScroll: Saving cache for:',
-            currentYear,
-            currentMonth,
-            'Posts:',
-            result.list.length,
-          );
           await SaveCacheForDate(currentYear, currentMonth, result.list);
           // 更新缓存显示
           dateFilterRef.current?.updateCacheDisplay();
@@ -204,7 +184,6 @@ export default function ArchivesPage(): JSX.Element {
   });
 
   const handleRefreshRequest = useMemoizedFn(() => {
-    console.log('Refresh requested for:', searchYear, searchMonth);
     dateReload(); // 直接调用 reload
   });
 

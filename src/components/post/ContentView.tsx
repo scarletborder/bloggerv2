@@ -29,27 +29,35 @@ const ContentView: React.FC<ContentViewProps> = ({ content }) => {
     };
   }, [theme]);
 
-  // 2. 抽离的复杂高亮逻辑副作用
-  useBlogHighlighter(content, cssLoaded, theme);
-
-  // 3. 内容预处理（Memo化防止重复计算）
+  // 2. 内容预处理（清理 + 净化），仅在 content 变化时执行
   const processedContent = useMemo(() => {
     const cleaned = cleanCodeMirrorContent(content);
     return DOMPurify.sanitize(cleaned);
   }, [content]);
 
+  // 3. 抽离的复杂高亮逻辑副作用（直接复用预处理结果，避免重复清理）
+  useBlogHighlighter(processedContent, cssLoaded, theme);
+
   // 4. 解析配置 (识别 twitter/youtube)
   const parseOptions = useMemo(() => getProcessorOptions(), []);
 
+  // 5. 样式字符串与解析树 memo 化，避免每次渲染重复生成/解析
+  const contentCss = useMemo(() => generateContentStyles(theme), [theme]);
+  const inlineStyles = useMemo(() => generateInlineStyles(), []);
+  const parsedContent = useMemo(
+    () => parse(processedContent, parseOptions),
+    [processedContent, parseOptions],
+  );
+
   return (
     <>
-      <style>{generateContentStyles(theme)}</style>
+      <style>{contentCss}</style>
       <div
         className={`blog-content ${theme === 'dark' ? 'cm-s-yonce' : 'cm-s-duotone-light'}`}
-        style={generateInlineStyles()}
+        style={inlineStyles}
       >
         {/* 不再使用 dangerouslySetInnerHTML，而是解析后的 React 组件树 */}
-        {parse(processedContent, parseOptions)}
+        {parsedContent}
       </div>
     </>
   );

@@ -84,6 +84,8 @@ function HomePage(): JSX.Element {
           <img
             src="https://s2.loli.net/2025/05/16/ke3yL5RDTOsU4vg.png"
             alt="footer banner"
+            loading="lazy"
+            decoding="async"
             style={{
               width: '100%',
               height: 'auto',

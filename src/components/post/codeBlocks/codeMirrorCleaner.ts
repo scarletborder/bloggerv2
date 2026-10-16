@@ -4,17 +4,13 @@
  */
 
 /**
- * 清理和简化 CodeMirror 生成的复杂 HTML 结构
- * @param htmlContent 原始 HTML 内容字符串
- * @returns 清理后的 HTML 内容字符串
+ * 在给定容器上原地清理 CodeMirror 生成的复杂 HTML 结构。
+ * React 渲染管线（传入 HTML 字符串）与 Blogger 原生渲染（传入 .post-body 容器）共用。
+ * @param container 待清理的 DOM 容器，内容会被原地修改
  */
-export const cleanCodeMirrorContent = (htmlContent: string): string => {
-  // 创建一个临时的 DOM 元素来解析 HTML
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = htmlContent;
-
+export const cleanCodeMirrorContentInContainer = (container: HTMLElement): void => {
   // 处理新的 HTML 结构：<pre class="md-fences ..."><pre class="cleaned-codemirror-block"><code class="language-js">
-  const mdFencesBlocks = tempDiv.querySelectorAll('pre.md-fences');
+  const mdFencesBlocks = container.querySelectorAll('pre.md-fences');
 
   mdFencesBlocks.forEach((outerPre) => {
     // 检查是否包含 cleaned-codemirror-block
@@ -53,7 +49,7 @@ export const cleanCodeMirrorContent = (htmlContent: string): string => {
   });
 
   // 查找所有 CodeMirror 代码块（处理其他可能的结构）
-  const codeMirrorBlocks = tempDiv.querySelectorAll('.CodeMirror');
+  const codeMirrorBlocks = container.querySelectorAll('.CodeMirror');
 
   codeMirrorBlocks.forEach((block) => {
     // 提取所有代码行的文本内容
@@ -108,7 +104,7 @@ export const cleanCodeMirrorContent = (htmlContent: string): string => {
   });
 
   // 同时处理包含 CodeMirror 的 pre 标签（保留原有逻辑作为后备）
-  const preTags = tempDiv.querySelectorAll('pre.md-fences');
+  const preTags = container.querySelectorAll('pre.md-fences');
   preTags.forEach((preTag) => {
     const codeMirrorDiv = preTag.querySelector('.CodeMirror');
     if (codeMirrorDiv) {
@@ -154,6 +150,16 @@ export const cleanCodeMirrorContent = (htmlContent: string): string => {
       }
     }
   });
+};
 
+/**
+ * 清理和简化 CodeMirror 生成的复杂 HTML 结构（字符串版本）
+ * @param htmlContent 原始 HTML 内容字符串
+ * @returns 清理后的 HTML 字符串
+ */
+export const cleanCodeMirrorContent = (htmlContent: string): string => {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = htmlContent;
+  cleanCodeMirrorContentInContainer(tempDiv);
   return tempDiv.innerHTML;
 };

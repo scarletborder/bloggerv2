@@ -55,6 +55,7 @@ export default function Slider({ isMobile = false }: SliderProps): JSX.Element {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    color: 'var(--slider-caption-text)',
     textShadow: '0 1px 2px rgba(0, 0, 0, 0.35)',
   };
 

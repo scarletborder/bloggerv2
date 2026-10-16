@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { isMobile } from 'react-device-detect';
 import ThemeToggle from '../components/ThemeToggle';
 import useTheme from '../hooks/useTheme';
@@ -23,6 +24,7 @@ const NavButton: React.FC<NavButtonProps> = ({ title, to }) => {
     cursor: 'pointer',
     backgroundColor: 'transparent',
     border: 'none',
+    display: 'block',
   };
 
   const buttonHoverStyles: React.CSSProperties = {
@@ -34,14 +36,14 @@ const NavButton: React.FC<NavButtonProps> = ({ title, to }) => {
   const [isHovered, setIsHovered] = React.useState(false);
 
   return (
-    <a
-      href={to}
+    <Link
+      to={to}
       style={isHovered ? buttonHoverStyles : buttonStyles}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {title}
-    </a>
+    </Link>
   );
 };
 
@@ -49,10 +51,12 @@ const NavButton: React.FC<NavButtonProps> = ({ title, to }) => {
 const MobileNavSelect: React.FC<{
   navItems: { title: string; to: string }[];
 }> = ({ navItems }) => {
+  const navigate = useNavigate();
+
   const handleNavChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedUrl = event.target.value;
     if (selectedUrl) {
-      window.location.href = selectedUrl;
+      navigate(selectedUrl);
     }
   };
 

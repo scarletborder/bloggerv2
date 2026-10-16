@@ -34,8 +34,6 @@ export default function ResultsDisplay({
 
   // 将点击处理函数移到组件顶层，符合Hooks规则
   const handlePostClick = useMemoizedFn((postPath: string) => {
-    console.log('Navigate to:', postPath);
-    // 这里可以添加导航逻辑
     navigate(`/${postPath}`);
   });
 

@@ -97,8 +97,6 @@ const TableOfContents: React.FC<{ content: string }> = ({ content }) => {
 
   /* ---------- 1. 提取正文标题并回填锚点 id ---------- */
   React.useEffect(() => {
-    let cancelled = false;
-    let timer: number | undefined;
     setTocItems([]);
     setActiveId('');
 
@@ -128,19 +126,18 @@ const TableOfContents: React.FC<{ content: string }> = ({ content }) => {
       return true;
     };
 
-    // 正文由 ContentView 解析渲染，挂载时机不固定，这里做短时轮询兜底
-    const attempt = (tries = 0) => {
-      if (cancelled) return;
-      if (collect()) return;
-      if (tries >= 40) return;
-      timer = window.setTimeout(() => attempt(tries + 1), 50);
-    };
-    attempt();
+    // 正文由 ContentView 同步渲染，effect 在 DOM 提交后执行，通常首次即可收集到
+    if (collect()) return;
 
-    return () => {
-      cancelled = true;
-      if (timer) window.clearTimeout(timer);
-    };
+    // 兜底：用 MutationObserver 监听正文出现，替代定时轮询
+    let observer: MutationObserver | null = null;
+    const watchTarget = document.querySelector('main') || document.body;
+    observer = new MutationObserver(() => {
+      if (collect()) observer?.disconnect();
+    });
+    observer.observe(watchTarget, { childList: true, subtree: true });
+
+    return () => observer?.disconnect();
   }, [content]);
 
   /* ---------- 2. 滚动监听：高亮当前章节 + 阅读进度 ---------- */
@@ -159,7 +156,8 @@ const TableOfContents: React.FC<{ content: string }> = ({ content }) => {
 
       // 触底时直接高亮最后一节，避免短小节永远无法激活
       if (scrollable > 0 && scrollTop >= scrollable - 2) {
-        setActiveId(tocItems[tocItems.length - 1].id);
+        const lastId = tocItems[tocItems.length - 1].id;
+        setActiveId(prev => (prev === lastId ? prev : lastId));
         return;
       }
 
@@ -172,7 +170,7 @@ const TableOfContents: React.FC<{ content: string }> = ({ content }) => {
         if (live.getBoundingClientRect().top - offset <= 1) current = id;
         else break;
       }
-      setActiveId(current);
+      setActiveId(prev => (prev === current ? prev : current));
     };
 
     const onScroll = () => {

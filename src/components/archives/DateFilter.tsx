@@ -74,7 +74,6 @@ const DateFilter = forwardRef<DateFilterRef, DateFilterProps>((
 
   const handleSearch = useMemoizedFn(() => {
     const { selectedYear, selectedMonth } = dateState;
-    console.log('DateFilter: Searching for', selectedYear, selectedMonth);
     // 直接触发搜索，缓存逻辑已经在useInfiniteScroll内部处理
     onDateSearch(selectedYear, selectedMonth);
   });

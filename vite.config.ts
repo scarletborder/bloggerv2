@@ -5,7 +5,18 @@ import viteCompression from 'vite-plugin-compression';
 import removeConsole from 'vite-plugin-remove-console';
 
 const ENABLE_HASH = true;
-const VENDORS_TO_CHUNK = ['tdesign-react', 'lodash', 'tdesign-mobile-react'];
+const VENDORS_TO_CHUNK = [
+  'tdesign-react',
+  'lodash',
+  'tdesign-mobile-react',
+  'swiper',
+  'prismjs',
+  'katex',
+];
+
+/** React 运行时独立成 chunk，保证应用代码更新时不失效框架缓存 */
+const REACT_RUNTIME_RE
+  = /[\\/]node_modules[\\/](react|react-dom|scheduler|react-router|react-router-dom)[\\/]/;
 
 interface EnvConfig {
   base: string;
@@ -139,6 +150,9 @@ export default defineConfig(({ mode }) => {
             if (id.includes('node_modules')) {
               if (id.includes('tdesign-react') || id.includes('@tdesign')) {
                 return 'tdesign-react';
+              }
+              if (REACT_RUNTIME_RE.test(id)) {
+                return 'react-vendor';
               }
               const chunkName = VENDORS_TO_CHUNK.find((vendor) =>
                 id.includes(vendor)

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { isMobile } from 'react-device-detect';
 import { getPostDetail, type PostDetail } from '../services/PostDetail';
 import HeaderView from '../components/post/HeaderView';
@@ -8,6 +8,24 @@ import TableOfContents from '../components/post/TableOfContents';
 import { Seperator } from '../components/post/common';
 import CommentArea from '../components/post/comments';
 import { useTitle } from 'ahooks';
+
+/**
+ * 文章详情内存缓存：返回已读文章时避免重复请求
+ * key 为规范化后的路径，value 为文章数据
+ */
+const postDetailCache = new Map<string, PostDetail>();
+const POST_CACHE_LIMIT = 30;
+
+const getCachedPost = (path: string): PostDetail | undefined => postDetailCache.get(path);
+
+const setCachedPost = (path: string, post: PostDetail): void => {
+  // 简单的容量控制，超出限制时淘汰最早写入的条目
+  if (postDetailCache.size >= POST_CACHE_LIMIT) {
+    const oldestKey = postDetailCache.keys().next().value;
+    if (oldestKey !== undefined) postDetailCache.delete(oldestKey);
+  }
+  postDetailCache.set(path, post);
+};
 
 /**
  * 文章详情页面
@@ -22,47 +40,71 @@ const PostPage: React.FC = () => {
   useTitle(`${post?.title ?? 'Loading'} - 绯境之外`);
 
   useEffect(() => {
-    const loadPost = async () => {
-      if (!pathParam) {
-        setError('文章路径不存在');
-        setLoading(false);
-        return;
-      }
+    if (!pathParam) {
+      setError('文章路径不存在');
+      setLoading(false);
+      return;
+    }
 
+    // TODO: 处理path参数，将路径转换为API所需的格式
+    // 这里先使用原始路径，稍后您可以根据需要进行处理
+    const processedPath = pathParam.startsWith('/') ? pathParam : `/${pathParam}`;
+
+    let cancelled = false;
+
+    // 命中缓存时直接渲染，跳过 loading 与网络请求
+    const cached = getCachedPost(processedPath);
+    if (cached) {
+      setPost(cached);
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
+    const loadPost = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        // TODO: 处理path参数，将路径转换为API所需的格式
-        // 这里先使用原始路径，稍后您可以根据需要进行处理
-        const processedPath = pathParam.startsWith('/')
-          ? pathParam
-          : `/${pathParam}`;
-
         const postDetail = await getPostDetail(processedPath);
+        if (cancelled) return;
+        setCachedPost(processedPath, postDetail);
         setPost(postDetail);
       } catch (err) {
+        if (cancelled) return;
         console.error('Failed to load post:', err);
         setError(err instanceof Error ? err.message : '加载文章失败');
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     loadPost();
+
+    return () => {
+      cancelled = true;
+    };
   }, [pathParam]);
 
   // 监听滚动，显示/隐藏回到顶部按钮（仅移动端）
   useEffect(() => {
     if (!isMobile) return;
 
+    let frame = 0;
     const handleScroll = () => {
-      const scrollTop =        window.pageYOffset || document.documentElement.scrollTop;
-      setShowScrollTop(scrollTop > 300); // 滚动超过300px时显示按钮
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        setShowScrollTop(scrollTop > 300); // 滚动超过300px时显示按钮
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   // 回到顶部功能
@@ -180,8 +222,8 @@ const PostPage: React.FC = () => {
         <div style={errorStyles}>
           <h1 style={errorTitleStyles}>😔 页面加载失败</h1>
           <p style={errorMessageStyles}>{error || '找不到指定的文章'}</p>
-          <a
-            href="/"
+          <Link
+            to="/"
             style={backButtonStyles}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor =                'var(--primary-hover-color)';
@@ -191,7 +233,7 @@ const PostPage: React.FC = () => {
             }}
           >
             返回首页
-          </a>
+          </Link>
         </div>
       </div>
     );

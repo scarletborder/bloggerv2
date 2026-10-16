@@ -37,7 +37,6 @@ export default function TagsFilter({
   }, [initialTag, tags, selectedTag, onTagSelect]);
 
   const handleTagClick = useMemoizedFn((tag: string) => {
-    console.log('Tag clicked:', tag); // 添加调试信息
     onTagSelect(tag);
     onTagSearch(tag); // 直接触发搜索
   });
