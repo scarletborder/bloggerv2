@@ -60,9 +60,17 @@ try {
     };
     function fixture(single, closed = false, empty = false) {
       const output = document.implementation.createHTMLDocument('');
+      // 首页按 Blogger「主页文章数 = 7」渲染，分页岛屿据此推导每页数量
+      const homePosts = empty ? [] : Array.from({ length: 7 }, (_, index) => ({
+        ...post,
+        id: `12${index}`,
+        title: `原生正文与评论测试 ${index + 1}`,
+        url: index === 0 ? '/2026/10/native-post.html' : `/2026/10/native-post-${index + 1}.html`,
+      }));
       const context = {
         blog: { title: '绯境之外', description: '生活分享和记录技术的博客', pageTitle: single ? post.title : '绯境之外' },
-        view: { isSingleItem: single }, posts: empty ? [] : [{ ...post, allowNewComments: !closed, noNewCommentsText: '评论已关闭' }],
+        view: { isSingleItem: single },
+        posts: single ? [{ ...post, allowNewComments: !closed, noNewCommentsText: '评论已关闭' }] : homePosts,
         newerPageUrl: '', olderPageUrl: single ? '' : '/search?updated-max=2026-10-01',
       };
       function lookup(expression, data) {
@@ -161,11 +169,13 @@ try {
     });
     await page.route('**/feeds/posts/summary*', async route => {
       const startIndex = Number(new URL(route.request().url()).searchParams.get('start-index') ?? '1');
+      // 每页 7 篇、共 22 篇，与线上「主页文章数 = 7」一致
+      const entries = Array.from({ length: 7 }, (_, offset) => feedEntry(startIndex + offset));
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify({
-          feed: { entry: [feedEntry(startIndex)], openSearch$totalResults: { $t: '9' }, category: [] },
+          feed: { entry: entries, openSearch$totalResults: { $t: '22' }, category: [] },
         }),
       });
     });
@@ -175,35 +185,39 @@ try {
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${name}: horizontal overflow`);
       assert.equal(await page.locator('iframe').count(), 0, `${name}: eager iframe`);
       if (name === 'home') {
-        assert.equal(await page.locator('.native-post-link').getAttribute('href'), '/2026/10/native-post.html');
+        assert.equal(await page.locator('.native-post-link').first().getAttribute('href'), '/2026/10/native-post.html');
         assert.match(await page.locator('.native-welcome').innerText(), /生活分享/);
+        assert.equal(await page.locator('.native-post-card').count(), 7, 'server-rendered first page keeps the configured page size');
         // 分页岛屿替换原生导航，翻页只更新列表不重载页面
         await page.waitForSelector('.native-pagination-island .t-pagination', { timeout: 10_000 });
         assert.equal(await page.locator('nav.native-pagination').isVisible(), false, 'native pagination must yield to the island');
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'home: pagination overflow');
         const next = page.locator('.t-pagination__btn-next');
         const prev = page.locator('.t-pagination__btn-prev');
+        // 每页 7 篇：第 N 页第一篇对应 start-index = (N-1)*7+1
+        const firstTitle = page => `第 ${(page - 1) * 7 + 1} 页文章`;
         const cardTitle = expected => page.waitForFunction(
           text => document.querySelector('.native-post-card h3')?.textContent?.includes(text) ?? false,
           expected,
         );
         await next.click();
-        await cardTitle('第 2 页文章');
-        assert.match(page.url(), /start-index=2/, 'client-side paging must update the URL');
-        assert.match(await page.locator('.native-post-card .native-date').innerText(), /发布于 2026\/10\/15/, 'fetched cards keep the native date format');
+        await cardTitle(firstTitle(2));
+        assert.equal(await page.locator('.native-post-card').count(), 7, 'fetched page must fill the page size');
+        assert.match(page.url(), /start-index=8/, 'client-side paging must update the URL');
+        assert.match(await page.locator('.native-post-card .native-date').first().innerText(), /发布于 2026\/10\/15/, 'fetched cards keep the native date format');
         // 连续翻页：React 接管列表后反复 diff，不应触发 removeChild 等运行时错误
         await next.click();
-        await cardTitle('第 3 页文章');
+        await cardTitle(firstTitle(3));
         await page.locator('.native-pagination-island').scrollIntoViewIfNeeded();
         await prev.click();
-        await cardTitle('第 2 页文章');
+        await cardTitle(firstTitle(2));
         await page.locator('.native-pagination-island').scrollIntoViewIfNeeded();
         await prev.click();
         await page.waitForFunction(() => document.querySelector('.native-post-link')?.getAttribute('href') === '/2026/10/native-post.html');
-        assert.match(await page.locator('.native-post-list').innerText(), /生活分享|最新文章/, 'server-rendered first page restored');
-        // 离开后再回来：重新挂载 React 卡片容器
+        assert.equal(await page.locator('.native-post-card').count(), 7, 'server-rendered first page restored');
+        // 离开后再回来：重新创建 React 卡片容器
         await next.click();
-        await cardTitle('第 2 页文章');
+        await cardTitle(firstTitle(2));
       }
       if (name === 'post') {
         assert.equal(await page.locator('#c1').count(), 1);

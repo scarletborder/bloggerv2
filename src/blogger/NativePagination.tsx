@@ -45,6 +45,7 @@ export function NativePagination() {
   const list = useRef<HTMLElement | null>(null);
   const nativeNav = useRef<HTMLElement | null>(null);
   const cardsRoot = useRef<Root | null>(null);
+  const requestId = useRef(0);
   const ssrItems = useRef('');
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
@@ -59,6 +60,7 @@ export function NativePagination() {
   const restoreServerPage = useCallback(() => {
     const items = list.current;
     if (!items) return;
+    requestId.current += 1;
     cardsRoot.current?.unmount();
     cardsRoot.current = null;
     items.innerHTML = ssrItems.current;
@@ -67,10 +69,14 @@ export function NativePagination() {
   const load = useCallback(async (page: number, size: number, updateHistory = true) => {
     const items = list.current;
     if (!items) return;
+    requestId.current += 1;
+    const id = requestId.current;
     setLoading(true);
     setFailed(false);
     try {
       const response = await GetPostList({ current: page, pageSize: size, startIndex: (page - 1) * size });
+      // 已有更新的翻页请求（连续点击或中途返回第一页），丢弃本次响应
+      if (id !== requestId.current) return;
       if (!cardsRoot.current) {
         // 首次翻页：只移除服务端渲染的节点（纯 DOM）。此后卡片由 React 管理，
         // 再手动 remove 会让 React 提交更新时 removeChild 失败。
@@ -92,11 +98,12 @@ export function NativePagination() {
       }
       items.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch {
+      if (id !== requestId.current) return;
       // 拉取失败时恢复原生导航，仍可整页跳转
       setFailed(true);
       if (nativeNav.current) nativeNav.current.style.removeProperty('display');
     } finally {
-      setLoading(false);
+      if (id === requestId.current) setLoading(false);
     }
   }, [usesCjkDate]);
 
