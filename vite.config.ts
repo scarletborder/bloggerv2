@@ -43,6 +43,7 @@ const getEnv = (mode: string): EnvConfig => {
     base,
     defineMap: {
       '__API_ENDPOINT__': JSON.stringify(apiEndpoint),
+      '__CDN_BASE__': JSON.stringify(cdnBaseUrl || '/'),
 
     },
   };
@@ -96,6 +97,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
+      manifest: true,
       minify: true,
       rollupOptions: {
         output: {

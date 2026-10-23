@@ -1,0 +1,65 @@
+/* The native markup shares the existing theme tokens and component geometry. */
+.native-nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 0 24px; min-height: 60px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+.native-nav > div { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.native-nav a { color: var(--text-color); font-size: 16px; font-weight: 500; padding: 8px 16px; }
+.native-nav input { width: 180px; max-width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-color); color: var(--text-color); }
+.native-home { display: grid; grid-template-columns: minmax(0, 65fr) minmax(0, 30fr); gap: 63px; max-width: 1500px; padding: 32px 5px 24px; margin: auto; }
+.native-home-main, .native-home-sidebar { min-width: 0; }
+.native-home-sidebar { display: flex; flex-direction: column; gap: 15px; }
+.native-welcome { padding: 5px 0; }
+.native-welcome h2 { font-size: 20px; font-weight: bold; margin: 0 0 10px; }
+.native-welcome p { font-size: 14px; line-height: 1.6; color: var(--text-secondary-color); white-space: pre-line; }
+.native-banner { width: 100%; height: auto; max-height: 96px; object-fit: contain; border-radius: 8px; }
+.native-post-list > h2 { font-size: 24px; font-weight: 600; margin: 0 0 20px; }
+.native-post-card { padding: 20px; margin-bottom: 16px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 8px var(--shadow-color); transition: transform .2s; }
+.native-post-card:hover { transform: translateY(-2px); }
+.native-post-link { display: block; color: var(--text-color); }
+.native-post-card h3 { font-size: 18px; font-weight: 600; margin: 0 0 8px; }
+.native-summary { font-size: 14px; color: var(--text-secondary-color); line-height: 1.5; margin: 8px 0 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.native-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.native-tags a { padding: 2px 8px; background: var(--primary-color); color: var(--surface-color); border-radius: 12px; font-size: 12px; }
+.native-date, .native-date a { color: var(--text-secondary-color); font-size: 12px; }
+.native-pagination { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; padding: 20px 0; }
+.native-post-layout { max-width: 1650px; width: 80%; margin: auto; padding: 32px 32px 32px calc(var(--toc-panel-left, 24px) + var(--toc-panel-width, 248px) + 32px); }
+.native-post { min-width: 0; }
+.native-post-header { padding-bottom: 24px; margin-bottom: 32px; border-bottom: 2px solid var(--border-color); }
+.native-post-header h1 { font-size: 40px; line-height: 1.2; font-weight: bold; margin: 0 0 16px; overflow-wrap: anywhere; }
+.native-post-header .native-date { font-size: 15px; }
+.native-post-header .post-tag { padding: 6px 12px; background: var(--surface-color); color: var(--primary-color); border: 1px solid var(--primary-color); border-radius: 16px; font-size: 13px; }
+.native-comments { margin-top: 32px; padding: 24px; border: 1px solid var(--border-color); border-radius: 16px; }
+.native-comments > h3 { margin: 0 0 20px; font-size: 24px; font-weight: bold; }
+.native-comments > h3 span { font-size: 16px; font-weight: normal; color: var(--text-secondary-color); }
+.native-comment { padding: 16px; margin-bottom: 16px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; overflow-wrap: anywhere; scroll-margin-top: 80px; }
+.native-comment header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+.native-comment-body { padding: 12px 0; line-height: 1.6; }
+.native-comment-body img { max-width: 100%; height: auto; }
+.native-reply { font-size: 13px; }
+.native-comment-form button { padding: 8px 16px; border: 0; border-radius: 8px; background: var(--primary-color); color: #fff; cursor: pointer; }
+.native-comment-form .form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 12px 0; }
+.native-comment-form iframe { width: 100%; height: 420px; border: 0; background: var(--surface-color); }
+.native-comment-form [role='status'] { color: var(--text-secondary-color); font-size: 14px; }
+.native-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 32px; padding: 24px 48px; background: var(--surface-color); border-top: 1px solid var(--border-color); }
+.native-footer > div { line-height: 1.8; }
+.native-footer div div { font-size: 14px; color: var(--text-secondary-color); }
+@media (max-width: 1279px) { .native-post-layout { padding-left: 32px; width: 95%; } }
+@media (max-width: 768px) {
+  .native-nav { padding: 8px 12px; gap: 8px; flex-wrap: wrap; }
+  .native-nav > div { gap: 4px; }
+  .native-nav a { font-size: 13px; padding: 8px; }
+  .native-nav input { width: 110px; }
+  .native-home { display: flex; flex-direction: column; padding: 16px; gap: 16px; }
+  .native-home-sidebar { display: contents; }
+  .native-welcome { order: -3; }
+  [data-blogger-island='slider'] { order: -2; }
+  [data-blogger-island='site-title'] { display: none; }
+  .native-welcome h2 { font-size: 24px; }
+  .native-welcome p { font-size: 16px; }
+  .native-post-card { padding: 16px 12px; }
+  .native-post-card h3 { font-size: 20px; }
+  .native-post-layout { width: 100%; padding: 16px 20px; }
+  .native-post-header { padding-bottom: 16px; margin-bottom: 20px; }
+  .native-post-header h1 { font-size: 28px; }
+  .native-comments { padding: 0; border: 0; border-radius: 0; }
+  .native-comments > h3 { font-size: 20px; }
+  .native-footer { padding: 20px 16px; gap: 16px; }
+}

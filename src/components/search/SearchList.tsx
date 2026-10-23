@@ -2,7 +2,6 @@
 import React from 'react';
 import { isMobile } from 'react-device-detect';
 import { useMemoizedFn } from 'ahooks';
-import { useNavigate } from 'react-router-dom';
 import { getCurrentTheme } from '../../constants/colors';
 import { type PostItem } from '../../models/PostItem';
 
@@ -20,10 +19,9 @@ export default function SearchList({
   scrollContainerRef,
 }: SearchListProps) {
   const colors = getCurrentTheme();
-  const navigate = useNavigate();
 
   const handlePostClick = useMemoizedFn((postPath: string) => {
-    navigate(`/${postPath}`);
+    window.location.assign(`/${postPath.replace(/^\//, '')}`);
   });
 
   const formatDate = (timestamp: number): string => {

@@ -50,6 +50,13 @@ jobs:
       - name: Build project
         run: pnpm run build
 
+      - name: Upload Blogger Template
+        uses: actions/upload-artifact@v4
+        with:
+          name: blogger-template
+          path: dist/template.xml
+          retention-days: 7
+
       - name: Find built assets and generate report
         id: generate-report
         run: |

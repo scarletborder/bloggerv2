@@ -6,7 +6,9 @@
   "scripts": {
     "prepare": "husky",
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/build-template.mjs",
+    "build:template": "node scripts/build-template.mjs",
+    "verify:blogger": "node scripts/verify-blogger.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -44,6 +46,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.64.1",
     "@types/lodash": "^4.17.20",
     "@types/react": "^19.2.4",
     "@types/react-dom": "^19.2.3",

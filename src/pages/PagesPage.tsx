@@ -1,12 +1,10 @@
 import { usePagination, useTitle } from 'ahooks';
 import type { JSX } from 'react/jsx-runtime';
-import { useNavigate } from 'react-router-dom';
 import { GetPageList } from '../services/PageList';
 import ToolsList from '../components/pages/ToolsList';
 import Pagination from '../components/pages/ToolsPagination';
 
 function PagesPage(): JSX.Element {
-  const navigate = useNavigate();
   useTitle('Pages - 绯境之外');
 
   const pageSize = window.innerWidth > 768 ? 12 : 6;
@@ -19,7 +17,7 @@ function PagesPage(): JSX.Element {
   );
 
   const handleItemClick = (path: string) => {
-    navigate(`/${path}`);
+    window.location.assign(`/${path.replace(/^\//, '')}`);
   };
 
   return (

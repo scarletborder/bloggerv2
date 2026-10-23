@@ -9,14 +9,30 @@ import './constants/colors.css'; // 向后兼容的颜色样式（已弃用，�
 import './utils/themeManager'; // 确保主题管理器早期初始化
 import ThemeView from './layout/ThemeView';
 import AppRoutes from './routes';
+import { enhanceBlogger } from './blogger/enhance';
+import './styles/blogger.css';
 
 // Import Swiper styles
 import 'swiper/swiper-bundle.css';
 
-createRoot(document.getElementById('root')!).render(<StrictMode>
-  <ThemeView>
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
-  </ThemeView>
-</StrictMode>);
+const nativeRoot = document.getElementById('blogger-native');
+// Utility routes keep their existing React views; posts keep Blogger's HTML and URL.
+const utilityRoute = ['/archives', '/pages'].includes(window.location.pathname)
+  || (window.location.pathname === '/search' && new URLSearchParams(window.location.search).has('q'));
+if (nativeRoot && !utilityRoute) {
+  enhanceBlogger();
+} else {
+  const root = document.getElementById('root') ?? document.body.appendChild(document.createElement('div'));
+  if (nativeRoot) {
+    document.querySelector('.native-nav')?.remove();
+    document.querySelector('.native-footer')?.remove();
+    nativeRoot.remove();
+  }
+  createRoot(root).render(<StrictMode>
+    <ThemeView>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </ThemeView>
+  </StrictMode>);
+}

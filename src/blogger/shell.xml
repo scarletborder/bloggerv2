@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true'
+  expr:dir='data:blog.languageDirection' expr:lang='data:blog.locale'
+  xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b'
+  xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+  <head>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <b:include data='blog' name='all-head-content'/>
+    <title><data:blog.pageTitle/></title>
+    <link href='https://s2.loli.net/2025/04/14/LnsCqG8ZVcrJN4l.png' rel='icon'/>
+    <b:skin><![CDATA[/* BLOGGER_STYLES */]]></b:skin>
+    <script><![CDATA[
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'dark' || (!theme && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.setAttribute('theme-mode', 'dark');
+        }
+      } catch (error) {}
+    ]]></script>
+    <!-- BLOGGER_ASSETS -->
+  </head>
+  <body>
+    <!-- BLOGGER_BODY -->
+  </body>
+</html>
