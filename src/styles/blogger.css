@@ -20,6 +20,9 @@
 .native-tags a { padding: 2px 8px; background: var(--primary-color); color: var(--surface-color); border-radius: 12px; font-size: 12px; }
 .native-date, .native-date a { color: var(--text-secondary-color); font-size: 12px; }
 .native-pagination { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; padding: 20px 0; }
+.native-pagination-island { display: flex; justify-content: center; padding: 20px 0; }
+.native-pagination-island .t-pagination { flex-wrap: wrap; justify-content: center; row-gap: 8px; max-width: 100%; }
+.native-pagination-status { width: 100%; margin: 8px 0 0; text-align: center; color: var(--text-secondary-color); font-size: 14px; }
 .native-post-layout { max-width: 1650px; width: 80%; margin: auto; padding: 32px 32px 32px calc(var(--toc-panel-left, 24px) + var(--toc-panel-width, 248px) + 32px); }
 .native-post { min-width: 0; }
 .native-post-header { padding-bottom: 24px; margin-bottom: 32px; border-bottom: 2px solid var(--border-color); }

@@ -7,6 +7,7 @@ import SiteTitle from '../components/home/SiteTitle';
 import Blogroll from '../components/home/Blogroll';
 import TableOfContents from '../components/post/TableOfContents';
 import { NativeCommentForm } from './NativeCommentForm';
+import { NativePagination } from './NativePagination';
 import { type ReactNode } from 'react';
 
 export function enhanceBlogger() {
@@ -22,6 +23,7 @@ export function enhanceBlogger() {
       case 'blogroll': component = <Blogroll isMobile={isMobile} />; break;
       case 'toc': component = <TableOfContents content={content?.innerHTML ?? ''} />; break;
       case 'comment-form': component = <NativeCommentForm editorUrl={element.dataset.editorUrl ?? ''} commentUrl={element.dataset.commentUrl ?? ''} />; break;
+      case 'pagination': component = <NativePagination />; break;
       default: continue;
     }
     createRoot(element).render(<BrowserRouter>{component}</BrowserRouter>);

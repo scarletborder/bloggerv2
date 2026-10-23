@@ -19,6 +19,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    env:
+      DEPLOY_ENV: "CDN"
+      CDN_BASEURL: "https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/"
+      API_ENDPOINT: "https://blog.scarletborder.cn"
+
     steps:
       - name: Checkout release branch
         uses: actions/checkout@v5
