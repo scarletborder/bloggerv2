@@ -94,6 +94,8 @@ export function renderBloggerBody(diagnostic = false) {
       <div><a href="/">HOME</a><a href="/archives">ARCHIVES</a><a href="/pages">PAGES</a></div>
       <div><form action="/search" method="get"><input name="q" aria-label="搜索文章" placeholder="搜索文章" /></form><div data-blogger-island="theme" /></div>
     </nav>
+    {/* 移动端导航：恢复原来的下拉选择 + 独立搜索页；与桌面导航由 CSS 媒体查询切换 */}
+    <B xml="<nav class='native-nav-mobile' aria-label='主导航'><select aria-label='导航菜单' onchange='window.location.href=this.value'><option value='' disabled='disabled' selected='selected'>导航菜单</option><option value='/'>HOME</option><option value='/archives'>ARCHIVES</option><option value='/pages'>PAGES</option></select><form action='/search' method='get'><input name='q' aria-label='搜索文章' placeholder='搜索文章' /></form><div data-blogger-island='theme' /></nav>" />
     <main id="blogger-native">
       {/* Blogger 仅在保存时自动补全 widget 定义，自动补全的 widget 会静默渲染失败。
           因此显式提供 widget-settings 与全部默认 includable（见 build-template.mjs 注入），

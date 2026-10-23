@@ -1,5 +1,6 @@
 /* The native markup shares the existing theme tokens and component geometry. */
 .native-nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 0 24px; min-height: 60px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+.native-nav-mobile { display: none; }
 .native-nav > div { display: flex; align-items: center; gap: 16px; min-width: 0; }
 .native-nav a { color: var(--text-color); font-size: 16px; font-weight: 500; padding: 8px 16px; }
 .native-nav input { width: 180px; max-width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-color); color: var(--text-color); }
@@ -22,7 +23,8 @@
 .native-pagination { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; padding: 20px 0; }
 .native-pagination-island { display: flex; justify-content: center; padding: 20px 0; }
 .native-pagination-island .t-pagination { flex-wrap: wrap; justify-content: center; row-gap: 8px; max-width: 100%; }
-.native-pagination-status { width: 100%; margin: 8px 0 0; text-align: center; color: var(--text-secondary-color); font-size: 14px; }
+/* 加载/失败占位与文章卡片同尺寸，翻页时不引起布局跳动 */
+.native-list-status { padding: 20px; margin-bottom: 16px; text-align: center; color: var(--text-secondary-color); font-size: 14px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; }
 .native-post-layout { max-width: 1650px; width: 80%; margin: auto; padding: 32px 32px 32px calc(var(--toc-panel-left, 24px) + var(--toc-panel-width, 248px) + 32px); }
 .native-post { min-width: 0; }
 .native-post-header { padding-bottom: 24px; margin-bottom: 32px; border-bottom: 2px solid var(--border-color); }
@@ -46,10 +48,12 @@
 .native-footer div div { font-size: 14px; color: var(--text-secondary-color); }
 @media (max-width: 1279px) { .native-post-layout { padding-left: 32px; width: 95%; } }
 @media (max-width: 768px) {
-  .native-nav { padding: 8px 12px; gap: 8px; flex-wrap: wrap; }
-  .native-nav > div { gap: 4px; }
-  .native-nav a { font-size: 13px; padding: 8px; }
-  .native-nav input { width: 110px; }
+  /* 移动端：隐藏桌面标签导航，显示下拉选择 + 搜索 + 主题按钮 */
+  .native-nav { display: none; }
+  .native-nav-mobile { display: flex; align-items: center; gap: 10px; padding: 8px 12px; min-height: 56px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+  .native-nav-mobile select { max-width: 45%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-color); color: var(--text-color); font-size: 13px; }
+  .native-nav-mobile form { display: flex; flex: 1; min-width: 0; }
+  .native-nav-mobile input { width: 100%; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 20px; background: var(--bg-color); color: var(--text-color); font-size: 14px; }
   .native-home { display: flex; flex-direction: column; padding: 16px; gap: 16px; }
   .native-home-sidebar { display: contents; }
   .native-welcome { order: -3; }

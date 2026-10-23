@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { Pagination } from 'tdesign-react';
 import GetPostList from '../services/PostList';
@@ -35,10 +35,16 @@ function PostCards({ posts, cjk }: { posts: FetchedPost[]; cjk: boolean }) {
   </>;
 }
 
+/** 列表区域的加载/失败占位，尺寸与文章卡片一致，避免翻页时布局跳动 */
+function PostListStatus({ message }: { message: string }) {
+  return <p className="native-list-status">{message}</p>;
+}
+
 /**
  * 首页文章分页：保留 Blogger 服务端渲染的第一页，翻页时改用同源 JSON Feed
  * 拉取对应页并替换列表，避免整页重载。原生 <nav> 链接保留在 DOM 中，
  * 仅在 JS 可用且存在多页时隐藏，供禁用 JS 的访客与爬虫使用。
+ * 加载与失败提示只出现在列表区域，分页组件自身不发生位移。
  */
 export function NativePagination() {
   const host = useRef<HTMLDivElement | null>(null);
@@ -46,12 +52,18 @@ export function NativePagination() {
   const nativeNav = useRef<HTMLElement | null>(null);
   const cardsRoot = useRef<Root | null>(null);
   const requestId = useRef(0);
+  const loadedPage = useRef(false);
   const ssrItems = useRef('');
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(FALLBACK_PAGE_SIZE);
-  const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
+  // 每页数量以服务端实际渲染的文章数为准（对应 Blogger「主页文章数」设置）；
+  // 首帧时 SSR 列表已在 DOM 中，用惰性初始化读取，避免在 effect 里 setState
+  const [pageSize] = useState(() => {
+    const items = document.querySelector('.native-post-list .native-post-items');
+    const rendered = items?.querySelectorAll('.native-post-card').length ?? 0;
+    return rendered > 0 ? rendered : FALLBACK_PAGE_SIZE;
+  });
 
   // 服务端输出的日期格式（年/月/日 或 2026/01/02），翻页后保持一致的显示
   const usesCjkDate = useCallback(() => /[年月]/.test(list.current?.querySelector('.native-date')?.textContent ?? ''), []);
@@ -66,27 +78,37 @@ export function NativePagination() {
     items.innerHTML = ssrItems.current;
   }, []);
 
+  // 列表区域整体交给 React 渲染：加载占位或文章卡片。
+  // 只在首次接管时清理服务端节点，此后由 React 自行 diff。
+  const renderList = useCallback((content: ReactNode) => {
+    const items = list.current;
+    if (!items) return;
+    if (!cardsRoot.current) {
+      items.querySelectorAll('.native-post-card, .native-empty').forEach(node => node.remove());
+      const container = document.createElement('div');
+      container.dataset.nativeCards = '';
+      items.append(container);
+      cardsRoot.current = createRoot(container);
+    }
+    cardsRoot.current.render(content);
+  }, []);
+
   const load = useCallback(async (page: number, size: number, updateHistory = true) => {
     const items = list.current;
     if (!items) return;
     requestId.current += 1;
     const id = requestId.current;
-    setLoading(true);
     setFailed(false);
+    // 先把分页组件带入视野：列表随后塌陷为加载占位，视图不会跳离分页
+    host.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    // 立即在列表位置显示占位，翻页组件不随请求出现额外内容
+    renderList(<PostListStatus message="正在加载文章…" />);
     try {
       const response = await GetPostList({ current: page, pageSize: size, startIndex: (page - 1) * size });
       // 已有更新的翻页请求（连续点击或中途返回第一页），丢弃本次响应
       if (id !== requestId.current) return;
-      if (!cardsRoot.current) {
-        // 首次翻页：只移除服务端渲染的节点（纯 DOM）。此后卡片由 React 管理，
-        // 再手动 remove 会让 React 提交更新时 removeChild 失败。
-        items.querySelectorAll('.native-post-card, .native-empty').forEach(node => node.remove());
-        const container = document.createElement('div');
-        container.dataset.nativeCards = '';
-        items.append(container);
-        cardsRoot.current = createRoot(container);
-      }
-      cardsRoot.current.render(<PostCards posts={response.list} cjk={usesCjkDate()} />);
+      renderList(<PostCards posts={response.list} cjk={usesCjkDate()} />);
+      loadedPage.current = true;
       setTotal(response.total);
       setCurrent(page);
       if (updateHistory) {
@@ -102,10 +124,14 @@ export function NativePagination() {
       // 拉取失败时恢复原生导航，仍可整页跳转
       setFailed(true);
       if (nativeNav.current) nativeNav.current.style.removeProperty('display');
-    } finally {
-      if (id === requestId.current) setLoading(false);
+      if (loadedPage.current) {
+        renderList(<PostListStatus message="文章列表加载失败，可使用下方链接翻页。" />);
+      } else {
+        // 尚未成功加载过任何一页：还原服务端渲染的第一页
+        restoreServerPage();
+      }
     }
-  }, [usesCjkDate]);
+  }, [renderList, restoreServerPage, usesCjkDate]);
 
   // 首次挂载：记录服务端结构并获取文章总数，用于计算页数
   useEffect(() => {
@@ -117,25 +143,22 @@ export function NativePagination() {
     list.current = items;
     nativeNav.current = nav;
     ssrItems.current = items?.innerHTML ?? '';
-    const rendered = items?.querySelectorAll('.native-post-card').length ?? 0;
-    const size = rendered > 0 ? rendered : FALLBACK_PAGE_SIZE;
-    setPageSize(size);
 
     const params = new URLSearchParams(window.location.search);
     const startIndex = Number.parseInt(params.get('start-index') ?? '', 10);
     const initialPage = Number.isFinite(startIndex) && startIndex > 1
-      ? Math.floor((startIndex - 1) / size) + 1
+      ? Math.floor((startIndex - 1) / pageSize) + 1
       : 1;
 
     // 只有一页时无需请求总数，原生导航（仅“首页”）保持可见
     if (!nav?.querySelector('a[rel="next"]')) return;
     let active = true;
-    void GetPostList({ current: 1, pageSize: size, startIndex: 0 })
+    void GetPostList({ current: 1, pageSize, startIndex: 0 })
       .then((response) => {
         if (!active) return;
         setTotal(response.total);
         setCurrent(initialPage);
-        if (initialPage > 1) void load(initialPage, size, false);
+        if (initialPage > 1) void load(initialPage, pageSize, false);
       })
       .catch(() => {
         if (active) setFailed(true);
@@ -143,7 +166,7 @@ export function NativePagination() {
     return () => {
       active = false;
     };
-  }, [load]);
+  }, [load, pageSize]);
 
   // 浏览器前进/后退时同步页码
   useEffect(() => {
@@ -189,7 +212,5 @@ export function NativePagination() {
         void load(page, pageSize);
       }}
     />}
-    {loading && <p className="native-pagination-status" role="status">正在加载文章…</p>}
-    {failed && <p className="native-pagination-status" role="status">文章列表加载失败，可使用上方链接翻页。</p>}
   </div>;
 }

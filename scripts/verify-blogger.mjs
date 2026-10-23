@@ -184,6 +184,16 @@ try {
       await page.waitForTimeout(700);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${name}: horizontal overflow`);
       assert.equal(await page.locator('iframe').count(), 0, `${name}: eager iframe`);
+      // 顶部导航：桌面显示标签，移动显示下拉选择 + 独立搜索页
+      const mobile = viewport.width <= 768;
+      assert.equal(await page.locator('nav.native-nav').isVisible(), !mobile, `desktop tab nav visibility at ${viewport.width}px`);
+      assert.equal(await page.locator('nav.native-nav-mobile').isVisible(), mobile, `mobile dropdown nav visibility at ${viewport.width}px`);
+      if (mobile) {
+        const options = await page.locator('nav.native-nav-mobile option').allInnerTexts();
+        assert.deepEqual(options, ['导航菜单', 'HOME', 'ARCHIVES', 'PAGES'], 'mobile dropdown items');
+        assert.equal(await page.locator('nav.native-nav-mobile form').getAttribute('action'), '/search', 'mobile search opens the standalone search page');
+        assert.equal(await page.locator('nav.native-nav-mobile select').getAttribute('onchange'), 'window.location.href=this.value', 'mobile dropdown navigates on change');
+      }
       if (name === 'home') {
         assert.equal(await page.locator('.native-post-link').first().getAttribute('href'), '/2026/10/native-post.html');
         assert.match(await page.locator('.native-welcome').innerText(), /生活分享/);
@@ -200,7 +210,27 @@ try {
           text => document.querySelector('.native-post-card h3')?.textContent?.includes(text) ?? false,
           expected,
         );
+        // 加载占位只出现在列表区域，翻页组件不被压缩且保持可见（桌面与手机同理）
+        await page.route('**/feeds/posts/summary*', async route => {
+          await new Promise(resolve => setTimeout(resolve, 600));
+          const startIndex = Number(new URL(route.request().url()).searchParams.get('start-index') ?? '1');
+          const entries = Array.from({ length: 7 }, (_, offset) => feedEntry(startIndex + offset));
+          await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              feed: { entry: entries, openSearch$totalResults: { $t: '22' }, category: [] },
+            }),
+          });
+        });
+        const beforeBox = await page.locator('.native-pagination-island .t-pagination').boundingBox();
         await next.click();
+        assert.match(await page.locator('.native-post-items .native-list-status').innerText(), /正在加载文章/, 'loading placeholder replaces the list, not the pagination');
+        assert.equal(await page.locator('.native-pagination-island .native-list-status').count(), 0, 'pagination area must stay free of status text');
+        const duringBox = await page.locator('.native-pagination-island .t-pagination').boundingBox();
+        assert.equal(duringBox.width, beforeBox.width, 'pagination must not be compressed while loading');
+        assert.ok(duringBox.y >= 0 && duringBox.y < page.viewportSize().height, 'pagination stays visible while loading');
+        await page.screenshot({ path: `dist/preview/home-loading-${viewport.width}.png` });
         await cardTitle(firstTitle(2));
         assert.equal(await page.locator('.native-post-card').count(), 7, 'fetched page must fill the page size');
         assert.match(page.url(), /start-index=8/, 'client-side paging must update the URL');
@@ -218,6 +248,15 @@ try {
         // 离开后再回来：重新创建 React 卡片容器
         await next.click();
         await cardTitle(firstTitle(2));
+        // 首页截图取翻页成功后的正常状态
+        await page.screenshot({ path: `dist/preview/home-${viewport.width}.png`, fullPage: true });
+        // Feed 失败：已翻过页时在列表区域提示，并恢复原生导航
+        await page.route('**/feeds/posts/summary*', route => route.abort());
+        await page.locator('.native-pagination-island').scrollIntoViewIfNeeded();
+        await next.click();
+        await page.waitForFunction(() => document.querySelector('.native-post-items .native-list-status')?.textContent?.includes('加载失败') ?? false);
+        assert.match(await page.locator('.native-post-items .native-list-status').innerText(), /加载失败/, 'feed failure keeps the message inside the list');
+        assert.equal(await page.locator('nav.native-pagination').isVisible(), true, 'native pagination returns when the feed fails');
       }
       if (name === 'post') {
         assert.equal(await page.locator('#c1').count(), 1);
@@ -236,7 +275,6 @@ try {
       }
       if (name === 'closed') assert.equal(await page.locator('[data-blogger-island="comment-form"]').count(), 0);
       if (name === 'empty') assert.match(await page.locator('.native-post-list').innerText(), /暂无文章/);
-      if (name === 'home') await page.screenshot({ path: `dist/preview/home-${viewport.width}.png`, fullPage: true });
     }
     await context.close();
     const noJS = await browser.newContext({ javaScriptEnabled: false, viewport });

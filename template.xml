@@ -24,12 +24,12 @@
     <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/tdesign-mobile-react-Df0HWWmw.css"/>
 <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/tdesign-react-vjMvunjG.css"/>
 <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/vendor-DkIdjokN.css"/>
-<link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index-DV2iw9N9.css"/>
-<script type="module" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index-DMU2-Vii.js"></script>
-<link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/blogger-native-a8af87c0.css"/>
+<link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index-DvDdOtMT.css"/>
+<script type="module" crossorigin="anonymous" src="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/index-_4MYXdY3.js"></script>
+<link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/gh/scarletborder/bloggerv2@static/assets/blogger-native-a1697c88.css"/>
   </head>
   <body>
-    <nav class="native-nav" aria-label="主导航"><div><a href="/">HOME</a><a href="/archives">ARCHIVES</a><a href="/pages">PAGES</a></div><div><form action="/search" method="get"><input aria-label="搜索文章" placeholder="搜索文章" name="q"/></form><div data-blogger-island="theme"></div></div></nav><main id="blogger-native"><b:section id='main' showaddelement='yes'><b:widget id='Blog1' locked='true' title='博文' type='Blog' version='2' visible='true'>        <b:widget-settings>
+    <nav class="native-nav" aria-label="主导航"><div><a href="/">HOME</a><a href="/archives">ARCHIVES</a><a href="/pages">PAGES</a></div><div><form action="/search" method="get"><input aria-label="搜索文章" placeholder="搜索文章" name="q"/></form><div data-blogger-island="theme"></div></div></nav><nav class='native-nav-mobile' aria-label='主导航'><select aria-label='导航菜单' onchange='window.location.href=this.value'><option value='' disabled='disabled' selected='selected'>导航菜单</option><option value='/'>HOME</option><option value='/archives'>ARCHIVES</option><option value='/pages'>PAGES</option></select><form action='/search' method='get'><input name='q' aria-label='搜索文章' placeholder='搜索文章' /></form><div data-blogger-island='theme' /></nav><main id="blogger-native"><b:section id='main' showaddelement='yes'><b:widget id='Blog1' locked='true' title='博文' type='Blog' version='2' visible='true'>        <b:widget-settings>
           <b:widget-setting name='showDateHeader'>false</b:widget-setting>
           <b:widget-setting name='commentLabel'>comments</b:widget-setting>
           <b:widget-setting name='style.textcolor'>#212529</b:widget-setting>

@@ -15,6 +15,11 @@ React 负责组件定义、构建模板，以及主题、轮播、友链、目�
 - `src/blogger/enhance.tsx`：局部挂载 React，不接管正文和评论 DOM。
 - `src/styles/blogger.css`：沿用已有主题变量的响应式布局。
 
+顶部导航按视口切换：桌面为 HOME / ARCHIVES / PAGES 标签 + 搜索框；
+≤768px 恢复原来的移动端样式——「导航菜单」下拉选择（HOME / ARCHIVES / PAGES）、
+紧凑搜索框（提交到独立搜索页 `/search`）和主题按钮，三者均由模板直接输出，
+不依赖 JS 即可使用（下拉通过内联 `onchange` 跳转）。
+
 运行 `pnpm build`，会同时生成 CDN 资源、根目录 `template.xml` 和
 `dist/template.xml`。生成器根据 Vite manifest 自动填写入口 JS 和其依赖 CSS，
 无需手动粘贴所有 chunk。`CDN_BASEURL` 可指定资源部署地址，默认使用本仓库 static 分支。
