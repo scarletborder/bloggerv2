@@ -181,13 +181,29 @@ try {
         await page.waitForSelector('.native-pagination-island .t-pagination', { timeout: 10_000 });
         assert.equal(await page.locator('nav.native-pagination').isVisible(), false, 'native pagination must yield to the island');
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'home: pagination overflow');
-        await page.locator('.t-pagination__btn-next').click();
-        await page.waitForFunction(() => document.querySelector('.native-post-card h3')?.textContent?.includes('第 2 页文章') ?? false);
+        const next = page.locator('.t-pagination__btn-next');
+        const prev = page.locator('.t-pagination__btn-prev');
+        const cardTitle = expected => page.waitForFunction(
+          text => document.querySelector('.native-post-card h3')?.textContent?.includes(text) ?? false,
+          expected,
+        );
+        await next.click();
+        await cardTitle('第 2 页文章');
         assert.match(page.url(), /start-index=2/, 'client-side paging must update the URL');
         assert.match(await page.locator('.native-post-card .native-date').innerText(), /发布于 2026\/10\/15/, 'fetched cards keep the native date format');
+        // 连续翻页：React 接管列表后反复 diff，不应触发 removeChild 等运行时错误
+        await next.click();
+        await cardTitle('第 3 页文章');
         await page.locator('.native-pagination-island').scrollIntoViewIfNeeded();
-        await page.locator('.t-pagination__btn-prev').click();
+        await prev.click();
+        await cardTitle('第 2 页文章');
+        await page.locator('.native-pagination-island').scrollIntoViewIfNeeded();
+        await prev.click();
         await page.waitForFunction(() => document.querySelector('.native-post-link')?.getAttribute('href') === '/2026/10/native-post.html');
+        assert.match(await page.locator('.native-post-list').innerText(), /生活分享|最新文章/, 'server-rendered first page restored');
+        // 离开后再回来：重新挂载 React 卡片容器
+        await next.click();
+        await cardTitle('第 2 页文章');
       }
       if (name === 'post') {
         assert.equal(await page.locator('#c1').count(), 1);

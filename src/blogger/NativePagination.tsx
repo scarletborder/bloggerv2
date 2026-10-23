@@ -71,14 +71,15 @@ export function NativePagination() {
     setFailed(false);
     try {
       const response = await GetPostList({ current: page, pageSize: size, startIndex: (page - 1) * size });
-      items.querySelectorAll('.native-post-card, .native-empty').forEach(node => node.remove());
-      let container = items.querySelector<HTMLElement>('[data-native-cards]');
-      if (!container) {
-        container = document.createElement('div');
+      if (!cardsRoot.current) {
+        // 首次翻页：只移除服务端渲染的节点（纯 DOM）。此后卡片由 React 管理，
+        // 再手动 remove 会让 React 提交更新时 removeChild 失败。
+        items.querySelectorAll('.native-post-card, .native-empty').forEach(node => node.remove());
+        const container = document.createElement('div');
         container.dataset.nativeCards = '';
         items.append(container);
+        cardsRoot.current = createRoot(container);
       }
-      cardsRoot.current ??= createRoot(container);
       cardsRoot.current.render(<PostCards posts={response.list} cjk={usesCjkDate()} />);
       setTotal(response.total);
       setCurrent(page);
