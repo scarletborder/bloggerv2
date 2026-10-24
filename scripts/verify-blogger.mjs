@@ -201,6 +201,8 @@ try {
         // 分页岛屿替换原生导航，翻页只更新列表不重载页面
         await page.waitForSelector('.native-pagination-island .t-pagination', { timeout: 10_000 });
         assert.equal(await page.locator('nav.native-pagination').isVisible(), false, 'native pagination must yield to the island');
+        assert.equal(await page.locator('.t-pagination__select').count(), 0, 'page size selector must stay hidden');
+        assert.equal(await page.locator('.native-pagination-island p').count(), 0, 'pagination island must not carry status text');
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'home: pagination overflow');
         const next = page.locator('.t-pagination__btn-next');
         const prev = page.locator('.t-pagination__btn-prev');

@@ -27,9 +27,16 @@ React 负责组件定义、构建模板，以及主题、轮播、友链、目�
 
 部署时先上传 `dist/assets` 到配置的 CDN，再将本次生成的 `dist/template.xml`
 导入 Blogger 主题。已有 CI 会发布 dist，并提供 `blogger-template` 下载产物。
-博客描述来自 Blogger「设置 → 基本 → 说明」，评论开关与审核设置也由 Blogger 控制。
-文章保留 `.html` 地址，并通过完整页面请求打开，让 Blogger 处理访问。
-归档、工具列表和搜索仍使用现有 React 页面，点击文章会转到 Blogger 原生页面。
+
+> **部署必须两步都做**：CI 只会把 JS/CSS 发到 CDN，**不会**更新 Blogger 后台的 XML。
+> 凡是改动涉及 `src/blogger/Template.tsx`、`shell.xml`、`default-includables.xml`、
+> `widget-settings.xml` 或 `src/styles/blogger.css`（原生样式表内联进模板），
+> 都必须再手动导入一次模板，否则前台仍跑旧结构（例如移动端下拉导航不出现、
+> 分页加载提示仍挤在分页组件旁）。验证方法：查看前台 HTML 是否含
+> `native-nav-mobile`，以及引用的 JS 哈希是否与本次部署一致。
+> 博客描述来自 Blogger「设置 → 基本 → 说明」，评论开关与审核设置也由 Blogger 控制。
+> 文章保留 `.html` 地址，并通过完整页面请求打开，让 Blogger 处理访问。
+> 归档、工具列表和搜索仍使用现有 React 页面，点击文章会转到 Blogger 原生页面。
 
 评论列表直接使用 `data:post.comments`，包含原生评论分页；即使 Google 不可达也能阅读。
 发表评论或回复时才加载 Blogger 原生 iframe。12 秒未完成 iframe 导航会移除表单并提示重试，

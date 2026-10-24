@@ -196,6 +196,7 @@ export function NativePagination() {
       total={total}
       pageSize={pageSize}
       totalContent
+      showPageSize={false}
       foldedMaxPageBtn={5}
       pageEllipsisMode="mid"
       onChange={(info) => {
