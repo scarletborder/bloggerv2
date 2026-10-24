@@ -1,0 +1,1452 @@
+:root,
+:root[theme-mode="light"] {
+    /* 自定义色系变量 - 用于兼容旧代码 */
+    --bg-color: #f5f5f9;
+    --surface-color: #ececf3;
+    --text-color: #212529;
+    --text-secondary-color: #627077;
+    --border-color: #82969f;
+    --primary-color: #82969f;
+    --primary-hover-color: #a4bbc6;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --scrollbar-thumb-color: #627077;
+    --scrollbar-track-color: #f1f1f1;
+
+    /* TDesign 品牌色定义 - 使用自定义主色 */
+    --td-brand-color-1: #e4f7ff;
+    --td-brand-color-2: #d2e7f1;
+    --td-brand-color-3: #b9cdd7;
+    --td-brand-color-4: #9db1ba;
+    --td-brand-color-5: var(--primary-color);
+    --td-brand-color-6: #667a83;
+    --td-brand-color-7: #4f626a;
+    --td-brand-color-8: #384b53;
+    --td-brand-color-9: #24373e;
+    --td-brand-color-10: #11242b;
+    --td-brand-color-light: var(--td-brand-color-1);
+    --td-brand-color-focus: var(--td-brand-color-2);
+    --td-brand-color-disabled: var(--td-brand-color-3);
+    --td-brand-color-hover: var(--primary-hover-color);
+    --td-brand-color: var(--primary-color);
+    --td-brand-color-active: var(--td-brand-color-6);
+    --td-warning-color-1: #fef3e6;
+    --td-warning-color-2: #f9e0c7;
+    --td-warning-color-3: #f7c797;
+    --td-warning-color-4: #f2995f;
+    --td-warning-color-5: #ed7b2f;
+    --td-warning-color-6: #d35a21;
+    --td-warning-color-7: #ba431b;
+    --td-warning-color-8: #9e3610;
+    --td-warning-color-9: #842b0b;
+    --td-warning-color-10: #5a1907;
+    --td-warning-color: var(--td-warning-color-5);
+    --td-warning-color-hover: var(--td-warning-color-4);
+    --td-warning-color-focus: var(--td-warning-color-2);
+    --td-warning-color-active: var(--td-warning-color-6);
+    --td-warning-color-disabled: var(--td-warning-color-3);
+    --td-warning-color-light: var(--td-warning-color-1);
+    --td-error-color-1: #fdecee;
+    --td-error-color-2: #f9d7d9;
+    --td-error-color-3: #f8b9be;
+    --td-error-color-4: #f78d94;
+    --td-error-color-5: #f36d78;
+    --td-error-color-6: #e34d59;
+    --td-error-color-7: #c9353f;
+    --td-error-color-8: #b11f26;
+    --td-error-color-9: #951114;
+    --td-error-color-10: #680506;
+    --td-error-color: var(--td-error-color-6);
+    --td-error-color-hover: var(--td-error-color-5);
+    --td-error-color-focus: var(--td-error-color-2);
+    --td-error-color-active: var(--td-error-color-7);
+    --td-error-color-disabled: var(--td-error-color-3);
+    --td-error-color-light: var(--td-error-color-1);
+    --td-success-color-1: #e8f8f2;
+    --td-success-color-2: #bcebdc;
+    --td-success-color-3: #85dbbe;
+    --td-success-color-4: #48c79c;
+    --td-success-color-5: #00a870;
+    --td-success-color-6: #078d5c;
+    --td-success-color-7: #067945;
+    --td-success-color-8: #056334;
+    --td-success-color-9: #044f2a;
+    --td-success-color-10: #033017;
+    --td-success-color: var(--td-success-color-5);
+    --td-success-color-hover: var(--td-success-color-4);
+    --td-success-color-focus: var(--td-success-color-2);
+    --td-success-color-active: var(--td-success-color-6);
+    --td-success-color-disabled: var(--td-success-color-3);
+    --td-success-color-light: var(--td-success-color-1);
+    --td-gray-color-1: #f3f3f3;
+    --td-gray-color-2: #eee;
+    --td-gray-color-3: #e7e7e7;
+    --td-gray-color-4: #dcdcdc;
+    --td-gray-color-5: #c5c5c5;
+    --td-gray-color-6: #a6a6a6;
+    --td-gray-color-7: #8b8b8b;
+    --td-gray-color-8: #777;
+    --td-gray-color-9: #5e5e5e;
+    --td-gray-color-10: #4b4b4b;
+    --td-gray-color-11: #383838;
+    --td-gray-color-12: #2c2c2c;
+    --td-gray-color-13: #242424;
+    --td-gray-color-14: #181818;
+    /* 使用自定义颜色作为背景色 - 为了逐渐消除硬编码颜色 */
+    --td-bg-color-page: var(--bg-color);
+    --td-bg-color-container: var(--surface-color);
+    --td-bg-color-container-select: var(--surface-color);
+    --td-bg-color-container-hover: #e0e6eb;
+    --td-bg-color-container-active: #d8dce3;
+    --td-bg-color-secondarycontainer: #f0f2f5;
+    --td-bg-color-secondarycontainer-hover: #e8eaef;
+    --td-bg-color-secondarycontainer-active: #dfe1e8;
+    --td-bg-color-component: #e8eaef;
+    --td-bg-color-component-hover: #dfe1e8;
+    --td-bg-color-component-active: #d3d5dc;
+    --td-bg-color-component-disabled: #e8eaef;
+    /* 边框颜色使用自定义颜色 */
+    --td-component-stroke: var(--border-color);
+    --td-component-border: var(--border-color);
+    --td-font-white-1: #ffffff;
+    --td-font-white-2: rgba(255, 255, 255, 0.55);
+    --td-font-white-3: rgba(255, 255, 255, 0.35);
+    --td-font-white-4: rgba(255, 255, 255, 0.22);
+    --td-font-gray-1: rgba(0, 0, 0, 0.9);
+    --td-font-gray-2: rgba(0, 0, 0, 0.6);
+    --td-font-gray-3: rgba(0, 0, 0, 0.4);
+    --td-font-gray-4: rgba(0, 0, 0, 0.26);
+    /* 使用自定义颜色的文本颜色 */
+    --td-text-color-primary: var(--text-color);
+    --td-text-color-secondary: var(--text-secondary-color);
+    --td-text-color-placeholder: var(--text-secondary-color);
+    --td-text-color-disabled: rgba(0, 0, 0, 0.26);
+    --td-text-color-anti: #fff;
+    /* 使用自定义主色 */
+    --td-text-color-brand: var(--primary-color);
+    --td-text-color-link: var(--primary-color);
+    --td-brand-color-light-hover: var(--td-brand-color-2);
+    --td-warning-color-light-hover: var(--td-warning-color-2);
+    --td-error-color-light-hover: var(--td-error-color-2);
+    --td-success-color-light-hover: var(--td-success-color-2);
+    --td-bg-color-secondarycomponent: var(--td-gray-color-4);
+    --td-bg-color-secondarycomponent-hover: var(--td-gray-color-5);
+    --td-bg-color-secondarycomponent-active: var(--td-gray-color-6);
+    --td-table-shadow-color: rgba(0, 0, 0, 8%);
+    /* 使用自定义 scrollbar 颜色 */
+    --td-scrollbar-color: var(--scrollbar-thumb-color);
+    --td-scrollbar-hover-color: var(--scrollbar-thumb-color);
+    --td-scroll-track-color: var(--scrollbar-track-color);
+    --td-bg-color-specialcomponent: var(--surface-color);
+    /* 自定义 border color - 使用原来的品牌蓝灰色 */
+    --td-border-level-1-color: var(--border-color);
+    --td-border-level-2-color: var(--border-color);
+    --td-shadow-1: 0 1px 10px rgba(0, 0, 0, 5%), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%);
+    --td-shadow-2: 0 3px 14px 2px rgba(0, 0, 0, 5%), 0 8px 10px 1px rgba(0, 0, 0, 6%), 0 5px 5px -3px rgba(0, 0, 0, 10%);
+    --td-shadow-3: 0 6px 30px 5px rgba(0, 0, 0, 5%), 0 16px 24px 2px rgba(0, 0, 0, 4%), 0 8px 10px -5px rgba(0, 0, 0, 8%);
+    --td-shadow-inset-top: inset 0 0.5px 0 var(--border-color);
+    --td-shadow-inset-right: inset 0.5px 0 0 var(--border-color);
+    --td-shadow-inset-bottom: inset 0 -0.5px 0 var(--border-color);
+    --td-shadow-inset-left: inset -0.5px 0 0 var(--border-color);
+    --td-mask-active: rgba(0, 0, 0, 0.6);
+    --td-mask-disabled: rgba(255, 255, 255, 0.6);
+}
+
+:root[theme-mode="dark"] {
+    /* 自定义色系变量 - 用于兼容旧代码（深色模式） */
+    --bg-color: #1a1a1e;
+    --surface-color: #202027;
+    --text-color: rgba(255, 255, 255, 0.85);
+    --text-secondary-color: #e6e6ff;
+    --border-color: #a4a4c6;
+    --primary-color: #c5c5ed;
+    --primary-hover-color: #a4a4c6;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --scrollbar-thumb-color: #e6e6ff;
+    --scrollbar-track-color: #626277;
+
+    /* TDesign 深色模式定义 - 使用自定义主色 */
+    --td-brand-color-1: #8f8fb020;
+    --td-brand-color-2: #2d2f4a;
+    --td-brand-color-3: #434461;
+    --td-brand-color-4: #5b5b7a;
+    --td-brand-color-5: var(--primary-color);
+    --td-brand-color-6: #8f8fb0;
+    --td-brand-color-7: #a4a4c6;
+    --td-brand-color-8: #c6c6e9;
+    --td-brand-color-9: #e0dfff;
+    --td-brand-color-10: #f4f2ff;
+    --td-brand-color-light: var(--td-brand-color-1);
+    --td-brand-color-focus: var(--td-brand-color-2);
+    --td-brand-color-disabled: var(--td-brand-color-3);
+    --td-brand-color-hover: var(--primary-hover-color);
+    --td-brand-color: var(--primary-color);
+    --td-brand-color-active: var(--td-brand-color-7);
+    --td-warning-color-1: #4f2a1d;
+    --td-warning-color-2: #582f21;
+    --td-warning-color-3: #733c23;
+    --td-warning-color-4: #a75d2b;
+    --td-warning-color-5: #cf6e2d;
+    --td-warning-color-6: #dc7633;
+    --td-warning-color-7: #e8935c;
+    --td-warning-color-8: #ecbf91;
+    --td-warning-color-9: #eed7bf;
+    --td-warning-color-10: #f3e9dc;
+    --td-error-color-1: #472324;
+    --td-error-color-2: #5e2a2d;
+    --td-error-color-3: #703439;
+    --td-error-color-4: #83383e;
+    --td-error-color-5: #a03f46;
+    --td-error-color-6: #c64751;
+    --td-error-color-7: #de6670;
+    --td-error-color-8: #ec888e;
+    --td-error-color-9: #edb1b6;
+    --td-error-color-10: #eeced0;
+    --td-success-color-1: #193a2a;
+    --td-success-color-2: #1a4230;
+    --td-success-color-3: #17533d;
+    --td-success-color-4: #0d7a55;
+    --td-success-color-5: #059465;
+    --td-success-color-6: #43af8a;
+    --td-success-color-7: #46bf96;
+    --td-success-color-8: #80d2b6;
+    --td-success-color-9: #b4e1d3;
+    --td-success-color-10: #deede8;
+    --td-gray-color-1: #f3f3f4;
+    --td-gray-color-2: #eeeef0;
+    --td-gray-color-3: #e8e8eb;
+    --td-gray-color-4: #dddde1;
+    --td-gray-color-5: #c6c6ca;
+    --td-gray-color-6: #a6a6aa;
+    --td-gray-color-7: #8b8b8f;
+    --td-gray-color-8: #77777a;
+    --td-gray-color-9: #5e5e61;
+    --td-gray-color-10: #4b4b4e;
+    --td-gray-color-11: #383838;
+    --td-gray-color-12: #2c2c2c;
+    --td-gray-color-13: #242424;
+    --td-gray-color-14: #181818;
+    /* 使用自定义颜色作为背景色 - 为了逐渐消除硬编码颜色 */
+    --td-bg-color-page: var(--bg-color);
+    --td-bg-color-container: var(--surface-color);
+    --td-bg-color-container-hover: #2a2a30;
+    --td-bg-color-container-active: #323238;
+    --td-bg-color-container-select: #3a3a40;
+    --td-bg-color-secondarycontainer: #282830;
+    --td-bg-color-secondarycontainer-hover: #303038;
+    --td-bg-color-secondarycontainer-active: #3a3a40;
+    --td-bg-color-component: #282830;
+    --td-bg-color-component-hover: #303038;
+    --td-bg-color-component-active: #3a3a40;
+    --td-bg-color-component-disabled: #1f1f24;
+    /* 边框颜色使用自定义颜色 */
+    --td-component-stroke: var(--border-color);
+    --td-component-border: var(--border-color);
+    --td-font-white-1: rgba(255, 255, 255, 0.9);
+    --td-font-white-2: rgba(255, 255, 255, 0.55);
+    --td-font-white-3: rgba(255, 255, 255, 0.35);
+    --td-font-white-4: rgba(255, 255, 255, 0.22);
+    --td-font-gray-1: rgba(0, 0, 0, 0.9);
+    --td-font-gray-2: rgba(0, 0, 0, 0.6);
+    --td-font-gray-3: rgba(0, 0, 0, 0.4);
+    --td-font-gray-4: rgba(0, 0, 0, 0.26);
+    /* 使用自定义颜色的文本颜色 */
+    --td-text-color-primary: var(--text-color);
+    --td-text-color-secondary: var(--text-secondary-color);
+    --td-text-color-placeholder: var(--text-secondary-color);
+    --td-text-color-disabled: rgba(255, 255, 255, 0.22);
+    --td-text-color-anti: #fff;
+    /* 使用自定义主色 */
+    --td-text-color-brand: var(--primary-color);
+    --td-text-color-link: var(--primary-color);
+    --td-shadow-1: 0 4px 6px rgba(0, 0, 0, 0.06), 0 1px 10px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.12);
+    --td-shadow-2: 0 8px 10px rgba(0, 0, 0, 0.12), 0 3px 14px rgba(0, 0, 0, 0.10), 0 5px 5px rgba(0, 0, 0, 0.16);
+    --td-shadow-3: 0 16px 24px rgba(0, 0, 0, 0.14), 0 6px 30px rgba(0, 0, 0, 0.12), 0 8px 10px rgba(0, 0, 0, 0.20);
+    --td-shadow-inset-top: inset 0 0.5px 0 var(--border-color);
+    --td-shadow-inset-right: inset 0.5px 0 0 var(--border-color);
+    --td-shadow-inset-bottom: inset 0 -0.5px 0 var(--border-color);
+    --td-shadow-inset-left: inset -0.5px 0 0 var(--border-color);
+    --td-table-shadow-color: rgba(0, 0, 0, 55%);
+    --td-bg-color-specialcomponent: transparent;
+    /* 使用自定义 border color 和 scrollbar 颜色 */
+    --td-border-level-1-color: var(--border-color);
+    --td-border-level-2-color: var(--border-color);
+    --td-scrollbar-color: var(--scrollbar-thumb-color);
+    --td-scrollbar-hover-color: var(--scrollbar-thumb-color);
+    --td-scroll-track-color: var(--scrollbar-track-color);
+    --td-mask-active: rgba(0, 0, 0, 0.4);
+    --td-mask-disabled: rgba(0, 0, 0, 0.6);
+}
+
+:root {
+    --td-font-family: pingfang sc, microsoft yahei, arial regular;
+    --td-font-family-medium: pingfang sc, microsoft yahei, arial medium;
+    --td-font-size-link-small: 12px;
+    --td-font-size-link-medium: 14px;
+    --td-font-size-link-large: 16px;
+    --td-font-size-mark-small: 12px;
+    --td-font-size-mark-medium: 14px;
+    --td-font-size-body-small: 12px;
+    --td-font-size-body-medium: 14px;
+    --td-font-size-body-large: 16px;
+    --td-font-size-title-small: 14px;
+    --td-font-size-title-medium: 16px;
+    --td-font-size-title-large: 20px;
+    --td-font-size-headline-small: 24px;
+    --td-font-size-headline-medium: 28px;
+    --td-font-size-headline-large: 36px;
+    --td-font-size-display-medium: 48px;
+    --td-font-size-display-large: 64px;
+    --td-line-height-link-small: 20px;
+    --td-line-height-link-medium: 22px;
+    --td-line-height-link-large: 24px;
+    --td-line-height-mark-small: 20px;
+    --td-line-height-mark-medium: 22px;
+    --td-line-height-body-small: 20px;
+    --td-line-height-body-medium: 22px;
+    --td-line-height-body-large: 24px;
+    --td-line-height-title-small: 22px;
+    --td-line-height-title-medium: 24px;
+    --td-line-height-title-large: 28px;
+    --td-line-height-headline-small: 32px;
+    --td-line-height-headline-medium: 36px;
+    --td-line-height-headline-large: 44px;
+    --td-line-height-display-medium: 56px;
+    --td-line-height-display-large: 72px;
+    --td-font-link-small: var(--td-font-size-link-small) / var(--td-line-height-link-small) var(--td-font-family);
+    --td-font-link-medium: var(--td-font-size-link-medium) / var(--td-line-height-link-medium) var(--td-font-family);
+    --td-font-link-large: var(--td-font-size-link-large) / var(--td-line-height-link-large) var(--td-font-family);
+    --td-font-mark-small: 600 var(--td-font-size-mark-small) / var(--td-line-height-mark-small) var(--td-font-family);
+    --td-font-mark-medium: 600 var(--td-font-size-mark-medium) / var(--td-line-height-mark-medium) var(--td-font-family);
+    --td-font-body-small: var(--td-font-size-body-small) / var(--td-line-height-body-small) var(--td-font-family);
+    --td-font-body-medium: var(--td-font-size-body-medium) / var(--td-line-height-body-medium) var(--td-font-family);
+    --td-font-body-large: var(--td-font-size-body-large) / var(--td-line-height-body-large) var(--td-font-family);
+    --td-font-title-small: 600 var(--td-font-size-title-small) / var(--td-line-height-title-small) var(--td-font-family);
+    --td-font-title-medium: 600 var(--td-font-size-title-medium) / var(--td-line-height-title-medium) var(--td-font-family);
+    --td-font-title-large: 600 var(--td-font-size-title-large) / var(--td-line-height-title-large) var(--td-font-family);
+    --td-font-headline-small: 600 var(--td-font-size-headline-small) / var(--td-line-height-headline-small) var(--td-font-family);
+    --td-font-headline-medium: 600 var(--td-font-size-headline-medium) / var(--td-line-height-headline-medium) var(--td-font-family);
+    --td-font-headline-large: 600 var(--td-font-size-headline-large) / var(--td-line-height-headline-large) var(--td-font-family);
+    --td-font-display-medium: 600 var(--td-font-size-display-medium) / var(--td-line-height-display-medium) var(--td-font-family);
+    --td-font-display-large: 600 var(--td-font-size-display-large) / var(--td-line-height-display-large) var(--td-font-family);
+    --td-radius-small: 2px;
+    --td-radius-default: 3px;
+    --td-radius-medium: 6px;
+    --td-radius-large: 9px;
+    --td-radius-extraLarge: 12px;
+    --td-radius-round: 999px;
+    --td-radius-circle: 50%;
+    --td-size-1: 2px;
+    --td-size-2: 4px;
+    --td-size-3: 6px;
+    --td-size-4: 8px;
+    --td-size-5: 12px;
+    --td-size-6: 16px;
+    --td-size-7: 20px;
+    --td-size-8: 24px;
+    --td-size-9: 28px;
+    --td-size-10: 32px;
+    --td-size-11: 36px;
+    --td-size-12: 40px;
+    --td-size-13: 48px;
+    --td-size-14: 56px;
+    --td-size-15: 64px;
+    --td-size-16: 72px;
+    --td-comp-size-xxxs: var(--td-size-6);
+    --td-comp-size-xxs: var(--td-size-7);
+    --td-comp-size-xs: var(--td-size-8);
+    --td-comp-size-s: var(--td-size-9);
+    --td-comp-size-m: var(--td-size-10);
+    --td-comp-size-l: var(--td-size-11);
+    --td-comp-size-xl: var(--td-size-12);
+    --td-comp-size-xxl: var(--td-size-13);
+    --td-comp-size-xxxl: var(--td-size-14);
+    --td-comp-size-xxxxl: var(--td-size-15);
+    --td-comp-size-xxxxxl: var(--td-size-16);
+    --td-pop-padding-s: var(--td-size-2);
+    --td-pop-padding-m: var(--td-size-3);
+    --td-pop-padding-l: var(--td-size-4);
+    --td-pop-padding-xl: var(--td-size-5);
+    --td-pop-padding-xxl: var(--td-size-6);
+    --td-comp-paddingLR-xxs: var(--td-size-1);
+    --td-comp-paddingLR-xs: var(--td-size-2);
+    --td-comp-paddingLR-s: var(--td-size-4);
+    --td-comp-paddingLR-m: var(--td-size-5);
+    --td-comp-paddingLR-l: var(--td-size-6);
+    --td-comp-paddingLR-xl: var(--td-size-8);
+    --td-comp-paddingLR-xxl: var(--td-size-10);
+    --td-comp-paddingTB-xxs: var(--td-size-1);
+    --td-comp-paddingTB-xs: var(--td-size-2);
+    --td-comp-paddingTB-s: var(--td-size-4);
+    --td-comp-paddingTB-m: var(--td-size-5);
+    --td-comp-paddingTB-l: var(--td-size-6);
+    --td-comp-paddingTB-xl: var(--td-size-8);
+    --td-comp-paddingTB-xxl: var(--td-size-10);
+    --td-comp-margin-xxs: var(--td-size-1);
+    --td-comp-margin-xs: var(--td-size-2);
+    --td-comp-margin-s: var(--td-size-4);
+    --td-comp-margin-m: var(--td-size-5);
+    --td-comp-margin-l: var(--td-size-6);
+    --td-comp-margin-xl: var(--td-size-7);
+    --td-comp-margin-xxl: var(--td-size-8);
+    --td-comp-margin-xxxl: var(--td-size-10);
+    --td-comp-margin-xxxxl: var(--td-size-12);
+}
+/**
+ * 全局样式 - 基于 TDesign 设计系统
+ * 所有字体、排版和全局样式定义都在此文件中
+ */
+
+/* 基础重置和 box-sizing */
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--td-font-family);
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font: var(--td-font-body-medium);
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+/* 段落样式 */
+p {
+  font-size: var(--td-font-size-body-large);
+  font-weight: 400;
+  margin: 16px 0;
+  color: var(--text-color);
+  line-height: var(--td-line-height-body-large);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  p {
+    margin: 12px 0;
+  }
+}
+
+/* Div 元素 */
+div {
+  font-size: var(--td-font-size-body-large);
+  color: var(--text-color);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Span 元素 - 使用 :where() 降低特异性 */
+:where(span) {
+  font-size: var(--td-font-size-body-large);
+  color: var(--text-color);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* 链接样式 */
+a {
+  font-size: var(--td-font-size-link-large);
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  line-height: var(--td-line-height-link-large);
+}
+
+a:hover {
+  color: var(--primary-hover-color);
+  text-decoration: underline;
+}
+
+/* 标题样式 */
+h1 {
+  font-size: var(--td-font-size-display-large);
+  font-weight: 600;
+  margin: 32px 0 24px;
+  color: var(--text-color);
+  line-height: var(--td-line-height-display-large);
+}
+
+h2 {
+  font-size: var(--td-font-size-headline-large);
+  font-weight: 500;
+  margin: 28px 0 20px;
+  color: var(--text-color);
+  line-height: var(--td-line-height-headline-large);
+}
+
+h3 {
+  font-size: var(--td-font-size-headline-medium);
+  font-weight: 500;
+  margin: 24px 0 16px;
+  color: var(--text-color);
+  line-height: var(--td-line-height-headline-medium);
+}
+
+h4 {
+  font-size: var(--td-font-size-title-large);
+  font-weight: 500;
+  margin: 20px 0 12px;
+  color: var(--text-color);
+  line-height: var(--td-line-height-title-large);
+}
+
+h5 {
+  font-size: var(--td-font-size-title-medium);
+  font-weight: 600;
+  margin: 18px 0 10px;
+  color: var(--text-color);
+  line-height: var(--td-line-height-title-medium);
+}
+
+h6 {
+  font-size: var(--td-font-size-body-large);
+  font-weight: 600;
+  margin: 16px 0 8px;
+  color: var(--text-color);
+  line-height: var(--td-line-height-body-large);
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: var(--td-font-size-headline-medium);
+    margin: 16px 0 12px;
+  }
+
+  h2 {
+    font-size: var(--td-font-size-headline-small);
+    margin: 14px 0 10px;
+  }
+
+  h3 {
+    font-size: var(--td-font-size-title-large);
+    margin: 12px 0 8px;
+  }
+
+  h4 {
+    font-size: var(--td-font-size-title-medium);
+    margin: 10px 0 6px;
+  }
+
+  h5 {
+    font-size: var(--td-font-size-title-small);
+    margin: 8px 0 4px;
+  }
+
+  h6 {
+    font-size: var(--td-font-size-body-large);
+    margin: 6px 0 2px;
+  }
+}
+
+/* 代码块样式 */
+pre {
+  font-size: var(--td-font-size-body-small);
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 16px;
+  margin: 16px 0;
+  overflow-x: auto;
+  color: var(--text-color);
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+@media (max-width: 768px) {
+  pre {
+    padding: 12px;
+    margin: 12px 0;
+  }
+}
+
+/* 内联代码样式 */
+code {
+  font-size: var(--td-font-size-body-small);
+  background-color: var(--surface-color);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--text-color);
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+@media (max-width: 768px) {
+  code {
+    padding: 2px 4px;
+  }
+}
+
+/* 小文本样式 */
+small {
+  font-size: var(--td-font-size-body-small);
+  color: var(--text-secondary-color);
+}
+
+/* 标签样式 */
+label {
+  font-size: var(--td-font-size-body-large);
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+/* 输入框和文本域样式 */
+input,
+textarea {
+  font-size: var(--td-font-size-body-large);
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 12px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+
+  input,
+  textarea {
+    padding: 8px;
+  }
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--primary-color);
+}
+
+/* 按钮样式 */
+button {
+  font-size: var(--td-font-size-body-large);
+  color: var(--bg-color);
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  button {
+    padding: 8px 16px;
+  }
+}
+
+button:hover {
+  background-color: var(--primary-hover-color);
+}
+
+/* 列表项样式 */
+li {
+  font-size: var(--td-font-size-body-large);
+  color: var(--text-color);
+  margin: 8px 0;
+  line-height: var(--td-line-height-body-large);
+}
+
+@media (max-width: 768px) {
+  li {
+    margin: 6px 0;
+  }
+}
+
+/* 引用样式 */
+blockquote {
+  font-size: var(--td-font-size-body-large);
+  color: var(--text-secondary-color);
+  border-left: 3px solid var(--primary-color);
+  padding-left: 16px;
+  margin: 16px 0;
+  font-style: normal;
+  font-weight: 400;
+  opacity: 0.95;
+  line-height: var(--td-line-height-body-large);
+}
+
+@media (max-width: 768px) {
+  blockquote {
+    padding-left: 12px;
+    margin: 12px 0;
+  }
+}
+
+/* 标题和图片标题样式 */
+caption,
+figcaption {
+  font-size: var(--td-font-size-body-small);
+  color: var(--text-secondary-color);
+  text-align: center;
+  margin: 8px 0;
+}
+
+@media (max-width: 768px) {
+
+  caption,
+  figcaption {
+    margin: 6px 0;
+  }
+}
+
+/* 表格样式 */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+  max-width: 100%;
+  overflow-x: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  table {
+    margin: 12px 0;
+    white-space: nowrap;
+  }
+}
+
+th,
+td {
+  font-size: var(--td-font-size-body-large);
+  border: 1px solid var(--border-color);
+  padding: 12px;
+  text-align: left;
+  line-height: var(--td-line-height-body-large);
+}
+
+@media (max-width: 768px) {
+
+  th,
+  td {
+    padding: 8px;
+  }
+}
+
+th {
+  background-color: var(--surface-color);
+  font-weight: 600;
+}
+
+/* 分割线样式 */
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 32px 0;
+}
+
+@media (max-width: 768px) {
+  hr {
+    margin: 20px 0;
+  }
+}
+
+/* 滚动条样式 - Webkit 浏览器 */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color);
+  border-radius: 6px;
+  border: 2px solid var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-color);
+  opacity: 0.8;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--scrollbar-track-color);
+}
+
+/* 滚动条样式 - Firefox */
+* {
+  scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+}
+
+/* 移动端基础样式 */
+@media (max-width: 768px) {
+
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
+    touch-action: pan-y;
+  }
+
+  * {
+    max-width: 100%;
+    hyphens: auto;
+  }
+}
+/**
+ * 注意：这个文件已被弃用，颜色定义现在在 src/styles/theme.css 中
+ * theme.css 基于 TDesign 设计系统，提供了完整的颜色定义
+ * 
+ * 保留此文件以确保向后兼容，但所有新的颜色应该在 theme.css 中定义
+ * 
+ * @deprecated 使用 src/styles/theme.css 替代
+ */
+
+/* 防闪烁的基础样式 */
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--td-font-family);
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1,
+    'calt' 1;
+  text-rendering: optimizeLegibility;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font: var(--td-font-body-medium);
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1,
+    'calt' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  width: 100%;
+}
+/* The native markup shares the existing theme tokens and component geometry. */
+.native-nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 0 24px; min-height: 60px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+.native-nav-mobile { display: none; }
+.native-nav > div { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.native-nav a { color: var(--text-color); font-size: 16px; font-weight: 500; padding: 8px 16px; }
+.native-nav input { width: 180px; max-width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-color); color: var(--text-color); }
+.native-home { display: grid; grid-template-columns: minmax(0, 65fr) minmax(0, 30fr); gap: 63px; max-width: 1500px; padding: 32px 5px 24px; margin: auto; }
+.native-home-main, .native-home-sidebar { min-width: 0; }
+.native-home-sidebar { display: flex; flex-direction: column; gap: 15px; }
+.native-welcome { padding: 5px 0; }
+.native-welcome h2 { font-size: 20px; font-weight: bold; margin: 0 0 10px; }
+.native-welcome p { font-size: 14px; line-height: 1.6; color: var(--text-secondary-color); white-space: pre-line; }
+.native-banner { width: 100%; height: auto; max-height: 96px; object-fit: contain; border-radius: 8px; }
+.native-post-list > h2 { font-size: 24px; font-weight: 600; margin: 0 0 20px; }
+.native-post-card { padding: 20px; margin-bottom: 16px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 8px var(--shadow-color); transition: transform .2s; }
+.native-post-card:hover { transform: translateY(-2px); }
+.native-post-link { display: block; color: var(--text-color); }
+.native-post-card h3 { font-size: 18px; font-weight: 600; margin: 0 0 8px; }
+.native-summary { font-size: 14px; color: var(--text-secondary-color); line-height: 1.5; margin: 8px 0 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.native-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.native-tags a { padding: 2px 8px; background: var(--primary-color); color: var(--surface-color); border-radius: 12px; font-size: 12px; }
+.native-date, .native-date a { color: var(--text-secondary-color); font-size: 12px; }
+.native-pagination { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; padding: 20px 0; }
+.native-pagination-island { display: flex; justify-content: center; padding: 20px 0; }
+.native-pagination-island .t-pagination { flex-wrap: wrap; justify-content: center; row-gap: 8px; max-width: 100%; }
+/* 加载/失败占位与文章卡片同尺寸，翻页时不引起布局跳动 */
+.native-list-status { padding: 20px; margin-bottom: 16px; text-align: center; color: var(--text-secondary-color); font-size: 14px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; }
+.native-post-layout { max-width: 1650px; width: 80%; margin: auto; padding: 32px 32px 32px calc(var(--toc-panel-left, 24px) + var(--toc-panel-width, 248px) + 32px); }
+.native-post { min-width: 0; }
+.native-post-header { padding-bottom: 24px; margin-bottom: 32px; border-bottom: 2px solid var(--border-color); }
+.native-post-header h1 { font-size: 40px; line-height: 1.2; font-weight: bold; margin: 0 0 16px; overflow-wrap: anywhere; }
+.native-post-header .native-date { font-size: 15px; }
+.native-post-header .post-tag { padding: 6px 12px; background: var(--surface-color); color: var(--primary-color); border: 1px solid var(--primary-color); border-radius: 16px; font-size: 13px; }
+.native-comments { margin-top: 32px; padding: 24px; border: 1px solid var(--border-color); border-radius: 16px; }
+.native-comments > h3 { margin: 0 0 20px; font-size: 24px; font-weight: bold; }
+.native-comments > h3 span { font-size: 16px; font-weight: normal; color: var(--text-secondary-color); }
+.native-comment { padding: 16px; margin-bottom: 16px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; overflow-wrap: anywhere; scroll-margin-top: 80px; }
+.native-comment header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+.native-comment-body { padding: 12px 0; line-height: 1.6; }
+.native-comment-body img { max-width: 100%; height: auto; }
+.native-reply { font-size: 13px; }
+.native-comment-form button { padding: 8px 16px; border: 0; border-radius: 8px; background: var(--primary-color); color: #fff; cursor: pointer; }
+.native-comment-form .form-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 12px 0; }
+.native-comment-form iframe { width: 100%; height: 420px; border: 0; background: var(--surface-color); }
+.native-comment-form [role='status'] { color: var(--text-secondary-color); font-size: 14px; }
+.native-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 32px; padding: 24px 48px; background: var(--surface-color); border-top: 1px solid var(--border-color); }
+.native-footer > div { line-height: 1.8; }
+.native-footer div div { font-size: 14px; color: var(--text-secondary-color); }
+@media (max-width: 1279px) { .native-post-layout { padding-left: 32px; width: 95%; } }
+@media (max-width: 768px) {
+  /* 移动端：隐藏桌面标签导航，显示下拉选择 + 搜索 + 主题按钮 */
+  .native-nav { display: none; }
+  .native-nav-mobile { display: flex; align-items: center; gap: 10px; padding: 8px 12px; min-height: 56px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+  .native-nav-mobile select { max-width: 45%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-color); color: var(--text-color); font-size: 13px; }
+  .native-nav-mobile form { display: flex; flex: 1; min-width: 0; }
+  .native-nav-mobile input { width: 100%; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 20px; background: var(--bg-color); color: var(--text-color); font-size: 14px; }
+  .native-home { display: flex; flex-direction: column; padding: 16px; gap: 16px; }
+  .native-home-sidebar { display: contents; }
+  .native-welcome { order: -3; }
+  [data-blogger-island='slider'] { order: -2; }
+  [data-blogger-island='site-title'] { display: none; }
+  .native-welcome h2 { font-size: 24px; }
+  .native-welcome p { font-size: 16px; }
+  .native-post-card { padding: 16px 12px; }
+  .native-post-card h3 { font-size: 20px; }
+  .native-post-layout { width: 100%; padding: 16px 20px; }
+  .native-post-header { padding-bottom: 16px; margin-bottom: 20px; }
+  .native-post-header h1 { font-size: 28px; }
+  .native-comments { padding: 0; border: 0; border-radius: 0; }
+  .native-comments > h3 { font-size: 20px; }
+  .native-footer { padding: 20px 16px; gap: 16px; }
+}
+
+
+    .blog-content {
+      line-height: 1.6;
+      color: var(--text-color);
+      /* 桌面端基础字号 (18px) */
+      font-size: 18px;
+      font-size: 1.125rem; /* 18 / 16 */
+      font-weight: 400;
+      max-width: 100%;
+      word-break: break-word;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    .blog-content h1,
+    .blog-content h2,
+    .blog-content h3,
+    .blog-content h4,
+    .blog-content h5,
+    .blog-content h6 {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.3em;
+      margin-top: 24px;
+      margin-top: 1.5rem; /* 24 / 16 */
+      margin-bottom: 16px;
+      margin-bottom: 1rem; /* 16 / 16 */
+      color: var(--text-color);
+    }
+
+    /* 标题层级 */
+    .blog-content h1 {
+      font-size: 40px;
+      font-size: 2.5rem; /* 40 / 16 */
+    }
+
+    .blog-content h2 {
+      font-size: 28px;
+      font-size: 1.75rem; /* 28 / 16 */
+    }
+
+    .blog-content h3 {
+      font-size: 25px;
+      font-size: 1.5625rem; /* 25 / 16 */
+    }
+
+    .blog-content p {
+      margin-top: 16px;
+      margin-top: 1rem;
+      margin-bottom: 16px;
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .blog-content pre {
+      background-color: #f8f9fa;
+      padding: 16px;
+      padding: 1rem;
+      border-radius: 8px;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      margin: 16px 0;
+      margin: 1rem 0;
+      font-size: 14px;
+      font-size: 0.875rem; /* 14 / 16 */
+      font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
+      font-weight: 400;
+      line-height: 1.5;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "kern" 0;
+    }
+
+    .blog-content code {
+      background-color: rgba(0, 0, 0, 0.1);
+      padding: 2px 6px;
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      border-radius: 0.25rem;
+      font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
+      /* 使用 em 单位使行内代码块大小相对于周围文本，这是推荐做法 */
+      font-size: 0.9em;
+      font-weight: 400;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "kern" 0;
+    }
+
+    .blog-content pre code {
+      background-color: transparent;
+      padding: 0;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      font-variant-numeric: inherit;
+      font-feature-settings: inherit;
+    }
+
+    .blog-content blockquote {
+      border-left: 4px solid var(--primary-color);
+      border-left: 0.25rem solid var(--primary-color);
+      margin: 16px 0;
+      margin: 1rem 0;
+      color: var(--text-secondary-color);
+      font-style: normal;
+      font-weight: 400;
+      opacity: 0.95;
+      background-color: var(--surface-color);
+      padding: 12px 16px;
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      border-radius: 0.25rem;
+    }
+
+    .blog-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border-radius: 0.5rem;
+      margin: 16px 0;
+      margin: 1rem 0;
+      box-shadow: var(--shadow-color) 0px 2px 8px;
+    }
+
+    .blog-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      margin: 1rem 0;
+      font-size: 16px;
+      font-size: 1rem;
+    }
+
+    .blog-content th,
+    .blog-content td {
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+    }
+
+    .blog-content th {
+      background-color: var(--surface-color);
+      font-weight: bold;
+    }
+
+    .blog-content ul,
+    .blog-content ol {
+      padding-left: 24px;
+      padding-left: 1.5rem;
+      margin: 16px 0;
+      margin: 1rem 0;
+    }
+
+    .blog-content li {
+      margin: 6px 0;
+      margin: 0.375rem 0;
+    }
+
+    /* CodeMirror 样式 - 原始复杂结构的样式 */
+    .blog-content .CodeMirror-scroll {
+      background-color: #f8f9fa;
+      padding: 16px;
+      padding: 1rem;
+      border-radius: 8px;
+      border-radius: 0.5rem;
+      color: #333;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "kern" 0;
+    }
+
+    /* 清理后的 CodeMirror 块样式 */
+    .blog-content .cleaned-codemirror-block {
+      background-color: #f8f9fa;
+      color: #333;
+      padding: 16px;
+      padding: 1rem;
+      border-radius: 8px;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      margin: 16px 0;
+      margin: 1rem 0;
+      font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
+      font-size: 14px;
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1.5;
+      border: 1px solid var(--border-color);
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "kern" 0;
+    }
+
+    .blog-content .cleaned-codemirror-block code {
+      background-color: transparent !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
+      font-size: inherit !important;
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* KaTeX 数学公式样式 */
+    .blog-content .katex {
+      font-size: 1.1em;
+    }
+
+    .blog-content .katex-display {
+      margin: 20px 0;
+      margin: 1.25rem 0;
+      text-align: center;
+    }
+
+    /* ======================================================== */
+    /* 移动端适配 (Mobile Overrides) 使用媒体查询                 */
+    /* 768px 是一个常用的断点，您可以根据需要调整                 */
+    /* ======================================================== */
+    @media (max-width: 768px) {
+      .blog-content {
+        /* 移动端基础字号 (16px) */
+        font-size: 16px;
+        font-size: 1rem;
+        padding: 0;
+      }
+
+      .blog-content h1,
+      .blog-content h2,
+      .blog-content h3,
+      .blog-content h4,
+      .blog-content h5,
+      .blog-content h6 {
+        margin-top: 20px;
+        margin-top: 1.25rem; /* 20 / 16 */
+        margin-bottom: 12px;
+        margin-bottom: 0.75rem; /* 12 / 16 */
+      }
+
+      .blog-content h1 {
+        /* 在移动端，h1字体大小通常会比桌面端小，这里设置为 32px */
+        font-size: 32px;
+        font-size: 2rem;
+      }
+      
+      .blog-content h2 {
+        /* 24px */
+        font-size: 24px;
+        font-size: 1.5rem;
+      }
+      
+      .blog-content h3 {
+        /* 20px */
+        font-size: 20px;
+        font-size: 1.25rem;
+      }
+      
+      .blog-content p {
+        margin: 12px 0;
+        margin: 0.75rem 0;
+      }
+
+      .blog-content pre {
+        padding: 12px;
+        padding: 0.75rem;
+        margin: 12px 0;
+        margin: 0.75rem 0;
+        font-size: 13px;
+        font-size: 0.8125rem; /* 13 / 16 */
+        white-space: pre;
+      }
+      
+      .blog-content blockquote {
+        margin: 12px 0;
+        margin: 0.75rem 0;
+        padding: 8px 12px;
+        padding: 0.5rem 0.75rem;
+        font-style: normal;
+        font-weight: 400;
+        opacity: 0.95;
+      }
+      
+      .blog-content img,
+      .blog-content table,
+      .blog-content ul,
+      .blog-content ol {
+        margin: 12px 0;
+        margin: 0.75rem 0;
+      }
+      
+      .blog-content table {
+        font-size: 13px;
+        font-size: 0.8125rem;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      
+      .blog-content th,
+      .blog-content td {
+        padding: 6px 8px;
+        padding: 0.375rem 0.5rem;
+      }
+      
+      .blog-content ul,
+      .blog-content ol {
+        padding-left: 20px;
+        padding-left: 1.25rem;
+      }
+      
+      .blog-content li {
+        margin: 4px 0;
+        margin: 0.25rem 0;
+      }
+
+      .blog-content .CodeMirror-scroll {
+        padding: 12px;
+        padding: 0.75rem;
+      }
+
+      .blog-content .cleaned-codemirror-block {
+        padding: 12px;
+        padding: 0.75rem;
+        margin: 12px 0;
+        margin: 0.75rem 0;
+        font-size: 13px;
+        font-size: 0.8125rem;
+        font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
+        font-variant-numeric: tabular-nums;
+        font-feature-settings: "kern" 0;
+      }
+
+    .blog-content .cleaned-codemirror-block code {
+      background-color: transparent !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
+      font-weight: inherit !important;
+      font-variant-numeric: inherit !important;
+      font-feature-settings: inherit !important;
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }      .blog-content .katex {
+        font-size: 1em;
+      }
+      
+      .blog-content .katex-display {
+        margin: 16px 0;
+        margin: 1rem 0;
+             }
+     }
+
+     /* 代码块中英文字体大小统一 */
+     .blog-content pre,
+     .blog-content code,
+     .blog-content .CodeMirror-scroll,
+     .blog-content .cleaned-codemirror-block {
+       /* 确保中英文字符使用统一的字体设置 */
+       text-size-adjust: 100%;
+       -webkit-text-size-adjust: 100%;
+       -moz-text-size-adjust: 100%;
+       /* 禁用字体大小的自动调整 */
+       font-size-adjust: none;
+       /* 确保字符间距一致 */
+       letter-spacing: 0;
+       word-spacing: 0;
+     }
+
+     /* 代码块增强功能样式 */
+     
+    /* 代码块容器整体样式 */
+    .enhanced-code-block {
+      position: relative; /* 改为非 important，避免不必要的覆盖 */
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 16px 0;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    /* 代码块头部，用于容纳工具栏 */
+    .code-header {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 8px 12px;
+      display: flex;
+      justify-content: flex-end; /* 修改为 flex-end 使工具栏靠右 */
+      align-items: center;
+      min-height: 36px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 工具栏，包含语言和复制按钮 */
+    .code-toolbar {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* 语言标签样式 */
+    .code-language-label {
+      background-color: rgba(0, 0, 0, 0.15);
+      color: rgba(0, 0, 0, 0.7);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Courier New', "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      user-select: none;
+    }
+
+    /* 复制按钮样式 */
+    .code-copy-button {
+      background-color: rgba(0, 0, 0, 0.1);
+      color: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .code-copy-button:hover {
+      background-color: rgba(0, 0, 0, 0.2);
+      color: rgba(0, 0, 0, 0.9);
+      border-color: rgba(0, 0, 0, 0.3);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .code-copy-button:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .code-copy-button:focus-visible {
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 代码内容区域样式，应用于 <pre> 元素 */
+    .code-content {
+      background-color: #f8f9fa;
+      margin: 0 !important;
+      border: none !important;
+      border-radius: 0 !important;
+    }
+
+    /* 复制成功状态 */
+    .code-copy-button.copied {
+      background-color: rgba(34, 197, 94, 0.1);
+      color: #16a34a;
+      border-color: rgba(34, 197, 94, 0.2);
+    }
+
+    /* 复制失败状态 */
+    .code-copy-button.error {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: #dc2626;
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+
+    .copy-icon {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+    }
+
+    .copy-text {
+      white-space: nowrap;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* 其他媒体查询和状态样式保持不变... */
+    @media (max-width: 768px) {
+      /* 新增：移动端抵消列表缩进 */
+      li .enhanced-code-block {
+        width: 100vw;
+        max-width: 90vw;
+        margin-left: calc(50% - 50vw + 0.55rem);
+        box-sizing: border-box;
+      }
+
+      .code-header {
+        padding: 6px 8px;
+        min-height: 32px;
+      }
+      .code-toolbar { gap: 6px; }
+      .code-language-label { padding: 3px 6px; font-size: 10px; }
+      .code-copy-button { padding: 3px 6px; font-size: 10px; }
+      .copy-icon { width: 10px; height: 10px; }
+      .copy-text { font-size: 9px; }
+    }
+    @media (prefers-contrast: high) {
+      .code-language-label, .code-copy-button {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-width: 2px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .code-copy-button { transition: none; }
+      .code-copy-button:hover { transform: none; box-shadow: none; }
+      .code-copy-button:active { transform: none; }
+    }
+    @media print {
+      .code-header { display: none; }
+    }
+  
+   
