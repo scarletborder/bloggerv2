@@ -15,5 +15,13 @@
       "url": "https://hlsvillager.icu/avatar.png",
       "type": "avatar"
     }
+  },
+  {
+    "alt": "Dicaeopolis' Wiki",
+    "url": "https://dicaeopolis.github.io/",
+    "pic": {
+      "url": "https://dicaeopolis.github.io/favicon.png",
+      "type": "avatar"
+    }
   }
 ]
